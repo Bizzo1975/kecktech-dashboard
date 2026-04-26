@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import data from '../data/services.json';
+
+// Colors are structural — kept in source, not JSON
+const serviceColors = ['#0D6E6E', '#2E7D32', '#C07810', '#7C3AED'];
+
+const services = data.services.map((svc, i) => ({ ...svc, color: serviceColors[i] }));
+---
+
+<Base
+  title="Services"
+  description="Four IT service lines from Kecktech — White Glove Managed IT, HaaS, AI Custom App Development, and Senior Technology Concierge. Kansas-based, disability-led, human-centered."
+>
+
+  <Hero
+    h1={data.hero.h1}
+    subtitle={data.hero.subtitle}
+    bgImage="/images/about-bg-img.jpg"
+    overlayColor="#0D6E6E"
+    overlayOpacity={0.72}
+  />
+
+  {services.map((svc, i) => (
+    <section
+      id={svc.id}
+      class={`svc-section${i % 2 === 1 ? ' svc-section--alt' : ''}`}
+    >
+      <div class="container svc-inner">
+        <div class="svc-text">
+          <span class="price-badge" style={`background: ${svc.color}`}>{svc.price}</span>
+          <h2 style={`color: ${svc.color}`}>{svc.name}</h2>
+          <p class="svc-body">{svc.body}</p>
+          <a href={`/contact?type=service&service=${svc.id}`} class="btn-primary" style={`background: ${svc.color}`}>{svc.cta} →</a>
+        </div>
+        <div class="svc-features-wrap">
+          <h4>What's included:</h4>
+          <ul class="svc-features-list">
+            {svc.features.map(f => (
+              <li>
+                <svg width="18" height="18" fill="none" stroke={svc.color} stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <!-- ── CTA ──────────────────────────────────────────────────────────── -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2>{data.cta.heading}</h2>
+      <p>{data.cta.body}</p>
+      <a href="/contact?type=general" class="btn-primary">{data.cta.button}</a>
+    </div>
+  </section>
+
+</Base>
+
+<style>
+.svc-section { background: var(--white); border-bottom: 1px solid #f1f5f9; }
+.svc-section--alt { background: var(--off-white); }
+.svc-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+.svc-text h2 { margin: 10px 0 16px; font-size: clamp(24px, 3vw, 34px); }
+.svc-body { margin-bottom: 28px; font-size: 17px; line-height: 1.8; }
+
+.svc-features-wrap {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 32px;
+  box-shadow: 0 2px 16px rgba(30,58,95,0.07);
+}
+.svc-section--alt .svc-features-wrap { background: #fff; }
+.svc-features-wrap h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--steel); margin-bottom: 20px; }
+.svc-features-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.svc-features-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 16px; color: var(--charcoal); line-height: 1.5; }
+.svc-features-list svg { flex-shrink: 0; margin-top: 2px; }
+
+.cta-banner { background: var(--navy); text-align: center; }
+.cta-banner h2 { color: #fff; margin-bottom: 14px; }
+.cta-banner p { color: var(--muted); font-size: 18px; margin-bottom: 32px; }
+
+@media (max-width: 768px) {
+  .svc-inner { grid-template-columns: 1fr; gap: 32px; }
+}
+</style>

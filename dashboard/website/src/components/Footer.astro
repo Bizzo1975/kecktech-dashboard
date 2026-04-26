@@ -1,0 +1,140 @@
+---
+import globalData from '../data/global.json';
+
+const services = [
+  { label: 'White Glove Managed IT', href: '/services#white-glove' },
+  { label: 'Hardware-as-a-Service', href: '/services#haas' },
+  { label: 'AI Custom App Development', href: '/services#ai-apps' },
+  { label: 'Senior Technology Concierge', href: '/services#senior-tech' },
+  { label: 'Solar Facility Goal ☀️', href: '/about#goal' },
+];
+const company = [
+  { label: 'About', href: '/about' },
+  { label: 'Pricing', href: '/pricing' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Privacy Policy', href: '/privacy' },
+];
+const year = new Date().getFullYear();
+const footer = globalData.footer;
+---
+
+<footer class="site-footer">
+  <div class="footer-grid container">
+
+    <div class="footer-col footer-brand">
+      <a href="/" aria-label="Kecktech IT Solutions Home">
+        <img src="/brand/transparent-logo-white.png" alt="Kecktech IT Solutions" class="footer-logo" />
+      </a>
+      <p class="footer-tagline" set:html={footer.tagline.replace('\n', '<br>')}></p>
+    </div>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Services</h4>
+      <ul class="footer-links">
+        {services.map(s => <li><a href={s.href}>{s.label}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Company</h4>
+      <ul class="footer-links">
+        {company.map(c => <li><a href={c.href}>{c.label}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4 class="footer-heading">Contact</h4>
+      <ul class="footer-contact">
+        <li>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          <a href={`tel:+1${footer.phone.replace(/\D/g, '')}`}>{footer.phone}</a>
+        </li>
+        <li>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <a href={`mailto:${footer.email}`}>{footer.email}</a>
+        </li>
+        <li>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          {footer.location}
+        </li>
+        <li class="footer-hours">{footer.hours}</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bar">
+    <span>&copy; {year} Kecktech IT Solutions LLC &nbsp;&middot;&nbsp; All rights reserved &nbsp;&middot;&nbsp; Built on solar power &#9728;</span>
+  </div>
+</footer>
+
+<style>
+.site-footer {
+  background: var(--dark-bg);
+  color: var(--muted);
+  font-size: 15px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1.6fr 1fr 1.4fr;
+  gap: 48px;
+  padding-top: 64px;
+  padding-bottom: 48px;
+  align-items: start;
+}
+.footer-logo {
+  max-width: 110px;
+  height: auto;
+  margin-bottom: 14px;
+}
+.footer-tagline {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  font-style: italic;
+}
+.footer-heading {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--steel); }
+.footer-contact { list-style: none; }
+.footer-contact li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+.footer-contact svg { flex-shrink: 0; margin-top: 3px; }
+.footer-contact a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer-contact a:hover { color: var(--steel); }
+.footer-hours { font-size: 13px; padding-left: 24px; }
+.footer-bar {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 20px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(148,163,184,0.6);
+}
+
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+}
+@media (max-width: 560px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+</style>

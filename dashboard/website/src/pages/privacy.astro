@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Privacy Policy"
+  description="Kecktech IT Solutions Privacy Policy — how we collect, use, and protect your information."
+>
+
+  <section class="privacy-hero">
+    <div class="container">
+      <h1>Privacy Policy</h1>
+      <p>Last updated: January 1, 2025</p>
+    </div>
+  </section>
+
+  <section class="privacy-content">
+    <div class="container">
+      <div class="prose">
+
+        <h2>1. Introduction</h2>
+        <p>Kecktech IT Solutions LLC ("Kecktech," "we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website kecktech.net or use our services.</p>
+        <p>If you disagree with the terms of this Privacy Policy, please discontinue use of our website and services.</p>
+
+        <h2>2. Information We Collect</h2>
+        <h3>Information You Provide</h3>
+        <p>We collect information you voluntarily provide, including:</p>
+        <ul>
+          <li>Name, email address, phone number, and business name when you contact us</li>
+          <li>Service inquiries submitted through our contact form</li>
+          <li>Communications sent to support@kecktech.net</li>
+        </ul>
+
+        <h3>Information Collected Automatically</h3>
+        <p>We use Umami — a self-hosted, privacy-first analytics platform — to understand website traffic. Umami does not collect personally identifiable information, does not use cookies, and does not track users across websites. No data is shared with Google, Facebook, or any third-party advertising platform.</p>
+
+        <h2>3. How We Use Your Information</h2>
+        <p>We use the information we collect to:</p>
+        <ul>
+          <li>Respond to your inquiries and provide requested services</li>
+          <li>Send invoices, service updates, and support communications</li>
+          <li>Improve our website and services</li>
+          <li>Comply with legal obligations</li>
+        </ul>
+        <p>We do not sell, trade, or rent your personal information to third parties.</p>
+
+        <h2>4. Data Storage &amp; Security</h2>
+        <p>Your data is stored on Kecktech's own servers, located in our facility in Park City, Kansas. We do not use Amazon Web Services, Google Cloud, Microsoft Azure, or any hyperscale cloud provider to store client data. Our facility is solar-powered and physically secured.</p>
+        <p>We implement industry-standard security measures including encryption in transit (TLS), encrypted storage, access controls, and regular security audits.</p>
+
+        <h2>5. HIPAA Compliance</h2>
+        <p>For clients requiring HIPAA compliance, Kecktech offers a Business Associate Agreement (BAA). Our Sovereign Private Hosting service is configured for HIPAA-eligible workloads. Contact us at support@kecktech.net to request a BAA.</p>
+
+        <h2>6. Cookies</h2>
+        <p>Our website does not use tracking cookies, advertising cookies, or third-party analytics cookies. We use Umami Analytics, which is cookieless by design.</p>
+
+        <h2>7. Third-Party Services</h2>
+        <p>We do not embed Google Analytics, Facebook Pixel, or any third-party tracking pixels on this website. Contact form submissions are processed by our own servers — your data does not pass through any third-party form service.</p>
+
+        <h2>8. Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+          <li>Request access to the personal information we hold about you</li>
+          <li>Request correction of inaccurate information</li>
+          <li>Request deletion of your information</li>
+          <li>Opt out of non-essential communications</li>
+        </ul>
+        <p>To exercise any of these rights, contact us at support@kecktech.net or (316) 768-0034.</p>
+
+        <h2>9. Children's Privacy</h2>
+        <p>Our services are not directed to children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected such information, please contact us immediately.</p>
+
+        <h2>10. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. We will notify you of material changes by posting the new policy on this page with an updated date. We encourage you to review this policy periodically.</p>
+
+        <h2>11. Contact Us</h2>
+        <p>If you have questions about this Privacy Policy or our privacy practices, please contact us:</p>
+        <address>
+          <strong>Kecktech IT Solutions LLC</strong><br />
+          Park City, Kansas<br />
+          Email: <a href="mailto:support@kecktech.net">support@kecktech.net</a><br />
+          Phone: <a href="tel:+13167680034">(316) 768-0034</a>
+        </address>
+
+      </div>
+    </div>
+  </section>
+
+</Base>
+
+<style>
+.privacy-hero {
+  background: var(--navy);
+  padding: 64px 24px 48px;
+}
+.privacy-hero h1 { color: #fff; margin-bottom: 8px; }
+.privacy-hero p { color: var(--muted); margin: 0; }
+
+.privacy-content { background: var(--white); }
+.prose {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.prose h2 { margin: 40px 0 14px; font-size: 24px; }
+.prose h3 { margin: 28px 0 10px; font-size: 19px; }
+.prose p { margin-bottom: 16px; line-height: 1.8; }
+.prose ul { padding-left: 24px; margin-bottom: 16px; }
+.prose ul li { margin-bottom: 8px; line-height: 1.7; }
+.prose a { color: var(--navy); }
+.prose a:hover { color: var(--gold); }
+address { font-style: normal; background: var(--off-white); padding: 24px 28px; border-radius: 8px; line-height: 2; margin-top: 8px; }
+</style>

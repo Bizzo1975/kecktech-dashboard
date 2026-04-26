@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import ValueCard from '../components/ValueCard.astro';
+import data from '../data/home.json';
+
+// Colors and hrefs are structural — kept here, not in JSON
+const serviceColors = ['#0D6E6E', '#2E7D32', '#C07810', '#7C3AED', '#4A6887'];
+const serviceHrefs  = ['/services#white-glove', '/services#haas', '/services#ai-apps', '/services#senior-tech', '/services#hosting'];
+const valueColors   = ['#C07810', '#0D6E6E', '#1E3A5F', '#4A6887'];
+
+const services = data.services.cards.map((card, i) => ({
+  ...card,
+  color: serviceColors[i],
+  href: serviceHrefs[i],
+}));
+
+const values = data.values.cards.map((card, i) => ({
+  ...card,
+  color: valueColors[i],
+}));
+---
+
+<Base
+  title="Solar-Powered IT That Actually Cares"
+  description="Kecktech IT Solutions — Solar-powered, disability-led IT services. White Glove Managed IT, HaaS, AI apps, Senior Tech Concierge, and sovereign hosting. Park City, Kansas."
+>
+
+  <Hero
+    h1={data.hero.h1}
+    subtitle={data.hero.subtitle}
+    bgImage="/images/home-hero-bg.jpg"
+    overlayColor="#1E3A5F"
+    overlayOpacity={0.68}
+    ctaLabel={data.hero.cta}
+    ctaHref="/contact?type=general"
+    ctaSecondaryLabel={data.hero.ctaSecondary}
+    ctaSecondaryHref="#services"
+  />
+
+  <!-- ── Five Ways We Serve You ────────────────────────────────────────── -->
+  <section id="services" class="services-section">
+    <div class="container">
+      <span class="section-label">{data.services.label}</span>
+      <h2>{data.services.heading}</h2>
+      <p class="section-intro">{data.services.intro}</p>
+      <div class="grid-5">
+        {services.map(s => <ServiceCard {...s} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Why Kecktech ──────────────────────────────────────────────────── -->
+  <section class="why-section">
+    <div class="container">
+      <span class="section-label">{data.values.label}</span>
+      <h2>{data.values.heading}</h2>
+      <p class="section-intro">{data.values.intro}</p>
+      <div class="grid-4">
+        {values.map(v => <ValueCard {...v} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA Banner ───────────────────────────────────────────────────── -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2>{data.cta.heading}</h2>
+      <p>{data.cta.body}</p>
+      <a href="/contact?type=general" class="btn-primary">{data.cta.button}</a>
+    </div>
+  </section>
+
+</Base>
+
+<style>
+/* Section labels: gold on home page */
+.services-section .section-label,
+.why-section .section-label { color: var(--gold); }
+
+.services-section { background: var(--off-white); }
+.services-section h2 { margin: 8px 0 4px; }
+.services-section h2::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 3px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin-top: 10px;
+  margin-bottom: 16px;
+}
+
+/* Subtle teal-tinted background for Why section */
+.why-section { background: rgba(13, 110, 110, 0.04); }
+.why-section h2 { margin: 8px 0 4px; }
+.why-section h2::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 3px;
+  background: var(--teal);
+  border-radius: 2px;
+  margin-top: 10px;
+  margin-bottom: 16px;
+}
+
+.section-intro {
+  color: var(--steel);
+  font-size: 17px;
+  margin-bottom: 40px;
+  max-width: 680px;
+}
+
+.cta-banner { background: var(--navy); text-align: center; }
+.cta-banner h2 { color: #fff; margin-bottom: 14px; }
+.cta-banner p { color: var(--muted); font-size: 18px; margin-bottom: 32px; }
+</style>

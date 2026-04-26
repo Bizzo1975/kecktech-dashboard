@@ -1,0 +1,122 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import data from '../data/contact.json';
+---
+
+<Base
+  title="Contact"
+  description="Contact Kecktech IT Solutions — (316) 768-0034 — support@kecktech.net — Park City, Kansas. Real people, real answers."
+>
+
+  <Hero
+    h1={data.hero.h1}
+    subtitle={data.hero.subtitle}
+    bgImage="/images/about-bg-img.jpg"
+    overlayColor="#0D6E6E"
+    overlayOpacity={0.68}
+  />
+
+  <!-- ── Contact Section ──────────────────────────────────────────────────────────────── -->
+  <section class="contact-section">
+    <div class="container contact-inner">
+
+      <!-- Form -->
+      <div class="form-col">
+        <h2>{data.form.heading}</h2>
+        <p class="form-intro" set:html={data.form.intro.replace('(316) 768-0034', '<a href="tel:+13167680034">(316) 768-0034</a>')}></p>
+        <ContactForm submitLabel={data.form.submitButton} />
+      </div>
+
+      <!-- Info -->
+      <div class="info-col">
+        <div class="info-card">
+          <h3>{data.info.heading}</h3>
+          <ul class="info-list">
+            <li>
+              <svg width="20" height="20" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              <div>
+                <p class="info-label">Phone</p>
+                <a href="tel:+13167680034" class="info-value">{data.info.phone}</a>
+              </div>
+            </li>
+            <li>
+              <svg width="20" height="20" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <div>
+                <p class="info-label">Email</p>
+                <a href={`mailto:${data.info.email}`} class="info-value">{data.info.email}</a>
+              </div>
+            </li>
+            <li>
+              <svg width="20" height="20" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <div>
+                <p class="info-label">Location</p>
+                <p class="info-value">{data.info.location}</p>
+              </div>
+            </li>
+            <li>
+              <svg width="20" height="20" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <div>
+                <p class="info-label">Hours</p>
+                <p class="info-value">{data.info.hours}</p>
+                <p class="info-sub">{data.info.hoursNote}</p>
+              </div>
+            </li>
+          </ul>
+          <p class="info-tagline"><em>{data.info.tagline}</em></p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+</Base>
+
+<style>
+.contact-section { background: var(--off-white); }
+.contact-inner {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+.form-col h2 { margin-bottom: 10px; }
+.form-intro { color: var(--steel); margin-bottom: 32px; font-size: 16px; }
+.form-intro a { color: var(--navy); font-weight: 600; text-decoration: none; }
+.form-intro a:hover { text-decoration: underline; }
+
+.info-card {
+  background: var(--navy);
+  color: #fff;
+  border-radius: 12px;
+  padding: 36px 32px;
+  margin-bottom: 24px;
+}
+.info-card h3 { color: #fff; font-size: 18px; margin-bottom: 24px; }
+.info-list { list-style: none; display: flex; flex-direction: column; gap: 20px; }
+.info-list li { display: flex; gap: 14px; align-items: flex-start; }
+.info-list svg { flex-shrink: 0; margin-top: 4px; }
+.info-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 2px; }
+.info-value { color: #fff; font-size: 16px; text-decoration: none; font-weight: 500; display: block; }
+.info-value:hover { color: var(--gold); }
+a.info-value:hover { color: var(--gold); }
+.info-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.info-tagline { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+
+.services-quick {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 24px 28px;
+  box-shadow: 0 2px 12px rgba(30,58,95,0.07);
+}
+.services-quick h4 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--steel); margin-bottom: 16px; }
+.services-quick ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.services-quick a { color: var(--navy); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+.services-quick a:hover { color: var(--gold); }
+
+@media (max-width: 900px) {
+  .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+}
+</style>

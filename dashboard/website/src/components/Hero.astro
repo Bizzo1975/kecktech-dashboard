@@ -1,0 +1,104 @@
+---
+interface Props {
+  h1: string;
+  subtitle: string;
+  bgImage?: string;
+  overlayColor?: string;
+  overlayOpacity?: number;
+  ctaLabel?: string;
+  ctaHref?: string;
+  ctaSecondaryLabel?: string;
+  ctaSecondaryHref?: string;
+  centered?: boolean;
+}
+const {
+  h1,
+  subtitle,
+  bgImage,
+  overlayColor = '#1E3A5F',
+  overlayOpacity = 0.65,
+  ctaLabel,
+  ctaHref = '/contact',
+  ctaSecondaryLabel,
+  ctaSecondaryHref = '#services',
+  centered = false,
+} = Astro.props;
+
+const overlayRgb = overlayColor.replace('#','').match(/.{2}/g)!.map(h => parseInt(h,16)).join(',');
+---
+
+<section
+  class={`hero${centered ? ' hero--centered' : ''}`}
+  style={bgImage ? `background-image: url('${bgImage}')` : ''}
+  aria-label="Page hero"
+>
+  {bgImage && (
+    <div
+      class="hero-overlay"
+      style={`background: rgba(${overlayRgb}, ${overlayOpacity})`}
+      aria-hidden="true"
+    />
+  )}
+  <div class="hero-content container">
+    <h1>{h1}</h1>
+    <p class="hero-sub">{subtitle}</p>
+    {(ctaLabel || ctaSecondaryLabel) && (
+      <div class="hero-ctas">
+        {ctaLabel && <a href={ctaHref} class="btn-primary">{ctaLabel}</a>}
+        {ctaSecondaryLabel && <a href={ctaSecondaryHref} class="btn-white">{ctaSecondaryLabel}</a>}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+.hero {
+  position: relative;
+  background-color: var(--navy);
+  background-size: cover;
+  background-position: center;
+  padding: 0 24px;
+  height: 560px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  width: 100%;
+}
+.hero--centered .hero-content {
+  max-width: var(--max-w);
+  text-align: center;
+  margin: 0 auto;
+}
+.hero h1 { color: #fff; margin-bottom: 20px; }
+.hero-sub {
+  color: rgba(255,255,255,0.88);
+  font-size: clamp(17px, 2vw, 21px);
+  line-height: 1.7;
+  margin-bottom: 0;
+  max-width: 680px;
+}
+.hero--centered .hero-sub { margin: 0 auto; }
+.hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 36px;
+}
+.hero--centered .hero-ctas { justify-content: center; }
+
+@media (max-width: 600px) {
+  .hero { height: auto; padding: 80px 16px; }
+  .hero-ctas { flex-direction: column; }
+  .hero-ctas a { text-align: center; }
+}
+</style>

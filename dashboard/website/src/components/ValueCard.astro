@@ -1,0 +1,38 @@
+---
+interface Props {
+  icon: string;
+  heading: string;
+  body: string;
+  color?: string;
+}
+const { icon, heading, body, color } = Astro.props;
+---
+
+<div class="val-card" style={color ? `--val-accent: ${color}` : ''}>
+  <div class="val-icon" aria-hidden="true" class:list={[color ? 'val-icon--circle' : '']}>{icon}</div>
+  <h3 class="val-heading">{heading}</h3>
+  <p class="val-body">{body}</p>
+</div>
+
+<style>
+.val-card {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 32px 28px;
+  box-shadow: 0 2px 16px rgba(30,58,95,0.06);
+  border-bottom: 3px solid var(--val-accent, var(--gold));
+}
+.val-icon { font-size: 36px; margin-bottom: 16px; line-height: 1; }
+.val-icon--circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--val-accent) 12%, transparent);
+  font-size: 28px;
+}
+.val-heading { color: var(--navy); font-size: 20px; margin-bottom: 10px; }
+.val-body { color: var(--charcoal); font-size: 15px; line-height: 1.7; margin: 0; }
+</style>

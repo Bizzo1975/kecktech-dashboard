@@ -1,0 +1,155 @@
+---
+const nav = [
+  { label: 'Home',     href: '/' },
+  { label: 'About',    href: '/about' },
+  { label: 'Services', href: '/services' },
+  { label: 'Pricing',  href: '/pricing' },
+  { label: 'Help',     href: 'https://help.kecktech.net' },
+  { label: 'Contact',  href: '/contact' },
+];
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo-link" aria-label="Kecktech IT Solutions — Home">
+      <img src="/brand/transparent-logo-white.png" alt="Kecktech IT Solutions" class="logo-img" />
+    </a>
+
+    <nav class="main-nav" aria-label="Primary navigation">
+      {nav.map(item => (
+        <a
+          href={item.href}
+          class={`nav-link${currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href)) ? ' active' : ''}`}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <a href="https://portal.kecktech.net" class="btn-login">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+      </svg>
+      Customer Login
+    </a>
+
+    <button class="hamburger" aria-label="Open navigation menu" aria-expanded="false" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+    {nav.map(item => (
+      <a href={item.href} class="mobile-nav-link">{item.label}</a>
+    ))}
+    <a href="https://portal.kecktech.net" class="mobile-nav-link mobile-login">Customer Login</a>
+  </div>
+</header>
+
+<style>
+.site-header {
+  background: var(--navy);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.header-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  overflow: hidden;
+}
+.logo-img { height: 52px; width: auto; max-height: 52px; object-fit: contain; }
+.logo-link { flex-shrink: 0; }
+
+.main-nav { display: flex; gap: 4px; margin-left: auto; }
+.nav-link {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-link:hover, .nav-link.active { color: var(--gold); }
+
+.btn-login {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--gold);
+  text-decoration: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  white-space: nowrap;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.btn-login:hover { background: #a06510; color: #fff; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background: var(--card-dark);
+  padding: 16px 24px 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.mobile-nav-link {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.mobile-nav-link:last-child { border-bottom: none; }
+.mobile-login { color: var(--gold); font-weight: 600; }
+
+@media (max-width: 768px) {
+  .main-nav, .btn-phone { display: none; }
+  .hamburger { display: flex; }
+  .mobile-nav.open { display: flex; }
+}
+</style>
+
+<script>
+const btn = document.getElementById('hamburger');
+const nav = document.getElementById('mobile-nav');
+btn?.addEventListener('click', () => {
+  const open = nav?.classList.toggle('open');
+  btn.setAttribute('aria-expanded', String(open));
+  nav?.setAttribute('aria-hidden', String(!open));
+});
+</script>

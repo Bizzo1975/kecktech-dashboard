@@ -1,0 +1,85 @@
+---
+interface Props {
+  service: string;
+  price: string;
+  tagline: string;
+  features: string[];
+  color: string;
+  featured?: boolean;
+  ctaHref?: string;
+}
+const { service, price, tagline, features, color, featured = false, ctaHref = '/contact' } = Astro.props;
+---
+
+<div class={`pricing-card${featured ? ' pricing-card--featured' : ''}`} style={`--accent: ${color}`}>
+  <div class="pc-header">
+    <h3 class="pc-service">{service}</h3>
+    <div class="pc-price">{price}</div>
+    <p class="pc-tagline">{tagline}</p>
+  </div>
+  <ul class="pc-features">
+    {features.map(f => (
+      <li>
+        <svg width="16" height="16" fill="none" stroke="var(--accent)" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+        </svg>
+        {f}
+      </li>
+    ))}
+  </ul>
+  <a href={ctaHref} class="btn-primary" style="width:100%;justify-content:center;margin-top:auto;">Get Started →</a>
+</div>
+
+<style>
+.pricing-card {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 36px 32px;
+  box-shadow: 0 2px 20px rgba(30,58,95,0.08);
+  border-top: 5px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.pricing-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(30,58,95,0.15); }
+.pricing-card--featured {
+  background: var(--navy);
+  border-top-color: var(--gold);
+  box-shadow: 0 8px 40px rgba(30,58,95,0.25);
+}
+.pricing-card--featured .pc-service,
+.pricing-card--featured .pc-price { color: #fff; }
+.pricing-card--featured .pc-tagline { color: var(--muted); }
+.pricing-card--featured .pc-features li { color: rgba(255,255,255,0.85); }
+
+.pc-header { }
+.pc-service { font-size: 18px; margin-bottom: 8px; }
+.pc-price {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 6px;
+  line-height: 1;
+}
+.pricing-card--featured .pc-price { color: var(--gold); }
+.pc-tagline { font-size: 14px; color: var(--steel); margin: 0; }
+
+.pc-features {
+  list-style: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pc-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  color: var(--charcoal);
+  line-height: 1.5;
+}
+.pc-features svg { flex-shrink: 0; margin-top: 2px; }
+</style>

@@ -1,0 +1,245 @@
+/* ── Kecktech Brand Tokens ───────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap');
+
+:root {
+  --navy:      #1E3A5F;
+  --charcoal:  #4A4A4A;
+  --steel:     #4A6887;
+  --gold:      #C07810;
+  --gold-dark: #a06510;
+  --teal:      #0D6E6E;
+  --green:     #2E7D32;
+  --violet:    #7C3AED;
+  --off-white: #F4F7FB;
+  --dark-bg:   #0F172A;
+  --card-dark: #1E293B;
+  --white:     #FFFFFF;
+  --muted:     #94A3B8;
+
+  --svc-1: #0D6E6E;
+  --svc-2: #2E7D32;
+  --svc-3: #C07810;
+  --svc-4: #7C3AED;
+  --svc-5: #4A6887;
+
+  --font-heading: 'Poppins', sans-serif;
+  --font-body:    'Open Sans', sans-serif;
+
+  --max-w: 1200px;
+  --section-pad: 80px 24px;
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+
+/* ── Base ────────────────────────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--charcoal);
+  background: var(--white);
+}
+
+h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--navy); line-height: 1.2; }
+h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 700; }
+h2 { font-size: clamp(28px, 3.5vw, 40px); font-weight: 600; }
+h3 { font-size: 22px; font-weight: 600; }
+h4 { font-size: 18px; font-weight: 600; }
+
+p { margin-bottom: 1em; }
+p:last-child { margin-bottom: 0; }
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section { padding: var(--section-pad); }
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gold);
+  color: #fff;
+  border-radius: 6px;
+  padding: 14px 28px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  min-height: 48px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--gold-dark); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid var(--navy);
+  color: var(--navy);
+  background: transparent;
+  border-radius: 6px;
+  padding: 12px 26px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  min-height: 48px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-secondary:hover { background: var(--navy); color: #fff; }
+
+.btn-white {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  color: var(--navy);
+  border-radius: 6px;
+  padding: 14px 28px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  min-height: 48px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-white:hover { background: var(--off-white); }
+
+/* ── Section labels ──────────────────────────────────────────────────────── */
+.section-label {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--steel);
+  margin-bottom: 12px;
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 32px;
+  box-shadow: 0 2px 16px rgba(30,58,95,0.08);
+}
+
+/* ── Grid utilities ──────────────────────────────────────────────────────── */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; align-items: start; }
+
+/* 5-card grid: 3 on top, 2 centered underneath */
+.grid-5 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 24px;
+}
+.grid-5 > * { grid-column: span 2; }
+.grid-5 > *:nth-child(4) { grid-column: 2 / span 2; }
+.grid-5 > *:nth-child(5) { grid-column: 4 / span 2; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-5 { grid-template-columns: repeat(2, 1fr); }
+  .grid-5 > *, .grid-5 > *:nth-child(4), .grid-5 > *:nth-child(5) { grid-column: span 1; }
+}
+@media (max-width: 600px) {
+  :root { --section-pad: 56px 16px; }
+  .grid-3, .grid-4, .grid-5, .grid-2 { grid-template-columns: 1fr; }
+  .grid-5 > *, .grid-5 > *:nth-child(4), .grid-5 > *:nth-child(5) { grid-column: span 1; }
+  h1 { font-size: 32px; }
+}
+
+/* ── Pull quote ──────────────────────────────────────────────────────────── */
+.pull-quote {
+  border-left: 4px solid var(--gold);
+  padding: 16px 24px;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-style: italic;
+  color: var(--navy);
+  background: var(--off-white);
+  border-radius: 0 8px 8px 0;
+  margin: 32px 0;
+}
+
+/* ── Stat bar ────────────────────────────────────────────────────────────── */
+.stat-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+  margin-top: 40px;
+}
+.stat-item { text-align: center; }
+.stat-number {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--gold);
+  display: block;
+}
+.stat-label {
+  font-size: 14px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── CTA Banner ──────────────────────────────────────────────────────────── */
+.cta-banner {
+  background: var(--navy);
+  color: #fff;
+  text-align: center;
+  padding: 80px 24px;
+}
+.cta-banner h2 { color: #fff; margin-bottom: 16px; }
+.cta-banner p { color: var(--muted); margin-bottom: 32px; font-size: 18px; }
+
+/* ── FAQ ─────────────────────────────────────────────────────────────────── */
+.faq-list { max-width: 780px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid #e2e8f0; padding: 24px 0; }
+.faq-q { font-family: var(--font-heading); font-weight: 600; color: var(--navy); font-size: 18px; margin-bottom: 8px; }
+.faq-a { color: var(--charcoal); }
+
+/* ── Price badge ─────────────────────────────────────────────────────────── */
+.price-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 20px;
+  padding: 4px 14px;
+  margin-bottom: 12px;
+}
+
+/* ── Team card ───────────────────────────────────────────────────────────── */
+.team-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  margin-bottom: 16px;
+  border: 4px solid var(--gold);
+}
