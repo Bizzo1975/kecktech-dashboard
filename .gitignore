@@ -6,3 +6,6 @@ secrets/
 *.pem
 *.key
 acme.json
+**/dist/
+**/node_modules/
+**/.next/
