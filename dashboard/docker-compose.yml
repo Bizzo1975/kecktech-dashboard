@@ -1,0 +1,122 @@
+networks:
+  kecktech_front:
+    external: true
+  kecktech_internal:
+    external: true
+
+services:
+
+  dashboard:
+    image: kecktech/dashboard:latest
+    container_name: dashboard
+    restart: always
+    mem_limit: 256m
+    ports:
+      - "8080:3000"
+    environment:
+      - ZAMMAD_URL=http://10.20.0.141:8080
+      - ZAMMAD_API_TOKEN=${ZAMMAD_API_TOKEN}
+      - TRMM_URL=https://10.20.0.142:8444
+      - TRMM_API_KEY=${TRMM_API_KEY}
+      - ERPNEXT_URL=http://10.20.0.140:8080
+      - ERPNEXT_API_KEY=${ERPNEXT_API_KEY}
+      - ERPNEXT_API_SECRET=${ERPNEXT_API_SECRET}
+      - UMAMI_URL=http://10.20.0.112:8080
+      - UMAMI_USER=admin
+      - UMAMI_PASS=${UMAMI_PASS}
+      - UMAMI_SITE_ID=d2427fe3-ce4b-4b9a-8e41-a8a3e9f2cd6d
+      - LLDAP_URL=http://10.20.0.100:17170
+      - LLDAP_ADMIN_USER=${LLDAP_ADMIN_USER:-admin}
+      - LLDAP_ADMIN_PASS=${LLDAP_ADMIN_PASS}
+      - RUSTDESK_SERVER_HOST=10.20.0.113
+      - RUSTDESK_PUBLIC_KEY=BPJWx0dInTDWjiRXq3yHcfuvJNOjPBR7Q2YbocPYnEw=
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://0.0.0.0:3000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - kecktech_front
+      - kecktech_internal
+
+  kecktech-web:
+    image: nginx:alpine
+    container_name: kecktech-web
+    restart: always
+    mem_limit: 64m
+    ports:
+      - "8081:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - ./website/dist:/usr/share/nginx/html:ro
+      - ./website/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - kecktech_front
+
+  kecktech-mailer:
+    image: php:8.2-apache
+    container_name: kecktech-mailer
+    restart: always
+    mem_limit: 64m
+    extra_hosts:
+      - "kecktech.net:10.20.0.143"
+      - "www.kecktech.net:10.20.0.143"
+      - "n8n.kecktech.net:10.20.0.111"
+      - "tickets.kecktech.net:10.20.0.141"
+      - "mail.kecktech.net:10.20.0.110"
+    volumes:
+      - ./website/api:/var/www/html:ro
+    ports:
+      - "8082:80"
+    networks:
+      - kecktech_front
+
+  kecktech-portal:
+    image: vboxuser-kecktech-portal:latest
+    container_name: kecktech-portal
+    restart: always
+    mem_limit: 512m
+    ports:
+      - "8083:3012"
+    environment:
+      - NODE_ENV=production
+      - PORTAL_BASE_URL=http://kecktech-portal:3012
+      - ZAMMAD_URL=https://tickets.kecktech.net
+      - ZAMMAD_API_TOKEN=${ZAMMAD_API_TOKEN}
+      - ERPNEXT_URL=https://erp.kecktech.net
+      - ERPNEXT_API_KEY=${ERPNEXT_API_KEY}
+      - ERPNEXT_API_SECRET=${ERPNEXT_API_SECRET}
+      - RUSTDESK_SERVER_HOST=10.20.0.113
+      - RUSTDESK_PUBLIC_KEY=BPJWx0dInTDWjiRXq3yHcfuvJNOjPBR7Q2YbocPYnEw=
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3012/api/health"]
+      interval: 30s
+      timeout: 8s
+      retries: 3
+    networks:
+      - kecktech_front
+
+  kecktech-admin:
+    image: vboxuser-kecktech-admin:latest
+    container_name: kecktech-admin
+    restart: always
+    mem_limit: 512m
+    extra_hosts:
+      - "kecktech.net:10.20.0.143"
+      - "www.kecktech.net:10.20.0.143"
+      - "admin.kecktech.net:10.20.0.143"
+      - "n8n.kecktech.net:10.20.0.111"
+      - "mail.kecktech.net:10.20.0.110"
+    ports:
+      - "8084:3000"
+    volumes:
+      - ./website/src/data:/website/src/data
+      - ./website/dist:/website/dist
+      - ./website/public/images:/website/public/images
+    networks:
+      - kecktech_front
