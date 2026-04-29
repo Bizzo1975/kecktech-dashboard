@@ -115,7 +115,17 @@ function renderFields(val, name, depth = 0) {
   if (val === null || val === undefined) return '';
 
   if (typeof val === 'boolean') {
-    return `<input type="hidden" name="${esc(name)}" value="${val ? 'true' : 'false'}" />`;
+    const id = name.replace(/[\[\].]/g, '_');
+    const parts = name.split(/[\[\].]+/).filter(Boolean);
+    const label = humanLabel(parts[parts.length - 1] || name);
+    return `<div class="field field-toggle">
+      <label for="${id}">${esc(label)}</label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="${id}" name="${esc(name)}" value="true" ${val ? 'checked' : ''} />
+        <span class="toggle-slider"></span>
+      </label>
+      <input type="hidden" name="${esc(name)}__type" value="boolean" />
+    </div>`;
   }
 
   if (typeof val === 'number') {
@@ -135,12 +145,38 @@ function renderFields(val, name, depth = 0) {
     return `<div class="field"><label for="${id}">${esc(label)}</label>${inputHtml}</div>`;
   }
 
+  // --- STRING ARRAY EDITOR (features lists, etc.) ---
+  if (Array.isArray(val) && val.length > 0 && val.every(i => typeof i === 'string')) {
+    const parts = name.split(/[\[\].]+/).filter(Boolean);
+    const label = humanLabel(parts[parts.length - 1] || name);
+    const id = name.replace(/[\[\].]/g, '_');
+    let rows = val.map((item, idx) => {
+      const rowName = `${name}[${idx}]`;
+      const rowId = `${id}_${idx}`;
+      return `<div class="string-array-row" data-array="${esc(id)}">
+        <span class="string-array-index">${idx + 1}.</span>
+        <input type="text" id="${rowId}" name="${esc(rowName)}" value="${esc(item)}" />
+        <button type="button" class="btn-remove-row" onclick="removeArrayRow(this)" title="Remove">&times;</button>
+      </div>`;
+    }).join('\n');
+
+    return `<div class="field field-string-array">
+      <label>${esc(label)}</label>
+      <div class="string-array-container" id="container_${id}" data-base-name="${esc(name)}">
+        ${rows}
+      </div>
+      <button type="button" class="btn-add-row" onclick="addArrayRow('container_${id}', '${esc(name)}')">+ Add Item</button>
+      <input type="hidden" name="${esc(name)}__type" value="string_array" />
+    </div>`;
+  }
+
   if (Array.isArray(val)) {
     const label = prettySectionLabel(name.split(/[\[\].]+/).filter(Boolean).pop() || name);
-    let html = `<details class="array-section accordion-section"><summary class="accordion-summary">${esc(label)}</summary><div class="accordion-content">`;
+    let html = `<details class="array-section accordion-section"${depth <= 1 ? ' open' : ''}><summary class="accordion-summary">${esc(label)}</summary><div class="accordion-content">`;
     val.forEach((item, i) => {
       if (typeof item === 'object' && !Array.isArray(item)) {
-        html += `<fieldset class="array-item"><legend>Item ${i + 1}</legend>`;
+        const itemLabel = item.name || item.heading || item.title || item.id || `Item ${i + 1}`;
+        html += `<fieldset class="array-item"><legend>${esc(itemLabel)}</legend>`;
         html += renderFields(item, `${name}[${i}]`, depth + 1);
         html += `</fieldset>`;
       } else {
@@ -154,7 +190,7 @@ function renderFields(val, name, depth = 0) {
   if (typeof val === 'object') {
     const label = name ? prettySectionLabel(name.split(/[\[\].]+/).filter(Boolean).pop() || name) : '';
     const wrapperStart = label && depth > 0
-      ? `<details class="obj-section accordion-section"><summary class="accordion-summary">${esc(label)}</summary><div class="accordion-content">`
+      ? `<details class="obj-section accordion-section"${depth === 1 ? ' open' : ''}><summary class="accordion-summary">${esc(label)}</summary><div class="accordion-content">`
       : '<div class="obj-section">';
     let html = wrapperStart;
     for (const [k, v] of Object.entries(val)) {
@@ -170,18 +206,45 @@ function renderFields(val, name, depth = 0) {
 // Recursively merge form body back into original structure (preserving types)
 function mergeFormData(original, submitted) {
   if (original === null || original === undefined) return submitted;
-  if (typeof original === 'boolean') return submitted === 'true';
+
+  // Boolean fields: checkbox present → true, absent → false
+  // The __type=boolean hidden input tells us this was a boolean field
+  if (typeof original === 'boolean') {
+    if (submitted === 'true' || submitted === true) return true;
+    if (submitted === 'false' || submitted === false) return false;
+    // Unchecked checkbox: key absent from form body → default false
+    return false;
+  }
+
   if (typeof original === 'number') return Number(submitted);
   if (typeof original === 'string') return typeof submitted === 'string' ? submitted : original;
+
   if (Array.isArray(original)) {
+    // String array: reconstruct from indexed form keys
+    if (original.length > 0 && original.every(i => typeof i === 'string')) {
+      if (!submitted || typeof submitted !== 'object') return original;
+      // Submitted comes as { '0': 'val', '1': 'val', ... }
+      const result = [];
+      let i = 0;
+      while (submitted[String(i)] !== undefined) {
+        const val = String(submitted[String(i)]).trim();
+        if (val) result.push(val);
+        i++;
+      }
+      return result.length > 0 ? result : original;
+    }
+
     if (!submitted || !Array.isArray(submitted)) return original;
     return original.map((item, i) =>
       submitted[i] === undefined ? item : mergeFormData(item, submitted[i])
     );
   }
+
   if (typeof original === 'object') {
     const result = {};
     for (const key of Object.keys(original)) {
+      // Skip __type helper keys
+      if (key.endsWith('__type')) continue;
       result[key] = submitted && submitted[key] !== undefined
         ? mergeFormData(original[key], submitted[key])
         : original[key];
@@ -249,6 +312,36 @@ function layout(title, body, page = '') {
   </div>
 
   <script>
+    /* ── String array add/remove ── */
+    function removeArrayRow(btn) {
+      var row = btn.closest('.string-array-row');
+      var container = row.parentElement;
+      row.remove();
+      reindexArrayRows(container);
+    }
+
+    function addArrayRow(containerId, baseName) {
+      var container = document.getElementById(containerId);
+      var rows = container.querySelectorAll('.string-array-row');
+      var idx = rows.length;
+      var div = document.createElement('div');
+      div.className = 'string-array-row';
+      div.innerHTML = '<span class="string-array-index">' + (idx + 1) + '.</span>'
+        + '<input type="text" name="' + baseName + '[' + idx + ']" value="" placeholder="New item..." />'
+        + '<button type="button" class="btn-remove-row" onclick="removeArrayRow(this)" title="Remove">&times;</button>';
+      container.appendChild(div);
+    }
+
+    function reindexArrayRows(container) {
+      var baseName = container.dataset.baseName;
+      var rows = container.querySelectorAll('.string-array-row');
+      rows.forEach(function(row, idx) {
+        row.querySelector('.string-array-index').textContent = (idx + 1) + '.';
+        var input = row.querySelector('input[type="text"]');
+        input.name = baseName + '[' + idx + ']';
+      });
+    }
+
     /* ── Photo upload handler ── */
     document.addEventListener('change', function(e) {
       const input = e.target;
@@ -314,6 +407,32 @@ app.get('/page/:name', (req, res) => {
   const saved = req.query.saved === '1';
   const fields = renderFields(data, '');
 
+  // Homepage service card selector
+  let serviceSelectorHtml = '';
+  if (name === 'home') {
+    try {
+      const servicesData = readData('services');
+      const allServices = (servicesData.services || []);
+      const currentIds = data.services?.displayIds || [];
+
+      serviceSelectorHtml = `
+        <fieldset class="service-selector">
+          <legend>Homepage Service Cards</legend>
+          <p class="selector-help">Check services to display on the homepage. Toggle availability in the Services page.</p>
+          ${allServices.map(svc => {
+            const checked = currentIds.includes(svc.id) ? 'checked' : '';
+            const unavailable = svc.available === false ? ' (unavailable)' : '';
+            return `<label class="service-checkbox${svc.available === false ? ' service-unavailable' : ''}">
+              <input type="checkbox" name="__displayIds__" value="${esc(svc.id)}" ${checked} />
+              <span class="service-checkbox-label">${esc(svc.name)}${unavailable}</span>
+              <span class="service-checkbox-rate">${esc(svc.price || '')}</span>
+            </label>`;
+          }).join('\n')}
+        </fieldset>
+      `;
+    } catch (e) { /* services.json not found, skip */ }
+  }
+
   const body = `
     ${saved ? `<div class="alert alert-success">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -345,6 +464,7 @@ app.get('/page/:name', (req, res) => {
     </div>
 
     <form method="POST" action="/save/${esc(name)}" class="edit-form">
+      ${serviceSelectorHtml}
       ${fields}
       <div class="form-footer">
         <button type="submit" class="btn btn-save">Save Changes</button>
@@ -398,6 +518,19 @@ app.post('/save/:name', (req, res) => {
   if (!PAGES.includes(name)) return res.status(404).send('Not found');
   const original = readData(name);
   const merged   = mergeFormData(original, req.body);
+
+  // Handle homepage displayIds from service selector checkboxes
+  if (name === 'home' && req.body['__displayIds__']) {
+    let ids = req.body['__displayIds__'];
+    if (!Array.isArray(ids)) ids = [ids];
+    if (!merged.services) merged.services = {};
+    merged.services.displayIds = ids;
+  } else if (name === 'home' && !req.body['__displayIds__']) {
+    // All unchecked — empty array
+    if (!merged.services) merged.services = {};
+    merged.services.displayIds = [];
+  }
+
   writeData(name, merged);
   res.redirect(`/page/${name}?saved=1`);
 });

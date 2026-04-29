@@ -3,48 +3,36 @@ name: Deploy to Dev — kecktech.net
 on:
   push:
     branches: [dev]
-    paths:
-      - 'dashboard/website/**'
-      - 'dashboard/docker-compose.yml'
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: dashboard/website/package-lock.json
-
-      - name: Install dependencies
-        working-directory: dashboard/website
-        run: npm ci
-
-      - name: Build Astro site
-        working-directory: dashboard/website
-        run: npm run build
-
-      - name: SCP dist/ to dev VM
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.DEV_SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: 'dashboard/website/dist/*'
-          target: '/opt/docker/dashboard/website/dist'
-          strip_components: 3
-
-      - name: Reload nginx on dev VM
+      - name: Deploy to dev-dashboard-01 (VMID 730)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DEV_SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker exec kecktech-web nginx -s reload
-            echo "Dev deploy complete"
+            set -e
+            cd /opt/docker/dashboard
+
+            echo "==> Pulling latest dev branch..."
+            git pull origin dev
+
+            echo "==> Installing website dependencies..."
+            cd dashboard/website && npm ci --omit=dev && cd ../..
+
+            echo "==> Building Astro site (uses data files on VM)..."
+            cd dashboard/website && npm run build && cd ../..
+
+            echo "==> Rebuilding admin container..."
+            cd dashboard && docker compose build kecktech-admin && cd ..
+
+            echo "==> Restarting admin + web containers..."
+            cd dashboard && docker compose up -d kecktech-admin && cd ..
+            docker exec kecktech-web nginx -s reload 2>/dev/null || docker restart kecktech-web
+
+            echo "==> Deploy complete. Running containers:"
+            docker ps --format "table {{.Names}}\t{{.Status}}" | grep kecktech
