@@ -4,19 +4,37 @@ import Hero from '../components/Hero.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import ValueCard from '../components/ValueCard.astro';
 import data from '../data/home.json';
+import servicesData from '../data/services.json';
 
-// Colors and hrefs are structural — kept here, not in JSON
-const serviceColors = ['#0D6E6E', '#2E7D32', '#C07810', '#7C3AED', '#4A6887'];
-const serviceHrefs  = ['/services#white-glove', '/services#haas', '/services#ai-apps', '/services#senior-tech', '/services#hosting'];
-const valueColors   = ['#C07810', '#0D6E6E', '#1E3A5F', '#4A6887'];
+// Build service cards from displayIds referencing services.json
+const serviceColorMap: Record<string, string> = {
+  'white-glove': '#0D6E6E',
+  'haas': '#2E7D32',
+  'ai-apps': '#C07810',
+  'senior-tech': '#7C3AED',
+  'break-fix': '#1E3A5F',
+  'time-block': '#0D6E6E',
+  'professional-services': '#4A6887',
+};
+const defaultColors = ['#0D6E6E', '#2E7D32', '#C07810', '#7C3AED', '#4A6887'];
 
-const services = data.services.cards.map((card, i) => ({
-  ...card,
-  color: serviceColors[i],
-  href: serviceHrefs[i],
-}));
+const displayIds = data.services.displayIds || [];
+const services = displayIds
+  .map((id: string) => servicesData.services?.find((s: any) => s.id === id))
+  .filter(Boolean)
+  .filter((s: any) => s.available !== false)
+  .map((s: any, i: number) => ({
+    icon: s.icon || '💼',
+    heading: s.name,
+    description: s.body || s.description || '',
+    price: s.price,
+    color: serviceColorMap[s.id] || defaultColors[i % defaultColors.length],
+    href: `/services#${s.id}`,
+  }));
 
-const values = data.values.cards.map((card, i) => ({
+const valueColors = ['#C07810', '#0D6E6E', '#1E3A5F', '#4A6887'];
+
+const values = data.values.cards.map((card: any, i: number) => ({
   ...card,
   color: valueColors[i],
 }));
@@ -39,15 +57,19 @@ const values = data.values.cards.map((card, i) => ({
     ctaSecondaryHref="#services"
   />
 
-  <!-- ── Five Ways We Serve You ────────────────────────────────────────── -->
+  <!-- ── Services ────────────────────────────────────────── -->
   <section id="services" class="services-section">
     <div class="container">
       <span class="section-label">{data.services.label}</span>
       <h2>{data.services.heading}</h2>
       <p class="section-intro">{data.services.intro}</p>
-      <div class="grid-5">
-        {services.map(s => <ServiceCard {...s} />)}
-      </div>
+      {services.length > 0 ? (
+        <div class={services.length >= 4 ? 'grid-4' : services.length === 3 ? 'grid-3' : services.length === 2 ? 'grid-2' : 'grid-1'}>
+          {services.map(s => <ServiceCard {...s} />)}
+        </div>
+      ) : (
+        <p class="section-intro">Services launching soon — contact us for details.</p>
+      )}
     </div>
   </section>
 

@@ -1,0 +1,38 @@
+name: Deploy to Dev — kecktech.net
+
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to dev-dashboard-01 (VMID 730)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd /opt/docker/dashboard
+
+            echo "==> Pulling latest dev branch..."
+            git pull origin dev
+
+            echo "==> Installing website dependencies..."
+            cd dashboard/website && npm ci --omit=dev && cd ../..
+
+            echo "==> Building Astro site (uses data files on VM)..."
+            cd dashboard/website && npm run build && cd ../..
+
+            echo "==> Rebuilding admin container..."
+            cd dashboard && docker compose build kecktech-admin && cd ..
+
+            echo "==> Restarting admin + web containers..."
+            cd dashboard && docker compose up -d kecktech-admin && cd ..
+            docker exec kecktech-web nginx -s reload 2>/dev/null || docker restart kecktech-web
+
+            echo "==> Deploy complete. Running containers:"
+            docker ps --format "table {{.Names}}\t{{.Status}}" | grep kecktech

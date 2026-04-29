@@ -1,18 +1,16 @@
 ---
 import globalData from '../data/global.json';
 
-const services = [
-  { label: 'White Glove Managed IT', href: '/services#white-glove' },
-  { label: 'Hardware-as-a-Service', href: '/services#haas' },
-  { label: 'AI Custom App Development', href: '/services#ai-apps' },
-  { label: 'Senior Technology Concierge', href: '/services#senior-tech' },
-  { label: 'Solar Facility Goal ☀️', href: '/about#goal' },
+const services = globalData.footer?.serviceLinks || [
+  { label: 'IT Break/Fix', href: '/services#break-fix' },
+  { label: 'Senior Concierge', href: '/services#senior-tech' },
+  { label: 'Time-Block Contracts', href: '/services#time-block' },
+  { label: 'IT Professional Services', href: '/services#professional-services' },
 ];
-const company = [
+const company = globalData.footer?.companyLinks || [
   { label: 'About', href: '/about' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Privacy Policy', href: '/privacy' },
 ];
 const year = new Date().getFullYear();
 const footer = globalData.footer;
