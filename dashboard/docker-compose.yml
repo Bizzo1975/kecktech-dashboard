@@ -80,6 +80,7 @@ services:
       - "8083:3012"
     environment:
       - NODE_ENV=production
+      - PUBLIC_WIKI_URL=https://dev-wiki.kecktech.net
       - PORTAL_BASE_URL=http://kecktech-portal:3012
       - ZAMMAD_URL=https://tickets.kecktech.net
       - ZAMMAD_API_TOKEN=${ZAMMAD_API_TOKEN}
