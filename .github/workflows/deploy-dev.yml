@@ -13,9 +13,9 @@ jobs:
         env:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          New-Item -ItemType Directory -Path "$env:USERPROFILE\.ssh" -Force | Out-Null
-          $env:SSH_KEY | Out-File -FilePath "$env:USERPROFILE\.ssh\deploy_key" -Encoding ascii -NoNewline
-          icacls "$env:USERPROFILE\.ssh\deploy_key" /inheritance:r /grant:r "${env:USERNAME}:(R)" | Out-Null
+          $keyPath = Join-Path $env:RUNNER_TEMP "deploy_key"
+          [System.IO.File]::WriteAllText($keyPath, ($env:SSH_KEY -replace "`r`n","`n"))
+          icacls $keyPath /inheritance:r /grant:r "${env:USERNAME}:(R)" | Out-Null
 
       - name: Deploy to dev-dashboard-01 (VMID 730)
         shell: powershell
@@ -23,8 +23,8 @@ jobs:
           SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          $keyPath = "$env:USERPROFILE\.ssh\deploy_key"
-          $commands = @"
+          $keyPath = Join-Path $env:RUNNER_TEMP "deploy_key"
+          $script = @"
           set -e
           cd /opt/docker/dashboard
           echo '==> Pulling latest dev branch...'
@@ -41,9 +41,12 @@ jobs:
           echo '==> Deploy complete'
           docker ps --format 'table {{.Names}}\t{{.Status}}' | grep kecktech
           "@
-          $commands | & ssh -o StrictHostKeyChecking=no -i $keyPath "$env:SSH_USER@$env:SSH_HOST" bash -s
+          $script | & ssh -o StrictHostKeyChecking=no -i $keyPath "$env:SSH_USER@$env:SSH_HOST" "bash -s"
+          if ($LASTEXITCODE -ne 0) { throw "SSH deploy failed with exit code $LASTEXITCODE" }
 
       - name: Cleanup SSH key
         if: always()
         shell: powershell
-        run: Remove-Item "$env:USERPROFILE\.ssh\deploy_key" -Force -ErrorAction SilentlyContinue
+        run: |
+          $keyPath = Join-Path $env:RUNNER_TEMP "deploy_key"
+          Remove-Item $keyPath -Force -ErrorAction SilentlyContinue
