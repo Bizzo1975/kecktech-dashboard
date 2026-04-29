@@ -14,21 +14,9 @@ jobs:
         run: |
           $sshExe = "C:\Program Files\Git\usr\bin\ssh.exe"
           $keyPath = "C:\Users\jonkd\.ssh\id_ed25519"
-          $script = @'
-          set -e
-          cd /opt/docker/dashboard
-          echo '==> Pulling latest main branch...'
-          git pull origin main
-          echo '==> Installing website dependencies...'
-          cd dashboard/website && npm ci --omit=dev && cd ../..
-          echo '==> Building Astro site...'
-          cd dashboard/website && npm run build && cd ../..
-          echo '==> Rebuilding admin container...'
-          cd dashboard && docker compose build kecktech-admin && cd ..
-          echo '==> Restarting containers...'
-          cd dashboard && docker compose up -d kecktech-admin && cd ..
-          docker exec kecktech-web nginx -s reload 2>/dev/null || docker restart kecktech-web
-          echo '==> Deploy complete'
-          '@
-          $script | & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath kecktech@10.20.0.143 "bash -s"
-          if ($LASTEXITCODE -ne 0) { throw "SSH deploy failed with exit code $LASTEXITCODE" }
+          $scriptPath = Join-Path $env:RUNNER_TEMP "deploy.sh"
+          $scriptContent = "set -e`ncd /opt/docker/dashboard`necho '==> Pulling latest main branch...'`ngit pull origin main`necho '==> Installing website dependencies...'`ncd dashboard/website && npm ci --omit=dev && cd ../..`necho '==> Building Astro site...'`ncd dashboard/website && npm run build && cd ../..`necho '==> Rebuilding admin container...'`ncd dashboard && docker compose build kecktech-admin && cd ..`necho '==> Restarting containers...'`ncd dashboard && docker compose up -d kecktech-admin && cd ..`ndocker exec kecktech-web nginx -s reload 2>/dev/null || docker restart kecktech-web`necho '==> Deploy complete'"
+          [System.IO.File]::WriteAllText($scriptPath, $scriptContent, (New-Object System.Text.UTF8Encoding $false))
+          & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath kecktech@10.20.0.143 "bash -s" < $scriptPath
+          if ($LASTEXITCODE -ne 0) { throw "Deploy failed with exit code $LASTEXITCODE" }
+          Remove-Item $scriptPath -Force -ErrorAction SilentlyContinue
