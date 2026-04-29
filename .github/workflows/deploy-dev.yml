@@ -13,6 +13,6 @@ jobs:
         run: |
           $sshExe = "C:\Program Files\Git\usr\bin\ssh.exe"
           $keyPath = "C:\Users\jonkd\.ssh\id_ed25519"
-          $script = "set -e && cd /opt/docker/dashboard && echo '==> Pulling latest dev branch...' && git pull origin dev && echo '==> Installing website dependencies...' && cd dashboard/website && npm ci --omit=dev && cd ../.. && echo '==> Building Astro site...' && cd dashboard/website && npm run build && cd ../.. && echo '==> Rebuilding admin container...' && cd dashboard && docker compose build kecktech-admin && cd .. && echo '==> Restarting containers...' && cd dashboard && docker compose up -d kecktech-admin && cd .. && docker exec kecktech-web nginx -s reload && echo '==> Deploy complete'"
+          $script = "git config --global --add safe.directory /opt/docker && cd /opt/docker && git pull origin dev && cd dashboard/website && npm ci --omit=dev && npm run build && cd ../.. && cd dashboard && docker compose build kecktech-admin && docker compose up -d kecktech-admin && docker compose restart kecktech-web && echo DEPLOY_SUCCESS"
           & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath kecktech@10.30.0.143 $script
           if ($LASTEXITCODE -ne 0) { throw "Deploy failed with exit code $LASTEXITCODE" }
