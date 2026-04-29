@@ -6,12 +6,14 @@ import data from '../data/services.json';
 // Colors are structural — kept in source, not JSON
 const serviceColors = ['#0D6E6E', '#2E7D32', '#C07810', '#7C3AED'];
 
-const services = data.services.map((svc, i) => ({ ...svc, color: serviceColors[i] }));
+const services = data.services
+  .filter(svc => svc.available)
+  .map((svc, i) => ({ ...svc, color: serviceColors[i % serviceColors.length] }));
 ---
 
 <Base
   title="Services"
-  description="Four IT service lines from Kecktech — White Glove Managed IT, HaaS, AI Custom App Development, and Senior Technology Concierge. Kansas-based, disability-led, human-centered."
+  description="IT services from Kecktech — Break/Fix, Senior Technology Concierge, Time-Block Contracts, and IT Professional Services. Kansas-based, disability-led, human-centered."
 >
 
   <Hero
