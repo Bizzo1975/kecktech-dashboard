@@ -80,6 +80,15 @@ const cards = data.cards.map((card, i) => ({
 }
 .pricing-grid-item {
   width: 100%;
+  display: flex;
+}
+.pricing-grid-item > * {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.pricing-grid-item .card-cta {
+  margin-top: auto;
 }
 
 .faq-section { background: var(--white); }
