@@ -7,7 +7,6 @@ const requestTypes = data.form.requestTypes;
 
 <form class="contact-form" id="contact-form" method="POST" action="/api/contact.php" novalidate>
 
-  <!-- Request Type Button Group -->
   <div class="form-group">
     <label>What can we help you with?</label>
     <div class="type-group" role="group" aria-label="Request type">
@@ -47,10 +46,10 @@ const requestTypes = data.form.requestTypes;
     <label for="service">Service Interest</label>
     <select id="service" name="service">
       <option value="">— Select a service —</option>
-      <option value="white-glove">White Glove Managed IT ($199/mo)</option>
-      <option value="haas">Hardware-as-a-Service ($149/mo/device)</option>
-      <option value="ai-apps">AI Custom App Development (from $3K)</option>
+      <option value="break-fix">IT Break/Fix ($125/hr)</option>
       <option value="senior-tech">Senior Technology Concierge ($79/mo)</option>
+      <option value="time-block">Time-Block Contracts ($112.50/hr · 10-hr min)</option>
+      <option value="professional-services">IT Professional Services (Contact for details)</option>
       <option value="general">General Question</option>
     </select>
   </div>
@@ -79,76 +78,37 @@ const requestTypes = data.form.requestTypes;
 .contact-form { display: flex; flex-direction: column; gap: 20px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
-label {
-  font-family: var(--font-heading);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--navy);
-}
+label { font-family: var(--font-heading); font-size: 14px; font-weight: 600; color: var(--navy); }
 .optional { font-weight: 400; color: var(--steel); }
 input, select, textarea {
-  font-family: var(--font-body);
-  font-size: 16px;
-  color: var(--charcoal);
-  background: #fff;
-  border: 1.5px solid #CBD5E1;
-  border-radius: 6px;
-  padding: 12px 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  width: 100%;
+  font-family: var(--font-body); font-size: 16px; color: var(--charcoal);
+  background: #fff; border: 1.5px solid #CBD5E1; border-radius: 6px;
+  padding: 12px 14px; transition: border-color 0.2s, box-shadow 0.2s; width: 100%;
 }
 input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--navy);
+  outline: none; border-color: var(--navy);
   box-shadow: 0 0 0 3px rgba(30,58,95,0.12);
 }
 textarea { resize: vertical; min-height: 120px; }
-
-/* Request type button group */
-.type-group {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 10px;
-}
+.type-group { display: flex; flex-wrap: nowrap; gap: 10px; }
 .type-btn {
-  font-family: var(--font-heading);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--navy);
-  background: #fff;
-  border: 2px solid #CBD5E1;
-  border-radius: 8px;
-  padding: 10px 16px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  font-family: var(--font-heading); font-size: 14px; font-weight: 600;
+  color: var(--navy); background: #fff; border: 2px solid #CBD5E1;
+  border-radius: 8px; padding: 10px 16px; cursor: pointer;
+  white-space: nowrap; transition: border-color 0.15s, background 0.15s, color 0.15s;
 }
-.type-btn:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-.type-btn.active {
-  border-color: var(--gold);
-  background: var(--gold);
-  color: #fff;
-}
-
+.type-btn:hover { border-color: var(--gold); color: var(--gold); }
+.type-btn.active { border-color: var(--gold); background: var(--gold); color: #fff; }
 .form-footer { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 .form-submit { flex-shrink: 0; }
 .form-note { font-size: 14px; color: var(--steel); margin: 0; }
-
 .form-success, .form-error {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 20px;
-  border-radius: 8px;
-  font-size: 16px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 20px; border-radius: 8px; font-size: 16px;
 }
 .form-success { background: #f0fdf4; color: var(--teal); border: 1px solid #bbf7d0; }
 .form-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 [hidden] { display: none !important; }
-
 @media (max-width: 640px) {
   .form-row { grid-template-columns: 1fr; }
   .type-group { flex-wrap: wrap; }
@@ -157,81 +117,48 @@ textarea { resize: vertical; min-height: 120px; }
 </style>
 
 <script>
-// Request type button group
 const typeButtons = document.querySelectorAll<HTMLButtonElement>('.type-btn');
 const requestTypeInput = document.getElementById('request_type') as HTMLInputElement;
 const serviceSelect = document.getElementById('service') as HTMLSelectElement;
-
-// URL param → request type value map
 const paramMap: Record<string, string> = {
-  tech: 'tech-support',
-  support: 'customer-support',
-  sales: 'sales',
-  general: 'general',
+  tech: 'tech-support', support: 'customer-support', sales: 'sales', general: 'general',
 };
-
-// URL param → service select value map
-const serviceMap: Record<string, string> = {
-  'white-glove': 'white-glove',
-  haas: 'haas',
-  'ai-apps': 'ai-apps',
-  'senior-tech': 'senior-tech',
-};
-
 function selectType(value: string) {
-  typeButtons.forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.value === value);
-  });
+  typeButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.value === value));
   requestTypeInput.value = value;
 }
-
-typeButtons.forEach(btn => {
-  btn.addEventListener('click', () => selectType(btn.dataset.value!));
-});
-
-// Auto-select from URL params on load
+typeButtons.forEach(btn => btn.addEventListener('click', () => selectType(btn.dataset.value!)));
 const params = new URLSearchParams(window.location.search);
 const typeParam = params.get('type');
-if (typeParam && paramMap[typeParam]) {
-  selectType(paramMap[typeParam]);
-}
+if (typeParam && paramMap[typeParam]) selectType(paramMap[typeParam]);
 const serviceParam = params.get('service');
 if (serviceParam && serviceSelect) {
   const opt = serviceSelect.querySelector<HTMLOptionElement>(`option[value="${serviceParam}"]`);
   if (opt) serviceSelect.value = serviceParam;
 }
-
-// Form submission
 const form = document.getElementById('contact-form') as HTMLFormElement;
 const success = document.getElementById('form-success')!;
 const error = document.getElementById('form-error')!;
-const submitLabel = form.querySelector('.form-submit')?.textContent ?? 'Send Message →';
-
+const submitText = form.querySelector('.form-submit')?.textContent ?? 'Send Message →';
 form?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = form.querySelector('.form-submit') as HTMLButtonElement;
   btn.textContent = 'Sending…';
   btn.disabled = true;
-
   try {
-    const res = await fetch(form.action, {
-      method: 'POST',
-      body: new FormData(form),
-    });
+    const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
     if (res.ok) {
       form.reset();
       typeButtons.forEach(b => b.classList.remove('active'));
       requestTypeInput.value = '';
       success.hidden = false;
       error.hidden = true;
-    } else {
-      throw new Error('non-200');
-    }
+    } else { throw new Error('non-200'); }
   } catch {
     error.hidden = false;
     success.hidden = true;
   } finally {
-    btn.textContent = submitLabel;
+    btn.textContent = submitText;
     btn.disabled = false;
   }
 });

@@ -1,0 +1,78 @@
+# Kecktech IT — Cursor Project Rules
+# Last updated: 2026-04-29
+
+## Identity
+Company: Kecktech IT Solutions LLC — family-owned, disability-led, solar-powered IT services, Park City, Kansas
+Operator: Jon Keck (GitHub: Bizzo1975)
+Launch date: 2026-05-12
+Primary domain: kecktech.net
+
+## This Repo — kecktech-dashboard
+- website/src/data/ — JSON content files — THIS is where page content lives
+- website/src/components/ — Astro components
+- website/dist/ — Built output served by nginx (do not edit directly)
+- website/nginx/nginx.conf — nginx config for kecktech-web container
+
+Build command: cd /opt/docker/dashboard/website && npm run build
+Run after every content or component change.
+
+## Branch Strategy
+dev → VMID 730 (dev-dashboard-01, 10.30.0.143) → https://dev.kecktech.net
+main → VMID 230 (prod-dashboard-01, 10.20.0.143) → https://kecktech.net
+Never commit directly to main.
+
+After any file edit:
+  cd /opt/docker/dashboard/website
+  npm run build
+  git add .
+  git commit -m "your message"
+  git push origin dev
+
+## Dev URLs
+https://dev.kecktech.net → public website (port 8081)
+https://dev-dash.kecktech.net → ops dashboard (port 8080)
+https://dev-admin.kecktech.net → admin UI (port 8084)
+https://dev-wiki.kecktech.net → wiki on VMID 732
+
+## Day 1 Active Services (ONLY these appear on client-facing pages)
+- IT Break/Fix — $125/hr (id: break-fix)
+- Senior Technology Concierge — $79/mo (id: senior-tech)
+- Time-Block Contracts — $112.50/hr, 10-hr min (id: time-block)
+- IT Professional Services — Contact for details (id: professional-services)
+
+## Deferred Services (available:false — never render client-facing)
+- White Glove Managed IT
+- Hardware-as-a-Service
+- AI Custom App Development
+- Game Server Hosting
+
+## Homepage Rule
+Senior Concierge intentionally hidden from homepage cards.
+Shows on /services and /pricing only. 3 cards on homepage.
+
+## services.json — available flag
+Each service has "available": true or false.
+Only available:true entries are rendered on client pages.
+Deferred services stay in file with available:false.
+
+## Content File Map
+src/data/home.json → homepage
+src/data/services.json → /services page
+src/data/pricing.json → /pricing page
+src/data/contact.json → /contact page
+src/data/about.json → /about page
+src/data/global.json → footer (all pages)
+src/components/ContactForm.astro → contact form (service dropdown hardcoded here)
+
+## Non-Negotiables
+- No pricing changes without operator confirmation
+- No deferred services on client-facing pages
+- Never commit to main directly
+- Run npm run build after every content change
+- jacob-roman.com is anonymous — never associate with Jon Keck or Kecktech
+
+## Notion Key Pages (MCP connected)
+Ops SOT: 34f92bae-8322-812d-9198-c0844393d7f8
+Dev VM Plan: 34f92bae-8322-8139-83db-d27dcf70393b
+Stack Handoff: 34c92bae-8322-817d-aedf-f116a800715a
+Daily Handoffs: 34f92bae-8322-8123-951a-f8d58d1840f2

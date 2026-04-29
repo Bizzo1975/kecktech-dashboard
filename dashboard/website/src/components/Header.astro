@@ -4,7 +4,7 @@ const nav = [
   { label: 'About',    href: '/about' },
   { label: 'Services', href: '/services' },
   { label: 'Pricing',  href: '/pricing' },
-  { label: 'Help',     href: 'https://help.kecktech.net' },
+  { label: 'Help',     href: 'https://dev-wiki.kecktech.net', external: true },
   { label: 'Contact',  href: '/contact' },
 ];
 const currentPath = Astro.url.pathname;
@@ -41,7 +41,7 @@ const currentPath = Astro.url.pathname;
 
   <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
     {nav.map(item => (
-      <a href={item.href} class="mobile-nav-link">{item.label}</a>
+      <a href={item.href} class="mobile-nav-link" {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{item.label}</a>
     ))}
     <a href="https://portal.kecktech.net" class="mobile-nav-link mobile-login">Customer Login</a>
   </div>
