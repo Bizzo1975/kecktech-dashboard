@@ -15,8 +15,7 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           $keyPath = Join-Path $env:RUNNER_TEMP "deploy_key"
-          [System.IO.File]::WriteAllText($keyPath, ($env:SSH_KEY -replace "`r`n","`n"))
-          icacls $keyPath /inheritance:r /grant:r "${env:USERNAME}:(R)" | Out-Null
+          [System.IO.File]::WriteAllText($keyPath, ($env:SSH_KEY.Replace("`r`n","`n") + "`n"))
 
       - name: Deploy to prod-dashboard-01 (VMID 230)
         shell: powershell
@@ -25,7 +24,8 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
         run: |
           $keyPath = Join-Path $env:RUNNER_TEMP "deploy_key"
-          $script = @"
+          $sshExe = "C:\Program Files\Git\usr\bin\ssh.exe"
+          $script = @'
           set -e
           cd /opt/docker/dashboard
           echo '==> Pulling latest main branch...'
@@ -40,9 +40,8 @@ jobs:
           cd dashboard && docker compose up -d kecktech-admin && cd ..
           docker exec kecktech-web nginx -s reload 2>/dev/null || docker restart kecktech-web
           echo '==> Deploy complete'
-          docker ps --format 'table {{.Names}}\t{{.Status}}' | grep kecktech
-          "@
-          $script | & ssh -o StrictHostKeyChecking=no -i $keyPath "$env:SSH_USER@$env:SSH_HOST" "bash -s"
+          '@
+          $script | & $sshExe -o StrictHostKeyChecking=no -i $keyPath "$env:SSH_USER@$env:SSH_HOST" "bash -s"
           if ($LASTEXITCODE -ne 0) { throw "SSH deploy failed with exit code $LASTEXITCODE" }
 
       - name: Cleanup SSH key
