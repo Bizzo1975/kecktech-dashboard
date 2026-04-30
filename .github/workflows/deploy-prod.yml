@@ -1,12 +1,11 @@
-name: Deploy to Prod — kecktech.net
+name: Deploy to Prod
 
 on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: 'Type YES to confirm prod deploy'
+        description: Type YES to confirm prod deploy
         required: true
-        default: ''
 
 jobs:
   deploy:
@@ -14,12 +13,11 @@ jobs:
     if: github.event.inputs.confirm == 'YES'
     environment: production
     steps:
-      - name: Deploy to prod-dashboard-01 (VMID 230)
+      - name: Deploy to prod-dashboard-01
         shell: powershell
         run: |
           $sshExe = "C:\Program Files\Git\usr\bin\ssh.exe"
           $keyPath = "C:\Users\jonkd\.ssh\deploy_key_fixed"
-          $script = "set -e && git config --global --add safe.directory /opt/docker && cd /opt/docker && git pull origin main && cd dashboard/website && npm ci --omit=dev && npm run build && cd /opt/docker/dashboard && docker compose up -d kecktech-admin && docker compose restart kecktech-web && echo DEPLOY_SUCCESS"
-          $output = & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath deploy@10.20.0.143 $script 2>&1
-          $output | Write-Host
-          if ($output -match "DEPLOY_SUCCESS") { exit 0 } else { exit 1 }
+          $script = "set -euo pipefail; git config --global --add safe.directory /opt/docker; cd /opt/docker; git pull origin main; cd dashboard/website; npm ci --omit=dev; npm run build; cd /opt/docker/dashboard; docker compose up -d kecktech-admin; docker compose restart kecktech-web; echo DEPLOY_OK"
+          & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath deploy@10.20.0.143 "bash -c '$script'"
+          if ($LASTEXITCODE -ne 0) { throw "Deploy failed" }
