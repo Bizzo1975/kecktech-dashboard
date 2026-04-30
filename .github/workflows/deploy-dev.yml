@@ -1,4 +1,4 @@
-name: Deploy to Dev — kecktech.net
+﻿name: Deploy to Dev — kecktech.net
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
         shell: powershell
         run: |
           $sshExe = "C:\Program Files\Git\usr\bin\ssh.exe"
-          $keyPath = "C:\Users\jonkd\.ssh\id_ed25519"
+          $keyPath = "C:\Users\jonkd\.ssh\deploy_key_fixed"
           $script = "git config --global --add safe.directory /opt/docker && cd /opt/docker && git pull origin dev && cd dashboard/website && npm ci --omit=dev && npm run build && cd ../.. && cd dashboard && docker compose build kecktech-admin && docker compose up -d kecktech-admin && docker compose restart kecktech-web && echo DEPLOY_SUCCESS"
-          & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath kecktech@10.30.0.143 $script
+          & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath deploy@10.30.0.143 $script
           if ($LASTEXITCODE -ne 0) { throw "Deploy failed with exit code $LASTEXITCODE" }
