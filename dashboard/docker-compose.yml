@@ -55,10 +55,19 @@ services:
     networks:
       - kecktech_front
   kecktech-mailer:
-    image: php:8.2-apache
+    build:
+      context: .
+      dockerfile: Dockerfile.mailer
+    image: kecktech-mailer:latest
     container_name: kecktech-mailer
     restart: always
     mem_limit: 64m
+    environment:
+      - SMTP_HOST=10.20.0.110
+      - SMTP_PORT=587
+      - SMTP_USER=support@kecktech.net
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_FROM=support@kecktech.net
     extra_hosts:
       - "dev.kecktech.net:10.30.0.143"
       - "www.dev.kecktech.net:10.30.0.143"
@@ -113,5 +122,7 @@ services:
       - ./website/src/data:/website/src/data
       - ./website/dist:/website/dist
       - ./website/public/images:/website/public/images
+      - ./website/admin/server.js:/admin/server.js
+      - ./website/admin/public/style.css:/admin/public/style.css
     networks:
       - kecktech_front

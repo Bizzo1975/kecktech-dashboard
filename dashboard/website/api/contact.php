@@ -80,7 +80,7 @@ $body .= "\nMessage:\n{$message}\n\n";
 $body .= "---\nSent from kecktech.net contact form\n";
 $body .= "IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown') . "\n";
 
-$headers  = "From: noreply@kecktech.net\r\n";
+$headers  = "From: support@kecktech.net\r\n";
 $headers .= "Reply-To: {$email}\r\n";
 $headers .= "X-Mailer: Kecktech-ContactForm/1.0\r\n";
 $headers .= "MIME-Version: 1.0\r\n";

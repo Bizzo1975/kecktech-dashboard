@@ -1,0 +1,92 @@
+{
+  "hero": {
+    "h1": "Simple, Transparent Pricing",
+    "subtitle": "No long-term contracts. No surprise invoices. No hidden fees. Pay for what you need — stop when you don't."
+  },
+  "cards": [
+    {
+      "service": "IT Break/Fix",
+      "price": "$125/hr",
+      "tagline": "No contracts. No minimums. Just fast, honest help.",
+      "features": [
+        "Remote and on-site support",
+        "No contracts or minimums required",
+        "Transparent hourly billing",
+        "Same technician every time",
+        "Clear explanation of every fix",
+        "Emergency response available"
+      ]
+    },
+    {
+      "service": "Senior Technology Concierge",
+      "price": "$79/mo",
+      "tagline": "Dignity-first tech support. Plain English always.",
+      "features": [
+        "Scam & fraud protection",
+        "Device setup & optimization",
+        "Monthly check-in calls",
+        "Plain-English support",
+        "Remote access for quick fixes",
+        "Emergency tech card"
+      ]
+    },
+    {
+      "service": "Time-Block Contracts",
+      "price": "$112.50/hr",
+      "tagline": "10% off prepaid hours. 10-hour minimum. Hours never expire.",
+      "featured": true,
+      "features": [
+        "10% discount off standard $125/hr rate",
+        "10-hour minimum purchase",
+        "Hours never expire",
+        "Priority scheduling over break/fix",
+        "Remote and on-site support",
+        "Same technician every time"
+      ]
+    },
+    {
+      "service": "IT Professional Services",
+      "price": "Contact for details",
+      "tagline": "Scoped projects. Written quotes. No surprises.",
+      "features": [
+        "Infrastructure design & builds",
+        "Network architecture & VLAN setup",
+        "Server deployment & migration",
+        "Security audits & hardening",
+        "Custom project scoping",
+        "Detailed written quotes"
+      ]
+    }
+  ],
+  "faq": {
+    "label": "Common Questions",
+    "heading": "FAQ",
+    "items": [
+      {
+        "q": "Are there long-term contracts?",
+        "a": "No. Break/Fix and Time-Block hours have no ongoing commitment. Senior Concierge is month-to-month — cancel any time with 30 days notice. Professional Services projects have a one-time project agreement with no ongoing obligation."
+      },
+      {
+        "q": "What payment methods do you accept?",
+        "a": "ACH bank transfer, check, and all major credit cards. Monthly service invoices are sent by email on the 1st of each month."
+      },
+      {
+        "q": "Do you serve clients outside Kansas?",
+        "a": "Yes — all remote services are available nationwide. On-site support is currently Kansas and surrounding region."
+      },
+      {
+        "q": "What is a Time-Block Contract?",
+        "a": "You purchase a block of IT hours in advance at a 10% discount off our standard $125/hr rate — that's $112.50/hr. Minimum purchase is 10 hours. Hours never expire and you get priority scheduling over standard break/fix clients."
+      },
+      {
+        "q": "Can I bundle services?",
+        "a": "Yes — contact us to discuss a custom package for your situation."
+      }
+    ]
+  },
+  "cta": {
+    "heading": "Not Sure Which Service Fits?",
+    "body": "Tell us about your situation — we'll recommend the right fit with no pressure and no sales pitch.",
+    "button": "Let's Talk →"
+  }
+}

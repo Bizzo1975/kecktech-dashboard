@@ -15,7 +15,7 @@ const PAGES = ['home', 'about', 'services', 'pricing', 'contact', 'global'];
 const NAV_ICONS = { home: '🏠', about: '👥', services: '⚙️', pricing: '💰', contact: '✉️', global: '🌐' };
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Photo upload ──────────────────────────────────────────────────────────────
@@ -71,6 +71,9 @@ const SECTION_LABELS = {
   cta: "Call To Action",
   testimonials: "Testimonials",
   faq: "FAQ",
+  values: "Values",
+  cards: "Cards",
+  items: "Items",
 };
 
 function prettySectionLabel(raw) {
@@ -110,10 +113,16 @@ function renderPhotoField(val, name, id) {
 </div>`;
 }
 
-// Recursively render form fields from a JSON value
+// ── Get a human-readable label for a card object ──
+function getCardLabel(item, fallbackIndex) {
+  return item.name || item.service || item.heading || item.title || item.id || `Item ${fallbackIndex + 1}`;
+}
+
+// ── Recursively render form fields from a JSON value ──
 function renderFields(val, name, depth = 0) {
   if (val === null || val === undefined) return '';
 
+  // ── BOOLEAN → visible toggle switch ──
   if (typeof val === 'boolean') {
     const id = name.replace(/[\[\].]/g, '_');
     const parts = name.split(/[\[\].]+/).filter(Boolean);
@@ -128,13 +137,23 @@ function renderFields(val, name, depth = 0) {
     </div>`;
   }
 
+  // ── NUMBER → visible number input (NOT hidden) ──
   if (typeof val === 'number') {
-    return `<input type="hidden" name="${esc(name)}" value="${val}" />`;
+    const id = name.replace(/[\[\].]/g, '_');
+    const parts = name.split(/[\[\].]+/).filter(Boolean);
+    const label = humanLabel(parts[parts.length - 1] || name);
+    return `<div class="field">
+      <label for="${id}">${esc(label)}</label>
+      <input type="number" id="${id}" name="${esc(name)}" value="${val}" step="any" />
+      <input type="hidden" name="${esc(name)}__type" value="number" />
+    </div>`;
   }
 
+  // ── STRING → text input or textarea ──
   if (typeof val === 'string') {
     const id    = name.replace(/[\[\].]/g, '_');
-    const label = humanLabel(name.split(/[\[\].]+/).filter(Boolean).pop() || name);
+    const parts = name.split(/[\[\].]+/).filter(Boolean);
+    const label = humanLabel(parts[parts.length - 1] || name);
 
     if (isPhotoField(name)) return renderPhotoField(val, name, id);
 
@@ -145,7 +164,7 @@ function renderFields(val, name, depth = 0) {
     return `<div class="field"><label for="${id}">${esc(label)}</label>${inputHtml}</div>`;
   }
 
-  // --- STRING ARRAY EDITOR (features lists, etc.) ---
+  // ── STRING ARRAY → repeatable list editor (features, links, etc.) ──
   if (Array.isArray(val) && val.length > 0 && val.every(i => typeof i === 'string')) {
     const parts = name.split(/[\[\].]+/).filter(Boolean);
     const label = humanLabel(parts[parts.length - 1] || name);
@@ -170,60 +189,85 @@ function renderFields(val, name, depth = 0) {
     </div>`;
   }
 
+  // ── ARRAY OF OBJECTS → card editor with full field expansion ──
   if (Array.isArray(val)) {
-    const label = prettySectionLabel(name.split(/[\[\].]+/).filter(Boolean).pop() || name);
-    let html = `<details class="array-section accordion-section"${depth <= 1 ? ' open' : ''}><summary class="accordion-summary">${esc(label)}</summary><div class="accordion-content">`;
+    const sectionParts = name.split(/[\[\].]+/).filter(Boolean);
+    const label = prettySectionLabel(sectionParts[sectionParts.length - 1] || name);
+
+    let html = `<details class="array-section accordion-section"${depth <= 1 ? ' open' : ''}>
+      <summary class="accordion-summary">${esc(label)}</summary>
+      <div class="accordion-content">`;
+
     val.forEach((item, i) => {
-      if (typeof item === 'object' && !Array.isArray(item)) {
-        const itemLabel = item.name || item.heading || item.title || item.id || `Item ${i + 1}`;
-        html += `<fieldset class="array-item"><legend>${esc(itemLabel)}</legend>`;
-        html += renderFields(item, `${name}[${i}]`, depth + 1);
+      if (typeof item === 'object' && item !== null && !Array.isArray(item)) {
+        // Full card object — render ALL fields visibly
+        const cardLabel = getCardLabel(item, i);
+        html += `<fieldset class="array-item card-item">
+          <legend>${esc(cardLabel)}</legend>`;
+
+        // Render each key of the card object in a logical order
+        for (const [k, v] of Object.entries(item)) {
+          html += renderFields(v, `${name}[${i}][${k}]`, depth + 1);
+        }
+
         html += `</fieldset>`;
       } else {
+        // Primitive array items
         html += renderFields(item, `${name}[${i}]`, depth + 1);
       }
     });
+
     html += `</div></details>`;
     return html;
   }
 
+  // ── PLAIN OBJECT → section with all fields ──
   if (typeof val === 'object') {
-    const label = name ? prettySectionLabel(name.split(/[\[\].]+/).filter(Boolean).pop() || name) : '';
-    const wrapperStart = label && depth > 0
-      ? `<details class="obj-section accordion-section"${depth === 1 ? ' open' : ''}><summary class="accordion-summary">${esc(label)}</summary><div class="accordion-content">`
+    const sectionParts = name.split(/[\[\].]+/).filter(Boolean);
+    const label = name ? prettySectionLabel(sectionParts[sectionParts.length - 1] || name) : '';
+
+    const shouldWrap = label && depth > 0;
+    let html = shouldWrap
+      ? `<details class="obj-section accordion-section"${depth <= 1 ? ' open' : ''}>
+           <summary class="accordion-summary">${esc(label)}</summary>
+           <div class="accordion-content">`
       : '<div class="obj-section">';
-    let html = wrapperStart;
+
     for (const [k, v] of Object.entries(val)) {
       html += renderFields(v, name ? `${name}[${k}]` : k, depth + 1);
     }
-    html += label && depth > 0 ? '</div></details>' : '</div>';
+
+    html += shouldWrap ? '</div></details>' : '</div>';
     return html;
   }
 
   return '';
 }
 
-// Recursively merge form body back into original structure (preserving types)
+// ── Merge form body back into original JSON (preserving types) ──
 function mergeFormData(original, submitted) {
   if (original === null || original === undefined) return submitted;
 
-  // Boolean fields: checkbox present → true, absent → false
-  // The __type=boolean hidden input tells us this was a boolean field
+  // Boolean: checkbox present → true, absent → false
   if (typeof original === 'boolean') {
     if (submitted === 'true' || submitted === true) return true;
     if (submitted === 'false' || submitted === false) return false;
-    // Unchecked checkbox: key absent from form body → default false
     return false;
   }
 
-  if (typeof original === 'number') return Number(submitted);
+  // Number: parse back to number
+  if (typeof original === 'number') {
+    if (submitted === undefined || submitted === null || submitted === '') return original;
+    const n = Number(submitted);
+    return isNaN(n) ? original : n;
+  }
+
   if (typeof original === 'string') return typeof submitted === 'string' ? submitted : original;
 
   if (Array.isArray(original)) {
     // String array: reconstruct from indexed form keys
     if (original.length > 0 && original.every(i => typeof i === 'string')) {
       if (!submitted || typeof submitted !== 'object') return original;
-      // Submitted comes as { '0': 'val', '1': 'val', ... }
       const result = [];
       let i = 0;
       while (submitted[String(i)] !== undefined) {
@@ -234,16 +278,17 @@ function mergeFormData(original, submitted) {
       return result.length > 0 ? result : original;
     }
 
-    if (!submitted || !Array.isArray(submitted)) return original;
-    return original.map((item, i) =>
-      submitted[i] === undefined ? item : mergeFormData(item, submitted[i])
-    );
+    // Object array (cards, FAQ items, etc.)
+    if (!submitted || typeof submitted !== 'object') return original;
+    return original.map((item, i) => {
+      const sub = submitted[String(i)] !== undefined ? submitted[String(i)] : submitted[i];
+      return sub === undefined ? item : mergeFormData(item, sub);
+    });
   }
 
   if (typeof original === 'object') {
     const result = {};
     for (const key of Object.keys(original)) {
-      // Skip __type helper keys
       if (key.endsWith('__type')) continue;
       result[key] = submitted && submitted[key] !== undefined
         ? mergeFormData(original[key], submitted[key])
@@ -251,6 +296,7 @@ function mergeFormData(original, submitted) {
     }
     return result;
   }
+
   return submitted;
 }
 
@@ -526,7 +572,6 @@ app.post('/save/:name', (req, res) => {
     if (!merged.services) merged.services = {};
     merged.services.displayIds = ids;
   } else if (name === 'home' && !req.body['__displayIds__']) {
-    // All unchecked — empty array
     if (!merged.services) merged.services = {};
     merged.services.displayIds = [];
   }

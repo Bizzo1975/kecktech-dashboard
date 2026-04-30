@@ -1,0 +1,27 @@
+{
+  "footer": {
+    "tagline": "Human-First IT. Your Data Stays in Kansas.\nBuilding Toward Solar.",
+    "phone": "(316) 768-0034",
+    "email": "support@kecktech.net",
+    "location": "Park City, Kansas",
+    "hours": "Mon\u2013Fri 8am\u20136pm CST",
+    "serviceLinks": [
+      { "label": "IT Break/Fix", "href": "/services#break-fix" },
+      { "label": "Senior Concierge", "href": "/services#senior-tech" },
+      { "label": "Time-Block Contracts", "href": "/services#time-block" },
+      { "label": "IT Professional Services", "href": "/services#professional-services" }
+    ],
+    "companyLinks": [
+      { "label": "About", "href": "/about" },
+      { "label": "Services", "href": "/services" },
+      { "label": "Pricing", "href": "/pricing" },
+      { "label": "Contact", "href": "/contact" },
+      { "label": "Help Center", "href": "https://help.kecktech.net" }
+    ]
+  },
+  "company": {
+    "name": "Kecktech IT Solutions LLC",
+    "phone": "(316) 768-0034",
+    "email": "support@kecktech.net"
+  }
+}

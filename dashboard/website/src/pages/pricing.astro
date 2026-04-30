@@ -3,33 +3,29 @@ import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import PricingCard from '../components/PricingCard.astro';
 import data from '../data/pricing.json';
+import servicesData from '../data/services.json';
 
-// Colors are structural — kept here, not in JSON
-const cardColors = ['#0D6E6E', '#2E7D32', '#C07810', '#7C3AED'];
-const cardServiceIds = ['white-glove', 'haas', 'ai-apps', 'senior-tech'];
+// Build pricing cards from services.json — only available services
+const cardColors = ['#0D6E6E', '#2E7D32', '#C07810', '#7C3AED', '#1E3A5F', '#4A6887'];
 
-const cards = data.cards.map((card, i) => ({
-  ...card,
-  color: cardColors[i],
-  ctaHref: `/contact?type=service&service=${cardServiceIds[i]}`,
-}));
+const cards = servicesData.services
+  .filter((svc: any) => svc.available)
+  .map((svc: any, i: number) => ({
+    service: svc.name,
+    price: svc.price,
+    tagline: svc.body?.split('.')[0] + '.',
+    features: svc.features || [],
+    color: cardColors[i % cardColors.length],
+    ctaHref: `/contact?type=service&service=${svc.id}`,
+  }));
+
+const serviceCount = cards.length;
+const descText = `Simple, transparent pricing for ${serviceCount} Kecktech IT services. No long-term contracts. No hidden fees.`;
 ---
 
-<Base
-  title="Pricing"
-  description="Simple, transparent pricing for all five Kecktech IT services. No long-term contracts. No hidden fees. Month-to-month."
->
+<Base title="Pricing" description={descText}>
 
-  <Hero
-    h1={data.hero.h1}
-    subtitle={data.hero.subtitle}
-    bgImage="/images/pricing-hero.jpg"
-    overlayColor="#1E3A5F"
-    overlayOpacity={0.72}
-    centered={true}
-  />
-
-  <!-- ── Pricing Cards ─────────────────────────────────────────────── -->
+  <Hero h1={data.hero.h1} subtitle={data.hero.subtitle} bgImage="/images/pricing-hero.jpg" overlayColor="#1E3A5F" overlayOpacity={0.72} centered={true} />
   <section class="pricing-section">
     <div class="container">
       <div class="pricing-grid">
@@ -42,7 +38,6 @@ const cards = data.cards.map((card, i) => ({
     </div>
   </section>
 
-  <!-- ── FAQ ──────────────────────────────────────────────────────── -->
   <section class="faq-section">
     <div class="container">
       <span class="section-label">{data.faq.label}</span>
@@ -58,7 +53,6 @@ const cards = data.cards.map((card, i) => ({
     </div>
   </section>
 
-  <!-- ── CTA ──────────────────────────────────────────────────────── -->
   <section class="cta-banner">
     <div class="container">
       <h2>{data.cta.heading}</h2>
@@ -71,56 +65,21 @@ const cards = data.cards.map((card, i) => ({
 
 <style>
 .pricing-section { background: var(--off-white); }
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 28px;
-  max-width: 840px;
-  margin: 0 auto;
-}
-.pricing-grid-item {
-  width: 100%;
-  display: flex;
-}
-.pricing-grid-item > * {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-.pricing-grid-item .card-cta {
-  margin-top: auto;
-}
-
+.pricing-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; max-width: 840px; margin: 0 auto; }
+.pricing-grid-item { width: 100%; display: flex; }
+.pricing-grid-item > * { display: flex; flex-direction: column; width: 100%; }
+.pricing-grid-item .card-cta { margin-top: auto; }
 .faq-section { background: var(--white); }
 .faq-section h2 { margin: 8px 0 20px; }
 .faq-item { border-bottom: 1px solid #e2e8f0; }
 .faq-item:first-of-type { border-top: 1px solid #e2e8f0; }
-.faq-q {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  font-family: var(--font-heading);
-  font-weight: 600;
-  color: var(--navy);
-  font-size: 16px;
-  padding: 9px 0;
-  cursor: pointer;
-  list-style: none;
-  margin: 0;
-}
+.faq-q { display: flex; justify-content: space-between; align-items: center; gap: 16px; font-family: var(--font-heading); font-weight: 600; color: var(--navy); font-size: 16px; padding: 9px 0; cursor: pointer; list-style: none; margin: 0; }
 .faq-q::-webkit-details-marker { display: none; }
 .faq-q::after { content: '+'; font-size: 20px; font-weight: 400; color: var(--gold); flex-shrink: 0; }
-.faq-item[open] .faq-q::after { content: '−'; }
+.faq-item[open] .faq-q::after { content: '\2212'; }
 .faq-a { color: var(--charcoal); font-size: 14px; margin: 0 0 8px; padding-left: 2px; }
-
 .cta-banner { background: var(--navy); text-align: center; }
 .cta-banner h2 { color: #fff; margin-bottom: 14px; }
 .cta-banner p { color: var(--muted); font-size: 18px; margin-bottom: 32px; }
-
-@media (max-width: 560px) {
-  .pricing-grid {
-    grid-template-columns: 1fr;
-  }
-}
+@media (max-width: 560px) { .pricing-grid { grid-template-columns: 1fr; } }
 </style>
