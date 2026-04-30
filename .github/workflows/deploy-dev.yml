@@ -1,4 +1,4 @@
-﻿name: Deploy to Dev — kecktech.net
+name: Deploy to Dev — kecktech.net
 
 on:
   push:
@@ -13,6 +13,7 @@ jobs:
         run: |
           $sshExe = "C:\Program Files\Git\usr\bin\ssh.exe"
           $keyPath = "C:\Users\jonkd\.ssh\deploy_key_fixed"
-          $script = "git config --global --add safe.directory /opt/docker && cd /opt/docker && git pull origin dev && cd dashboard/website && npm ci --omit=dev && npm run build && cd ../.. && cd dashboard && docker compose build kecktech-admin && docker compose up -d kecktech-admin && docker compose restart kecktech-web && echo DEPLOY_SUCCESS"
-          & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath deploy@10.30.0.143 $script
-          if ($LASTEXITCODE -ne 0) { throw "Deploy failed with exit code $LASTEXITCODE" }
+          $script = "set -e && git config --global --add safe.directory /opt/docker && cd /opt/docker && git pull origin dev && cd dashboard/website && npm ci --omit=dev && npm run build && cd /opt/docker/dashboard && docker compose up -d kecktech-admin && docker compose restart kecktech-web && echo DEPLOY_SUCCESS"
+          $output = & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath deploy@10.30.0.143 $script 2>&1
+          $output | Write-Host
+          if ($output -match "DEPLOY_SUCCESS") { exit 0 } else { exit 1 }
