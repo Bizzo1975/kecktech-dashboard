@@ -56,7 +56,7 @@ import Icon from '../components/Icon.astro';
     <div class="container">
       <span class="section-label">{data.team.label}</span>
       <h2>{data.team.heading}</h2>
-      <div class="grid-2 team-grid">
+      <div class="team-grid team-grid--solo">
         {data.team.members.map(m => (
           <div class="team-member">
             <img src={m.photo} alt={m.photoAlt} class="team-photo" />

@@ -15,22 +15,22 @@
     "heading": "Our Core Values",
     "cards": [
       {
-        "icon": "user-check",
+        "icon": "user-round-check",
         "title": "Human-First",
         "desc": "Technology serves people — not the other way around. Every decision we make starts with the human on the other end, especially the ones Big Tech has historically left behind."
       },
       {
-        "icon": "shield",
+        "icon": "server-cog",
         "title": "Your Data, Your Business",
         "desc": "We run our own servers in Park City, Kansas. Your data doesn't flow through Amazon, Google, or Microsoft. We know exactly where it lives — and so do you."
       },
       {
-        "icon": "sun",
+        "icon": "leaf",
         "title": "Solar-Forward",
         "desc": "We're building toward a solar-powered facility in Park City, Kansas. Every technology decision we make today is designed to support that future — low-waste hardware, efficient self-hosted infrastructure, and a commitment to energy-conscious operations."
       },
       {
-        "icon": "accessibility",
+        "icon": "door-open",
         "title": "Radically Accessible",
         "desc": "We design our services to be affordable, jargon-free, and available to people who've been underserved by traditional IT — including seniors, small business owners, and anyone who's ever been told that IT is too complicated for them."
       },
@@ -43,14 +43,14 @@
   },
   "team": {
     "label": "Meet the Team",
-    "heading": "The Founders",
+    "heading": "The Founder",
     "members": [
       {
         "name": "Jon Keck",
-        "title": "Owner",
+        "title": "Lead Technician",
         "bio": "30+ years of enterprise IT experience. Jon built the infrastructure that powers Kecktech — from the vision of a solar-powered data center to the AI pipelines in the code. He believes the best IT support is the kind you barely notice.",
         "photo": "/images/headshot.png",
-        "photoAlt": "Jon Keck, Owner",
+        "photoAlt": "Jon Keck, Lead Technician",
         "website": "https://www.willworkforlunch.com"
       }
     ]
