@@ -43,7 +43,6 @@ const currentPath = Astro.url.pathname;
     {nav.map(item => (
       <a href={item.href} class="mobile-nav-link" {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{item.label}</a>
     ))}
-    <a href="https://portal.kecktech.net" class="mobile-nav-link mobile-login">Customer Login</a>
   </div>
 </header>
 
@@ -65,7 +64,7 @@ const currentPath = Astro.url.pathname;
   gap: 28px;
   overflow: hidden;
 }
-.logo-img { height: 58px; width: auto; max-height: 58px; object-fit: contain; }
+.logo-img { height: 62px; width: auto; max-height: 62px; object-fit: contain; }
 .logo-link { flex-shrink: 0; }
 
 .main-nav { display: flex; gap: 4px; margin-left: auto; }
@@ -135,7 +134,6 @@ const currentPath = Astro.url.pathname;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .mobile-nav-link:last-child { border-bottom: none; }
-.mobile-login { display: none; }
 
 @media (max-width: 768px) {
   .main-nav, .btn-phone, .btn-login { display: none; }
