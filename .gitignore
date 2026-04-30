@@ -1,7 +1,9 @@
 .env
 *.env
 volumes/
-data/
+# Docker volume data directories
+/data/
+**/volumes/data/
 secrets/
 *.pem
 *.key

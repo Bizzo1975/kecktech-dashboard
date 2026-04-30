@@ -4,20 +4,24 @@ import Hero from '../components/Hero.astro';
 import data from '../data/services.json';
 
 // Colors are structural — kept in source, not JSON
-const serviceColors = ['#0D6E6E', '#2E7D32', '#C07810', '#7C3AED'];
+const serviceColors = ['#0D6E6E', '#2E7D32', '#C07810', '#7C3AED', '#1E3A5F', '#4A6887', '#7C3AED'];
 
 const services = data.services
   .filter(svc => svc.available)
   .map((svc, i) => ({ ...svc, color: serviceColors[i % serviceColors.length] }));
----
 
+// Dynamic count for hero h1
+const numberWords = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+const countWord = numberWords[services.length] || String(services.length);
+const heroH1 = data.hero.h1.replace(/\b(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\b/i, countWord);
+---
 <Base
   title="Services"
-  description="IT services from Kecktech — Break/Fix, Senior Technology Concierge, Time-Block Contracts, and IT Professional Services. Kansas-based, disability-led, human-centered."
+  description={`IT services from Kecktech — ${services.map(s => s.name).join(', ')}. Kansas-based, human-first, privacy-focused.`}
 >
 
   <Hero
-    h1={data.hero.h1}
+    h1={heroH1}
     subtitle={data.hero.subtitle}
     bgImage="/images/about-bg-img.jpg"
     overlayColor="#0D6E6E"
@@ -34,7 +38,7 @@ const services = data.services
           <span class="price-badge" style={`background: ${svc.color}`}>{svc.price}</span>
           <h2 style={`color: ${svc.color}`}>{svc.name}</h2>
           <p class="svc-body">{svc.body}</p>
-          <a href={`/contact?type=service&service=${svc.id}`} class="btn-primary" style={`background: ${svc.color}`}>{svc.cta} →</a>
+          <a href={`/contact?type=service&service=${svc.id}`} class="btn-primary" style={`background: ${svc.color}`}>{svc.cta} &rarr;</a>
         </div>
         <div class="svc-features-wrap">
           <h4>What's included:</h4>
@@ -53,7 +57,7 @@ const services = data.services
     </section>
   ))}
 
-  <!-- ── CTA ──────────────────────────────────────────────────────────── -->
+  <!-- CTA -->
   <section class="cta-banner">
     <div class="container">
       <h2>{data.cta.heading}</h2>
@@ -67,32 +71,17 @@ const services = data.services
 <style>
 .svc-section { background: var(--white); border-bottom: 1px solid #f1f5f9; }
 .svc-section--alt { background: var(--off-white); }
-.svc-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: start;
-}
+.svc-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
 .svc-text h2 { margin: 10px 0 16px; font-size: clamp(24px, 3vw, 34px); }
 .svc-body { margin-bottom: 28px; font-size: 17px; line-height: 1.8; }
-
-.svc-features-wrap {
-  background: var(--white);
-  border-radius: 10px;
-  padding: 32px;
-  box-shadow: 0 2px 16px rgba(30,58,95,0.07);
-}
+.svc-features-wrap { background: var(--white); border-radius: 10px; padding: 32px; box-shadow: 0 2px 16px rgba(30,58,95,0.07); }
 .svc-section--alt .svc-features-wrap { background: #fff; }
 .svc-features-wrap h4 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--steel); margin-bottom: 20px; }
 .svc-features-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
 .svc-features-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 16px; color: var(--charcoal); line-height: 1.5; }
 .svc-features-list svg { flex-shrink: 0; margin-top: 2px; }
-
 .cta-banner { background: var(--navy); text-align: center; }
 .cta-banner h2 { color: #fff; margin-bottom: 14px; }
 .cta-banner p { color: var(--muted); font-size: 18px; margin-bottom: 32px; }
-
-@media (max-width: 768px) {
-  .svc-inner { grid-template-columns: 1fr; gap: 32px; }
-}
+@media (max-width: 768px) { .svc-inner { grid-template-columns: 1fr; gap: 32px; } }
 </style>

@@ -303,6 +303,7 @@ body {
   letter-spacing: 0.8px;
 }
 .field input[type="text"],
+.field input[type="number"],
 .field textarea,
 .photo-path {
   font-family: var(--font-body);
@@ -316,6 +317,7 @@ body {
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .field input[type="text"]:focus,
+.field input[type="number"]:focus,
 .field textarea:focus,
 .photo-path:focus {
   outline: none;
@@ -348,7 +350,7 @@ h4.array-heading {
   margin-top: 20px;
 }
 
-/* ── Array items ── */
+/* ── Array items / Card items ── */
 .array-section { margin-bottom: 20px; }
 .accordion-section {
   border: 1px solid var(--border);
@@ -386,6 +388,30 @@ h4.array-heading {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   padding: 0 8px;
+}
+
+/* ── Card items — enhanced styling ── */
+.card-item {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 24px 16px;
+  margin-bottom: 16px;
+  background: var(--white);
+  box-shadow: 0 1px 4px rgba(30,58,95,.04);
+  transition: border-color 0.15s;
+}
+.card-item:hover {
+  border-color: var(--steel);
+}
+.card-item legend {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 2px 10px;
+  background: var(--white);
 }
 
 /* ═══════════════════════════════════════════════════════════

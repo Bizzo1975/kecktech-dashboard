@@ -1,0 +1,125 @@
+{
+  "hero": {
+    "h1": "Four Service Lines. One Company That Cares.",
+    "subtitle": "Every service we offer exists because we saw a real problem going unsolved. No bundles, no upsells, no surprises."
+  },
+  "cta": {
+    "heading": "Not Sure Which Service Fits?",
+    "body": "Tell us about your situation — we'll recommend the right fit with no pressure.",
+    "button": "Talk to a Human →"
+  },
+  "services": [
+    {
+      "id": "break-fix",
+      "available": true,
+      "name": "IT Break/Fix",
+      "price": "$125/hr",
+      "body": "Something broke and you need it fixed — fast. No contracts, no retainers, no minimum commitment. We show up, we fix it, we explain what happened. Billed by the hour with no surprise fees.",
+      "features": [
+        "Remote and on-site support",
+        "No contracts or minimums",
+        "Transparent hourly billing",
+        "Same technician every time",
+        "Clear explanation of every fix",
+        "Emergency response available"
+      ],
+      "cta": "Get Help Now"
+    },
+    {
+      "id": "senior-tech",
+      "available": true,
+      "name": "Senior Technology Concierge",
+      "price": "$79/mo",
+      "body": "Monthly tech support designed for older adults — or the family members who love them. Monthly check-in call, unlimited scam and phishing review during business hours, and device setup help (up to 2 devices/year). Peace of mind for you. Independence for them.",
+      "features": [
+        "Monthly 30-minute check-in call",
+        "Unlimited scam & phishing review during business hours",
+        "Device setup — 2 devices included per year",
+        "No long-term contract required",
+        "Emergency line available for urgent issues"
+      ],
+      "cta": "Get Started"
+    },
+    {
+      "id": "time-block",
+      "available": true,
+      "name": "Time-Block Contracts",
+      "price": "$112.50/hr",
+      "body": "Purchase IT hours in advance and save 10% off our standard rate. Ideal for businesses with ongoing or predictable IT needs. Hours never expire and you get priority scheduling over break/fix clients. Minimum purchase of 10 hours.",
+      "features": [
+        "10% discount off standard $125/hr rate",
+        "10-hour minimum purchase",
+        "Hours never expire",
+        "Priority scheduling",
+        "Same technician every time",
+        "Remote and on-site support"
+      ],
+      "cta": "Buy a Block"
+    },
+    {
+      "id": "professional-services",
+      "available": true,
+      "name": "IT Professional Services",
+      "price": "From $125/hr",
+      "body": "Infrastructure projects, network design, server builds, migrations, security audits, and more. Scoped, quoted, and delivered on time. If you have a project that goes beyond break/fix, this is where we start the conversation.",
+      "priceNote": "Scope and timeline set at discovery call. Free 30-minute consultation — no obligation.",
+      "features": [
+        "Infrastructure design & builds",
+        "Network architecture & VLAN setup",
+        "Server deployment & migration",
+        "Security audits & hardening",
+        "Custom project scoping",
+        "Detailed written quotes"
+      ],
+      "cta": "Start a Conversation"
+    },
+    {
+      "id": "white-glove",
+      "available": false,
+      "name": "Managed IT",
+      "price": "$199/mo",
+      "body": "Dedicated remote IT support, SLA-backed response, and real humans who know your systems before you call.",
+      "features": [
+        "Remote monitoring 24/7",
+        "SLA-backed response times",
+        "Dedicated technician — same person every time",
+        "Proactive security patching",
+        "Security baseline hardening",
+        "No per-ticket fees — ever"
+      ],
+      "cta": "Get Started"
+    },
+    {
+      "id": "haas",
+      "available": false,
+      "name": "Hardware-as-a-Service (HaaS)",
+      "price": "$149/mo per device",
+      "body": "Enterprise-grade refurbished hardware on a flat monthly subscription.",
+      "features": [
+        "Refurbished enterprise-grade hardware",
+        "Kecktech-branded device tags",
+        "Remote management included",
+        "Hardware refresh cycle included",
+        "Responsible recycling of aged-out devices",
+        "No upfront hardware purchase required"
+      ],
+      "cta": "Get Started"
+    },
+    {
+      "id": "ai-apps",
+      "available": false,
+      "name": "AI Custom App Development",
+      "price": "From $3,000",
+      "body": "Stop paying $800/mo for a stack of SaaS tools that don't talk to each other.",
+      "features": [
+        "Custom-built to your exact workflow",
+        "You own 100% of the code — forever",
+        "AI-powered automation built in",
+        "Kansas-hosted on Kecktech infrastructure",
+        "No recurring SaaS license fees",
+        "Built in weeks, not months"
+      ],
+      "cta": "Start Your Project"
+    }
+  ]
+}

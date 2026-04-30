@@ -1,0 +1,17 @@
+FROM php:8.2-apache
+
+# Install msmtp as sendmail replacement
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends msmtp msmtp-mta && \
+    rm -rf /var/lib/apt/lists/*
+
+# Point PHP's sendmail to msmtp
+RUN echo "sendmail_path = /usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/mail.ini
+
+# Startup script generates msmtp config from env vars
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+EXPOSE 80
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["apache2-foreground"]

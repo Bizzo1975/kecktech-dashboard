@@ -1,0 +1,51 @@
+{
+  "hero": {
+    "h1": "Reliable IT support for small businesses and seniors.",
+    "subtitle": "Honest pricing. Real accountability. No tech jargon. We handle the technology so you can focus on what you do best.",
+    "eyebrow": "Serving Wichita & Sedgwick County",
+    "cta": "Chat with Us →",
+    "ctaSecondary": "See Our Services ↓"
+  },
+  "services": {
+    "label": "How We Can Help",
+    "heading": "Every Service Built Around a Real Problem",
+    "intro": "No bundled packages. No unnecessary upsells. Focused service lines — each one built around a real problem we saw going unsolved.",
+    "displayIds": [
+      "break-fix",
+      "time-block",
+      "professional-services"
+    ]
+  },
+  "values": {
+    "label": "Why Clients Choose Us",
+    "heading": "What Makes Kecktech Different",
+    "intro": "There are a lot of IT companies. Here's what makes us different — and why it matters.",
+    "cards": [
+      {
+        "icon": "☀️",
+        "heading": "Building Toward Solar",
+        "body": "We're building toward a 25kW solar array and 100kWh battery bank for our Kansas facility — our 1–2 year goal. Every business decision we make today prioritizes sustainability and energy-conscious operations."
+      },
+      {
+        "icon": "♿",
+        "heading": "Accessible & Affordable",
+        "body": "We design our services to be affordable, jargon-free, and available to people who've been underserved by traditional IT — including seniors, small business owners, and anyone who's been told IT is too complicated for them."
+      },
+      {
+        "icon": "🔒",
+        "heading": "Your Data Stays in Kansas",
+        "body": "We operate from Kansas and your data stays in Kansas — on our own infrastructure. We don't scan, sell, or monetize your data."
+      },
+      {
+        "icon": "🧑",
+        "heading": "Real Humans. Real Accountability.",
+        "body": "No ticket queues. No offshore call centers. No automated runaround. When you need us, a real person picks up — the same people, every time."
+      }
+    ]
+  },
+  "cta": {
+    "heading": "Ready for IT That Actually Works for You?",
+    "body": "No long-term contracts. Transparent pricing. A team that treats every client like a neighbor.",
+    "button": "Get a Free Assessment →"
+  }
+}
