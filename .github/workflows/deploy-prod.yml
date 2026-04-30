@@ -16,8 +16,4 @@ jobs:
       - name: Deploy to prod-dashboard-01
         shell: powershell
         run: |
-          $sshExe = "C:\Program Files\Git\usr\bin\ssh.exe"
-          $keyPath = "C:\Users\jonkd\.ssh\deploy_key_fixed"
-          $script = "set -euo pipefail; git config --global --add safe.directory /opt/docker; cd /opt/docker; git pull origin main; cd dashboard/website; npm ci --omit=dev; npm run build; cd /opt/docker/dashboard; docker compose up -d kecktech-admin; docker compose restart kecktech-web; echo DEPLOY_OK"
-          & $sshExe -o StrictHostKeyChecking=no -o BatchMode=yes -i $keyPath deploy@10.20.0.143 "bash -c '$script'"
-          if ($LASTEXITCODE -ne 0) { throw "Deploy failed" }
+          & C:\actions-runner\deploy.ps1 -target "10.20.0.143" -branch "main"
