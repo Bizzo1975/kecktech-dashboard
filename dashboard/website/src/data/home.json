@@ -22,22 +22,22 @@
     "intro": "There are a lot of IT companies. Here's what makes us different — and why it matters.",
     "cards": [
       {
-        "icon": "☀️",
+        "icon": "sun",
         "heading": "Building Toward Solar",
         "body": "We're building toward a 25kW solar array and 100kWh battery bank for our Kansas facility — our 1–2 year goal. Every business decision we make today prioritizes sustainability and energy-conscious operations."
       },
       {
-        "icon": "♿",
+        "icon": "accessibility",
         "heading": "Accessible & Affordable",
         "body": "We design our services to be affordable, jargon-free, and available to people who've been underserved by traditional IT — including seniors, small business owners, and anyone who's been told IT is too complicated for them."
       },
       {
-        "icon": "🔒",
+        "icon": "lock",
         "heading": "Your Data Stays in Kansas",
         "body": "We operate from Kansas and your data stays in Kansas — on our own infrastructure. We don't scan, sell, or monetize your data."
       },
       {
-        "icon": "🧑",
+        "icon": "users",
         "heading": "Real Humans. Real Accountability.",
         "body": "No ticket queues. No offshore call centers. No automated runaround. When you need us, a real person picks up — the same people, every time."
       }

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import data from '../data/about.json';
+import Icon from '../components/Icon.astro';
 ---
 
 <Base
@@ -41,7 +42,7 @@ import data from '../data/about.json';
       <div class="values-grid">
         {data.values.cards.map(v => (
           <div class="value-card">
-            <div class="val-icon" aria-hidden="true">{v.icon}</div>
+            <div class="val-icon-wrap" aria-hidden="true"><Icon name={v.icon} size={24} /></div>
             <h3>{v.title}</h3>
             <p>{v.desc}</p>
           </div>
@@ -135,7 +136,7 @@ import data from '../data/about.json';
 .values-grid > *:nth-child(4) { grid-column: 2 / span 2; }
 .values-grid > *:nth-child(5) { grid-column: 4 / span 2; }
 .value-card { background: var(--off-white); border-radius: 10px; padding: 28px; }
-.val-icon { font-size: 32px; margin-bottom: 12px; }
+.val-icon-wrap { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: color-mix(in srgb, var(--navy) 8%, transparent); color: var(--navy); margin-bottom: 12px; }
 .value-card h3 { color: var(--navy); font-size: 18px; margin-bottom: 10px; }
 .value-card p { font-size: 15px; color: var(--charcoal); margin: 0; line-height: 1.7; }
 

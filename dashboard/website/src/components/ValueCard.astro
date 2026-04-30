@@ -5,11 +5,12 @@ interface Props {
   body: string;
   color?: string;
 }
+import Icon from './Icon.astro';
 const { icon, heading, body, color } = Astro.props;
 ---
 
 <div class="val-card" style={color ? `--val-accent: ${color}` : ''}>
-  <div class="val-icon" aria-hidden="true" class:list={[color ? 'val-icon--circle' : '']}>{icon}</div>
+  <div class="val-icon val-icon--circle" aria-hidden="true"><Icon name={icon} size={24} /></div>
   <h3 class="val-heading">{heading}</h3>
   <p class="val-body">{body}</p>
 </div>
@@ -22,7 +23,7 @@ const { icon, heading, body, color } = Astro.props;
   box-shadow: 0 2px 16px rgba(30,58,95,0.06);
   border-bottom: 3px solid var(--val-accent, var(--gold));
 }
-.val-icon { font-size: 36px; margin-bottom: 16px; line-height: 1; }
+.val-icon { margin-bottom: 16px; color: var(--val-accent, var(--gold)); }
 .val-icon--circle {
   display: inline-flex;
   align-items: center;

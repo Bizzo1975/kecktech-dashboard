@@ -15,27 +15,27 @@
     "heading": "Our Core Values",
     "cards": [
       {
-        "icon": "🧑‍💼",
+        "icon": "user-check",
         "title": "Human-First",
         "desc": "Technology serves people — not the other way around. Every decision we make starts with the human on the other end, especially the ones Big Tech has historically left behind."
       },
       {
-        "icon": "🛡️",
+        "icon": "shield",
         "title": "Your Data, Your Business",
         "desc": "We run our own servers in Park City, Kansas. Your data doesn't flow through Amazon, Google, or Microsoft. We know exactly where it lives — and so do you."
       },
       {
-        "icon": "☀️",
+        "icon": "sun",
         "title": "Solar-Forward",
         "desc": "We're building toward a solar-powered facility in Park City, Kansas. Every technology decision we make today is designed to support that future — low-waste hardware, efficient self-hosted infrastructure, and a commitment to energy-conscious operations."
       },
       {
-        "icon": "♿",
+        "icon": "accessibility",
         "title": "Radically Accessible",
         "desc": "We design our services to be affordable, jargon-free, and available to people who've been underserved by traditional IT — including seniors, small business owners, and anyone who's ever been told that IT is too complicated for them."
       },
       {
-        "icon": "🤝",
+        "icon": "handshake",
         "title": "Hands-On Support",
         "desc": "Real humans, real accountability, real care. No offshore call centers, no ticket queues — the same people answer every time, with patience and dignity."
       }
@@ -52,13 +52,6 @@
         "photo": "/images/headshot.png",
         "photoAlt": "Jon Keck, Owner",
         "website": "https://www.willworkforlunch.com"
-      },
-      {
-        "name": "Co-Founder",
-        "title": "Co-Founder & Client Relations",
-        "bio": "Coming soon — bio to be added by Jon.",
-        "photo": "/images/team-2.jpg",
-        "photoAlt": "Co-Founder"
       }
     ]
   },
@@ -71,10 +64,22 @@
     "donateLabel": "Donate via PayPal ↗",
     "donateUrl": "https://www.paypal.com/donate",
     "stats": [
-      { "number": "25kW",      "label": "Planned Solar Array" },
-      { "number": "100kWh",    "label": "Battery Goal" },
-      { "number": "1,500 ft²", "label": "Target Facility" },
-      { "number": "$250K",     "label": "Funding Goal" }
+      {
+        "number": "25kW",
+        "label": "Planned Solar Array"
+      },
+      {
+        "number": "100kWh",
+        "label": "Battery Goal"
+      },
+      {
+        "number": "1,500 ft²",
+        "label": "Target Facility"
+      },
+      {
+        "number": "$250K",
+        "label": "Funding Goal"
+      }
     ],
     "ctaPrimary": "Talk to Our Team →",
     "ctaSecondary": "View Services →"

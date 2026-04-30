@@ -65,7 +65,7 @@ const currentPath = Astro.url.pathname;
   gap: 28px;
   overflow: hidden;
 }
-.logo-img { height: 52px; width: auto; max-height: 52px; object-fit: contain; }
+.logo-img { height: 58px; width: auto; max-height: 58px; object-fit: contain; }
 .logo-link { flex-shrink: 0; }
 
 .main-nav { display: flex; gap: 4px; margin-left: auto; }
@@ -135,10 +135,10 @@ const currentPath = Astro.url.pathname;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .mobile-nav-link:last-child { border-bottom: none; }
-.mobile-login { color: var(--gold); font-weight: 600; }
+.mobile-login { display: none; }
 
 @media (max-width: 768px) {
-  .main-nav, .btn-phone { display: none; }
+  .main-nav, .btn-phone, .btn-login { display: none; }
   .hamburger { display: flex; }
   .mobile-nav.open { display: flex; }
 }

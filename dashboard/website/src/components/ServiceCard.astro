@@ -1,4 +1,5 @@
----
+﻿---
+import Icon from './Icon.astro';
 interface Props {
   icon: string;
   heading: string;
@@ -6,16 +7,20 @@ interface Props {
   price: string;
   color: string;
   href?: string;
+  priceNote?: string;
 }
-const { icon, heading, description, price, color, href = '/contact' } = Astro.props;
+const { icon, heading, description, price, color, href = '/contact', priceNote } = Astro.props;
 ---
 
 <div class="svc-card" style={`--accent: ${color}`}>
-  <div class="svc-icon" aria-hidden="true">{icon}</div>
+  <div class="svc-icon-wrap">
+    <Icon name={icon} size={28} />
+  </div>
   <div class="svc-price">{price}</div>
   <h3 class="svc-heading">{heading}</h3>
   <p class="svc-desc">{description}</p>
-  <a href={href} class="svc-link">Learn more →</a>
+  {priceNote && <p class="svc-note">{priceNote}</p>}
+  <a href={href} class="svc-link">Learn more &rarr;</a>
 </div>
 
 <style>
@@ -32,7 +37,16 @@ const { icon, heading, description, price, color, href = '/contact' } = Astro.pr
 }
 .svc-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(30,58,95,0.14); }
 
-.svc-icon { font-size: 32px; line-height: 1; }
+.svc-icon-wrap {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+}
 .svc-price {
   display: inline-block;
   background: var(--accent);
@@ -46,6 +60,7 @@ const { icon, heading, description, price, color, href = '/contact' } = Astro.pr
 }
 .svc-heading { color: var(--navy); font-size: 19px; margin: 0; }
 .svc-desc { color: var(--charcoal); font-size: 15px; line-height: 1.7; flex: 1; margin: 0; }
+.svc-note { color: var(--steel); font-size: 13px; font-style: italic; margin: 0; }
 .svc-link {
   font-family: var(--font-heading);
   font-size: 14px;
