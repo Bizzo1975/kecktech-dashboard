@@ -8,12 +8,8 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Set execution policy
-        shell: powershell
-        run: Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
-
       - name: Deploy to dev-dashboard-01
         shell: powershell
         run: |
-          & "C:\actions-runner\deploy.ps1" -target "10.30.0.143" -branch "dev"
+          & C:\actions-runner\deploy.ps1 -target "10.30.0.143" -branch "dev"
           if ($LASTEXITCODE -ne 0) { throw "Deploy failed with exit code $LASTEXITCODE" }
