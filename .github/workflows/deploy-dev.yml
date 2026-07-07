@@ -12,3 +12,4 @@ jobs:
         shell: powershell
         run: |
           & C:\actions-runner\deploy.ps1 -target "10.30.0.143" -branch "dev"
+          if ($LASTEXITCODE -ne 0) { throw "Deploy failed with exit code $LASTEXITCODE" }

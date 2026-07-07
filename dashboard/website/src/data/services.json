@@ -1,7 +1,7 @@
 {
   "hero": {
-    "h1": "Four Service Lines. One Company That Cares.",
-    "subtitle": "Every service we offer exists because we saw a real problem going unsolved. No bundles, no upsells, no surprises."
+    "h1": "Every Service Exists For a Reason.",
+    "subtitle": "Focused service lines built around real problems — small business IT, senior support, and AI-powered automation. No bundles, no upsells, no surprises."
   },
   "cta": {
     "heading": "Not Sure Which Service Fits?",
@@ -107,14 +107,14 @@
     },
     {
       "id": "ai-apps",
-      "available": false,
-      "name": "AI Custom App Development",
+      "available": true,
+      "name": "AI Agentic Coding",
       "price": "From $3,000",
-      "body": "Stop paying $800/mo for a stack of SaaS tools that don't talk to each other.",
+      "body": "We build custom AI automation tools, agentic workflows, and local-first LLM pipelines. Stop paying $800/mo for a SaaS stack that barely talks to itself — own your automation outright, hosted in Kansas, no recurring fees.",
       "features": [
         "Custom-built to your exact workflow",
         "You own 100% of the code — forever",
-        "AI-powered automation built in",
+        "AI-powered agentic automation",
         "Kansas-hosted on Kecktech infrastructure",
         "No recurring SaaS license fees",
         "Built in weeks, not months"

@@ -12,8 +12,9 @@
     "intro": "No bundled packages. No unnecessary upsells. Focused service lines — each one built around a real problem we saw going unsolved.",
     "displayIds": [
       "break-fix",
+      "senior-tech",
       "time-block",
-      "professional-services"
+      "ai-apps"
     ]
   },
   "values": {
@@ -22,9 +23,9 @@
     "intro": "There are a lot of IT companies. Here's what makes us different — and why it matters.",
     "cards": [
       {
-        "icon": "sun-medium",
-        "heading": "Building Toward Solar",
-        "body": "We're building toward a 25kW solar array and 100kWh battery bank for our Kansas facility — our 1–2 year goal. Every business decision we make today prioritizes sustainability and energy-conscious operations."
+        "icon": "bot",
+        "heading": "AI Agentic Coding",
+        "body": "We build custom AI automation tools and agentic workflows for small businesses — owned by you, hosted in Kansas, designed to replace the SaaS stack you barely use. No recurring fees. No lock-in."
       },
       {
         "icon": "door-open",
