@@ -1,12 +1,12 @@
 {
   "hero": {
-    "h1": "Independent. Human-First. Building Toward Solar.",
+    "h1": "Independent. Human-First. Built for Real People.",
     "subtitle": "An independent managed service provider built in Park City, Kansas — human-first, privacy-focused, and built to last."
   },
   "mission": {
     "label": "Our Mission",
     "heading": "Why We Exist",
-    "body": "To deliver reliable, human-centered IT care to the clients Big Tech ignores, and build toward a solar-powered, accessible facility in Park City, Kansas.",
+    "body": "To deliver reliable, human-centered IT care to the clients Big Tech ignores — small business owners, seniors, and anyone who's been priced out of quality IT support.",
     "quote": "Local, sovereign, sustainable technology is not just possible — it's better.",
     "body2": "Kecktech is the IT partner that treats every client like a neighbor — whether that's an overwhelmed small business owner, a senior trying to stay safe online, or a company tired of paying $1,200 a month for tools they barely use."
   },
@@ -25,9 +25,9 @@
         "desc": "We run our own servers in Park City, Kansas. Your data doesn't flow through Amazon, Google, or Microsoft. We know exactly where it lives — and so do you."
       },
       {
-        "icon": "leaf",
-        "title": "Solar-Forward",
-        "desc": "We're building toward a solar-powered facility in Park City, Kansas. Every technology decision we make today is designed to support that future — low-waste hardware, efficient self-hosted infrastructure, and a commitment to energy-conscious operations."
+        "icon": "bot",
+        "title": "AI Agentic Coding",
+        "desc": "We build custom AI automation tools and agentic workflows for small businesses — owned by you, hosted in Kansas, designed to replace the SaaS stack you barely use. No recurring fees. No lock-in."
       },
       {
         "icon": "door-open",
@@ -48,7 +48,7 @@
       {
         "name": "Jon Keck",
         "title": "Lead Technician",
-        "bio": "30+ years of enterprise IT experience. Jon built the infrastructure that powers Kecktech — from the vision of a solar-powered data center to the AI pipelines in the code. He believes the best IT support is the kind you barely notice.",
+        "bio": "30+ years of enterprise IT experience. Jon built the infrastructure that powers Kecktech — from self-hosted Kansas infrastructure to the AI agentic pipelines that automate real business problems. He believes the best IT support is the kind you barely notice.",
         "photo": "/images/headshot.png",
         "photoAlt": "Jon Keck, Lead Technician",
         "website": "https://www.willworkforlunch.com"
@@ -56,32 +56,32 @@
     ]
   },
   "facility": {
-    "label": "Our Big Goal",
-    "heading": "Help Us Build It",
-    "body": "Our dream is a 1,500 sq ft purpose-built facility in Park City, Kansas — 25kW solar array, 100kWh battery backup, accessible, and 100% off-grid. We're raising funds to make it real.",
-    "donateHeading": "Support the Build",
-    "donateBody": "Every dollar goes directly toward the solar facility. Help us build sovereign, sustainable infrastructure for small businesses and seniors across Kansas.",
-    "donateLabel": "Donate via PayPal ↗",
-    "donateUrl": "https://www.paypal.com/donate",
+    "label": "AI Agentic Coding",
+    "heading": "Custom AI. No SaaS Fees. Yours Forever.",
+    "body": "We build AI-powered automation tools, custom agentic workflows, and local-first LLM pipelines for small businesses who are tired of paying recurring SaaS fees for tools that barely work together. You own the code. It runs in Kansas. No lock-in.",
+    "donateHeading": "Start Your Project",
+    "donateBody": "Tell us about your operational problem. We'll scope a custom AI solution and quote it in writing — no obligation, no sales pitch.",
+    "donateLabel": "Schedule a Discovery Call →",
+    "donateUrl": "/contact?type=sales",
     "stats": [
       {
-        "number": "25kW",
-        "label": "Planned Solar Array"
+        "number": "100%",
+        "label": "Code Ownership"
       },
       {
-        "number": "100kWh",
-        "label": "Battery Goal"
+        "number": "$0",
+        "label": "Recurring SaaS Fees"
       },
       {
-        "number": "1,500 ft²",
-        "label": "Target Facility"
+        "number": "Kansas",
+        "label": "Hosted & Operated"
       },
       {
-        "number": "$250K",
-        "label": "Funding Goal"
+        "number": "Weeks",
+        "label": "Delivery Timeline"
       }
     ],
-    "ctaPrimary": "Talk to Our Team →",
+    "ctaPrimary": "Start a Conversation →",
     "ctaSecondary": "View Services →"
   }
 }

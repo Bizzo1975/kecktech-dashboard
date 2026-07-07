@@ -24,7 +24,7 @@ const services = displayIds
   .filter(Boolean)
   .filter((s: any) => s.available !== false)
   .map((s: any, i: number) => ({
-    icon: ({'break-fix': 'wrench', 'senior-tech': 'heart-handshake', 'time-block': 'calendar-clock', 'professional-services': 'building-2'})[s.id] || 'wrench',
+    icon: ({'break-fix': 'wrench', 'senior-tech': 'heart-handshake', 'time-block': 'calendar-clock', 'professional-services': 'building-2', 'ai-apps': 'bot'})[s.id] || 'wrench',
     heading: s.name,
     description: s.body || s.description || '',
     price: s.price,
