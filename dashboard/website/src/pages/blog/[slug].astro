@@ -1,0 +1,170 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import data from '../../data/blog.json';
+import { fetchPost, fetchPosts, formatDate } from '../../lib/cms-blog';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  try {
+    const posts = await fetchPosts();
+    return posts.map((p) => ({
+      params: { slug: p.slug },
+    }));
+  } catch (err) {
+    console.warn('[blog/[slug]] CMS unavailable for paths:', err);
+    return [];
+  }
+}
+
+const { slug } = Astro.params;
+if (!slug) {
+  return Astro.redirect('/blog');
+}
+
+let post = null;
+try {
+  post = await fetchPost(slug);
+} catch (err) {
+  console.warn('[blog/[slug]] CMS fetch failed:', err);
+}
+
+if (!post) {
+  return Astro.redirect('/blog');
+}
+
+const html = marked.parse(post.content || '', { async: false }) as string;
+const dateLabel = formatDate(post.published_at);
+---
+
+<Base
+  title={post.title}
+  description={post.excerpt || `${post.title} — Kecktech IT Solutions blog`}
+>
+  <Hero
+    h1={post.title}
+    subtitle={dateLabel || 'Kecktech IT Solutions'}
+    bgImage="/images/blog-hero.jpg"
+    overlayColor="#2E7D32"
+    overlayOpacity={0.70}
+    ctaLabel="Back to Blog"
+    ctaHref="/blog"
+    ctaSecondaryLabel="Contact Us"
+    ctaSecondaryHref="/contact?type=general"
+  />
+
+  <section class="article-section">
+    <div class="container">
+      <article class="prose">
+        {post.excerpt ? <p class="lede">{post.excerpt}</p> : null}
+        <div class="body" set:html={html} />
+        <div class="meta-row">
+          <span>Kecktech IT Solutions</span>
+          <span>Park City, Kansas</span>
+          <a href="/about">About us</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="container">
+      <h2>Have a question about this?</h2>
+      <p>{data.cta.body}</p>
+      <a href="/contact?type=general" class="btn-primary">{data.cta.button}</a>
+      <p class="back-link"><a href="/blog">← Back to all posts</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+.article-section {
+  background: var(--white);
+}
+.prose {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.lede {
+  font-size: 20px;
+  color: var(--steel);
+  margin: 0 0 28px;
+  line-height: 1.7;
+}
+.body :global(h2) {
+  margin: 40px 0 14px;
+  font-size: 24px;
+  color: var(--navy);
+}
+.body :global(h3) {
+  margin: 28px 0 10px;
+  font-size: 19px;
+  color: var(--navy);
+}
+.body :global(p) {
+  margin-bottom: 16px;
+  line-height: 1.8;
+  color: var(--charcoal);
+}
+.body :global(ul),
+.body :global(ol) {
+  padding-left: 24px;
+  margin-bottom: 16px;
+}
+.body :global(li) {
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+.body :global(a) {
+  color: var(--navy);
+}
+.body :global(a:hover) {
+  color: var(--gold);
+}
+.body :global(blockquote) {
+  border-left: 4px solid var(--gold);
+  padding: 16px 24px;
+  margin: 24px 0;
+  background: var(--off-white);
+  color: var(--navy);
+  font-family: var(--font-heading);
+}
+.body :global(code) {
+  background: var(--off-white);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+.body :global(pre) {
+  background: var(--off-white);
+  padding: 16px 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 28px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  color: var(--steel);
+}
+.meta-row a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 600;
+}
+.back-link {
+  margin-top: 28px;
+}
+.back-link a {
+  color: var(--gold);
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+</style>

@@ -1,0 +1,88 @@
+---
+interface Props {
+  title: string;
+  excerpt?: string | null;
+  href: string;
+  dateLabel?: string;
+  dateTime?: string;
+  color?: string;
+  featured?: boolean;
+}
+const {
+  title,
+  excerpt,
+  href,
+  dateLabel,
+  dateTime,
+  color = '#C07810',
+  featured = false,
+} = Astro.props;
+---
+
+<a class={`blog-card${featured ? ' blog-card--featured' : ''}`} href={href} style={`--accent: ${color}`}>
+  {dateLabel && dateTime ? (
+    <time class="blog-meta" datetime={dateTime}>{dateLabel}</time>
+  ) : dateLabel ? (
+    <span class="blog-meta">{dateLabel}</span>
+  ) : null}
+  <h3 class="blog-heading">{title}</h3>
+  {excerpt ? <p class="blog-desc">{excerpt}</p> : null}
+  <span class="blog-link">Read more →</span>
+</a>
+
+<style>
+.blog-card {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 32px 28px;
+  box-shadow: 0 2px 16px rgba(30, 58, 95, 0.08);
+  border-top: 4px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+}
+.blog-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(30, 58, 95, 0.14);
+}
+.blog-card--featured {
+  grid-column: 1 / -1;
+  padding: 40px 36px;
+}
+.blog-meta {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--steel);
+}
+.blog-heading {
+  color: var(--navy);
+  font-size: 22px;
+  margin: 0;
+  line-height: 1.3;
+}
+.blog-card:hover .blog-heading {
+  color: var(--gold);
+}
+.blog-card--featured .blog-heading {
+  font-size: clamp(24px, 3vw, 32px);
+}
+.blog-desc {
+  color: var(--charcoal);
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 0;
+  flex: 1;
+}
+.blog-link {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-top: 4px;
+}
+</style>

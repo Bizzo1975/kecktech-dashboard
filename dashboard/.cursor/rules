@@ -62,6 +62,8 @@ src/data/pricing.json → /pricing page
 src/data/contact.json → /contact page
 src/data/about.json → /about page
 src/data/global.json → footer (all pages)
+src/data/demos.json → /demos page
+src/data/blog.json → /blog page chrome (posts from CMS)
 src/components/ContactForm.astro → contact form (service dropdown hardcoded here)
 
 ## Non-Negotiables

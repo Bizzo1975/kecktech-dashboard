@@ -1,0 +1,23 @@
+{
+  "hero": {
+    "h1": "Notes From the Field.",
+    "subtitle": "Practical updates from Kecktech — products, services, engineering decisions, and what we’re learning while keeping IT human-first in Kansas.",
+    "cta": "Talk to Us →",
+    "ctaSecondary": "Read the Latest ↓"
+  },
+  "posts": {
+    "label": "From the Field",
+    "heading": "Latest Updates",
+    "intro": "Short, useful posts about how we build, support, and host technology for small businesses and seniors — without the jargon."
+  },
+  "cta": {
+    "heading": "Have a Question About Something You Read?",
+    "body": "Tell us what you’re working on — we’ll point you to the right next step with no pressure.",
+    "button": "Contact Kecktech →"
+  },
+  "empty": {
+    "heading": "New posts are on the way.",
+    "body": "We’re preparing the first field notes. In the meantime, we’re happy to talk through your IT situation.",
+    "button": "Contact Us →"
+  }
+}

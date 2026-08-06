@@ -1,0 +1,95 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import DemoCard from '../components/DemoCard.astro';
+import data from '../data/demos.json';
+
+const cardColors = [
+  '#1B6B93',
+  '#0D6E6E',
+  '#2E7D32',
+  '#C07810',
+  '#4A6887',
+  '#7C3AED',
+  '#1B6B93',
+  '#0D6E6E',
+  '#C07810',
+];
+
+const apps = data.apps.filter((app) => app.available !== false);
+---
+
+<Base
+  title="Demos"
+  description="Live demos of apps built and hosted by Kecktech — open a product and explore it yourself."
+>
+  <Hero
+    h1={data.hero.h1}
+    subtitle={data.hero.subtitle}
+    bgImage="/images/demos-hero.jpg"
+    overlayColor="#1B6B93"
+    overlayOpacity={0.70}
+    ctaLabel={data.hero.cta}
+    ctaHref="/contact?type=general"
+    ctaSecondaryLabel={data.hero.ctaSecondary}
+    ctaSecondaryHref="#demos"
+  />
+
+  <section id="demos" class="demos-section">
+    <div class="container">
+      <span class="section-label">{data.demos.label}</span>
+      <h2>{data.demos.heading}</h2>
+      <p class="section-intro">{data.demos.intro}</p>
+
+      <div class={`demos-grid ${apps.length === 1 ? 'demos-grid--one' : ''}`}>
+        {apps.map((app, i) => (
+          <DemoCard
+            name={app.name}
+            description={app.description}
+            href={app.url}
+            image={app.image}
+            color={cardColors[i % cardColors.length]}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="container">
+      <h2>{data.cta.heading}</h2>
+      <p>{data.cta.body}</p>
+      <a href="/contact?type=general" class="btn-primary">{data.cta.button}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+.demos-section {
+  background: var(--off-white);
+}
+.section-intro {
+  max-width: 720px;
+  color: var(--charcoal);
+  margin: 0 0 40px;
+  font-size: 18px;
+  line-height: 1.8;
+}
+.demos-section h2 {
+  margin: 8px 0 16px;
+}
+.demos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+.demos-grid--one {
+  grid-template-columns: 1fr;
+  max-width: 720px;
+}
+@media (max-width: 800px) {
+  .demos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

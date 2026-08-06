@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import BlogCard from '../components/BlogCard.astro';
+import data from '../data/blog.json';
+import { cardColor, fetchPosts, formatDate, type BlogPostListItem } from '../lib/cms-blog';
+
+let posts: BlogPostListItem[] = [];
+let cmsError = false;
+try {
+  posts = await fetchPosts();
+} catch (err) {
+  console.warn('[blog] CMS unavailable at build time:', err);
+  cmsError = true;
+  posts = [];
+}
+---
+
+<Base
+  title="Blog"
+  description="Practical updates from Kecktech — products, services, engineering decisions, and human-first IT notes from Kansas."
+>
+  <Hero
+    h1={data.hero.h1}
+    subtitle={data.hero.subtitle}
+    bgImage="/images/blog-hero.jpg"
+    overlayColor="#2E7D32"
+    overlayOpacity={0.70}
+    ctaLabel={data.hero.cta}
+    ctaHref="/contact?type=general"
+    ctaSecondaryLabel={data.hero.ctaSecondary}
+    ctaSecondaryHref="#posts"
+  />
+
+  <section id="posts" class="posts-section">
+    <div class="container">
+      <span class="section-label">{data.posts.label}</span>
+      <h2>{data.posts.heading}</h2>
+      <p class="section-intro">{data.posts.intro}</p>
+
+      {posts.length === 0 ? (
+        <div class="empty-state">
+          <h3>{data.empty.heading}</h3>
+          <p>{cmsError ? 'We could not load posts from the CMS during this build. Please rebuild after the CMS is reachable.' : data.empty.body}</p>
+          <a href="/contact?type=general" class="btn-primary">{data.empty.button}</a>
+        </div>
+      ) : (
+        <div class={`posts-grid ${posts.length === 1 ? 'posts-grid--one' : ''}`}>
+          {posts.map((post, i) => (
+            <BlogCard
+              title={post.title}
+              excerpt={post.excerpt}
+              href={`/blog/${post.slug}`}
+              dateLabel={formatDate(post.published_at)}
+              dateTime={post.published_at || undefined}
+              color={cardColor(i)}
+              featured={i === 0 && posts.length > 1}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="container">
+      <h2>{data.cta.heading}</h2>
+      <p>{data.cta.body}</p>
+      <a href="/contact?type=general" class="btn-primary">{data.cta.button}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+.posts-section {
+  background: var(--off-white);
+}
+.section-intro {
+  max-width: 720px;
+  color: var(--charcoal);
+  margin: 0 0 40px;
+  font-size: 18px;
+  line-height: 1.8;
+}
+.posts-section h2 {
+  margin: 8px 0 16px;
+}
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+.posts-grid--one {
+  grid-template-columns: 1fr;
+  max-width: 720px;
+}
+.empty-state {
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 2px 16px rgba(30, 58, 95, 0.08);
+  border-top: 4px solid var(--gold);
+  padding: 40px 36px;
+  max-width: 720px;
+}
+.empty-state h3 {
+  margin: 0 0 12px;
+  color: var(--navy);
+}
+.empty-state p {
+  margin: 0 0 28px;
+  color: var(--charcoal);
+}
+@media (max-width: 800px) {
+  .posts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

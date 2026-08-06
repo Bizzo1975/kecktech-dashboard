@@ -1,0 +1,92 @@
+{
+  "hero": {
+    "h1": "Live Demos. Real Apps.",
+    "subtitle": "Open the apps we build and host — product demos you can click into, not slideware.",
+    "cta": "Talk to Us →",
+    "ctaSecondary": "Browse Demos ↓"
+  },
+  "demos": {
+    "label": "Built by Kecktech",
+    "heading": "Try the Apps",
+    "intro": "Each card opens a running demo. Explore the product, then tell us what you want built for your business."
+  },
+  "apps": [
+    {
+      "id": "marketlist",
+      "name": "Marketlist",
+      "description": "Household food system — shopping lists, pantry, recipes, and garden in one place.",
+      "url": "https://marketlist.kecktech.net",
+      "image": "/images/demos/marketlist.jpg",
+      "available": true
+    },
+    {
+      "id": "flooros",
+      "name": "FloorOS",
+      "description": "Flooring ERP companion for customers, quotes, and relationship workflow.",
+      "url": "https://flooros.kecktech.net",
+      "image": "/images/demos/flooros.jpg",
+      "available": true
+    },
+    {
+      "id": "portal",
+      "name": "Customer Portal",
+      "description": "Client portal for Kecktech customers — tickets, status, and account access.",
+      "url": "https://portal.kecktech.net",
+      "image": "/images/demos/portal.jpg",
+      "available": true
+    },
+    {
+      "id": "farmbot",
+      "name": "FarmBot",
+      "description": "Self-hosted garden robot manager — pairs with Marketlist Garden.",
+      "url": "https://farmbot.kecktech.net",
+      "image": "/images/demos/farmbot.jpg",
+      "available": true
+    },
+    {
+      "id": "cleaner",
+      "name": "Cleaner",
+      "description": "Repo cleanup and maintenance tool for keeping codebases tidy.",
+      "url": "https://cleaner.kecktech.net",
+      "image": "/images/demos/cleaner.jpg",
+      "available": true
+    },
+    {
+      "id": "argo",
+      "name": "Argo",
+      "description": "In-house Kecktech application for day-to-day operations workflows.",
+      "url": "https://argo.kecktech.net",
+      "image": "/images/demos/argo.jpg",
+      "available": true
+    },
+    {
+      "id": "netops",
+      "name": "NetOps",
+      "description": "Sovereign NetOps network and infrastructure operations UI.",
+      "url": "https://net-ops.kecktech.net",
+      "image": "/images/demos/netops.jpg",
+      "available": true
+    },
+    {
+      "id": "chat",
+      "name": "Chat",
+      "description": "Local LLM chat powered by Open WebUI — private AI on our stack.",
+      "url": "https://chat.kecktech.net",
+      "image": "/images/demos/chat.jpg",
+      "available": true
+    },
+    {
+      "id": "sovereign-hub",
+      "name": "Sovereign Hub",
+      "description": "Ops intelligence and agent hub for monitoring, incidents, and automation.",
+      "url": "https://sovereign-hub.kecktech.net",
+      "image": "/images/demos/sovereign-hub.jpg",
+      "available": true
+    }
+  ],
+  "cta": {
+    "heading": "Want Something Like This for Your Business?",
+    "body": "Tell us what you need — we’ll scope a custom app or adapt one of these patterns to your workflow.",
+    "button": "Contact Kecktech →"
+  }
+}

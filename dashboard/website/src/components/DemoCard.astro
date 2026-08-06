@@ -1,0 +1,97 @@
+---
+interface Props {
+  name: string;
+  description: string;
+  href: string;
+  image: string;
+  color?: string;
+}
+const {
+  name,
+  description,
+  href,
+  image,
+  color = '#1B6B93',
+} = Astro.props;
+---
+
+<a
+  class="demo-card"
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  style={`--accent: ${color}`}
+>
+  <div class="demo-media">
+    <img src={image} alt="" loading="lazy" width="640" height="400" />
+  </div>
+  <div class="demo-body">
+    <h3 class="demo-heading">{name}</h3>
+    <p class="demo-desc">{description}</p>
+    <span class="demo-link">Open Demo →</span>
+  </div>
+</a>
+
+<style>
+.demo-card {
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 2px 16px rgba(30, 58, 95, 0.08);
+  border-top: 4px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+}
+.demo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(30, 58, 95, 0.14);
+}
+.demo-media {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--off-white);
+}
+.demo-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+.demo-card:hover .demo-media img {
+  transform: scale(1.04);
+}
+.demo-body {
+  padding: 24px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.demo-heading {
+  color: var(--navy);
+  font-size: 20px;
+  margin: 0;
+  line-height: 1.3;
+}
+.demo-card:hover .demo-heading {
+  color: var(--ocean);
+}
+.demo-desc {
+  color: var(--charcoal);
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+  flex: 1;
+}
+.demo-link {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-top: 4px;
+}
+</style>
