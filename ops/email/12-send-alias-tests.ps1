@@ -1,11 +1,10 @@
-# Send one inbound test per site/alias into the shared mailbox
-# Run from Office-PC after: Connect-ExchangeOnline -UserPrincipalName <your licensed UPN>
-# Or use Outlook/OWA to send manually using the same subjects.
-
-param(
-  [string]$FromMailbox = "support@kecktech.net",
-  [string]$ToMailbox = "support@kecktech.net"
-)
+# Send one inbound test per site/alias into the shared mailbox.
+# Requires interactive Microsoft Graph device login (Mail.Send as your user is NOT enough for app-only;
+# this script sends FROM your mailbox TO each alias so MX delivers into support@).
+#
+# Usage:
+#   pwsh -File ops/email/12-send-alias-tests.ps1
+# Does not touch DNS / OPNsense / AdGuard / Tailscale.
 
 $ErrorActionPreference = "Stop"
 
@@ -20,32 +19,34 @@ $targets = @(
   @{ Site = "unclejons"; Address = "support@unclejonsitgarage.com" }
 )
 
-if (-not (Get-Module -ListAvailable ExchangeOnlineManagement)) {
-  throw "Install-Module ExchangeOnlineManagement -Scope CurrentUser"
-}
+Import-Module Microsoft.Graph.Authentication
+Import-Module Microsoft.Graph.Users.Actions -ErrorAction SilentlyContinue
 
-Import-Module ExchangeOnlineManagement
-if (-not (Get-ConnectionInformation -ErrorAction SilentlyContinue)) {
-  Connect-ExchangeOnline -ShowBanner:$false
-}
+Connect-MgGraph -Scopes "Mail.Send","User.Read" -UseDeviceCode -NoWelcome
+$me = (Invoke-MgGraphRequest -Method GET -Uri "https://graph.microsoft.com/v1.0/me").userPrincipalName
+Write-Host "Sending as $me"
 
 foreach ($t in $targets) {
   $subj = "[TEST] $($t.Site) $($t.Address)"
-  Write-Host "Sending $subj ..."
-  Send-MailMessage -From $FromMailbox -To $ToMailbox -Subject $subj -Body "Inbound alias delivery check for $($t.Address) at $(Get-Date -Format o). Open shared mailbox Inbox." -SmtpServer localhost -ErrorAction SilentlyContinue
-  # Prefer Graph/EXO native send when available:
-  try {
-    Send-MgUserMail -UserId $FromMailbox -Message @{
+  $body = @{
+    message = @{
       subject = $subj
-      body = @{ contentType = "Text"; content = "Inbound alias delivery check for $($t.Address)." }
+      body = @{ contentType = "Text"; content = "Inbound alias delivery check for $($t.Address) at $(Get-Date -Format o)." }
       toRecipients = @(@{ emailAddress = @{ address = $t.Address } })
-    } -ErrorAction Stop
-    Write-Host "  OK Graph -> $($t.Address)"
+    }
+    saveToSentItems = $true
+  } | ConvertTo-Json -Depth 6
+
+  try {
+    Invoke-MgGraphRequest -Method POST -Uri "https://graph.microsoft.com/v1.0/me/sendMail" -Body $body -ContentType "application/json"
+    Write-Host "OK  $subj"
   } catch {
-    Write-Warning "  Graph send failed for $($t.Address): $_. Use OWA compose To=$($t.Address) Subject=$subj"
+    Write-Warning "FAIL $subj : $_"
   }
+  Start-Sleep -Seconds 2
 }
 
 Write-Host ""
-Write-Host "OWA shared mailbox: https://outlook.office.com/mail/support@kecktech.net/"
-Write-Host "Confirm each [TEST] subject appears in the shared Inbox."
+Write-Host "Open shared mailbox Inbox:"
+Write-Host "https://outlook.office.com/mail/support@kecktech.net/"
+Disconnect-MgGraph | Out-Null

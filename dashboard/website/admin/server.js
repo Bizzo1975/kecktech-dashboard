@@ -2,17 +2,21 @@
 const express = require('express');
 const fs      = require('fs');
 const path    = require('path');
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 const multer  = require('multer');
 
 const DATA_DIR    = process.env.DATA_DIR    || '/website/src/data';
 const WEBSITE_DIR = process.env.WEBSITE_DIR || '/website';
 const IMAGES_DIR  = path.join(WEBSITE_DIR, 'public', 'images');
 const PORT        = process.env.PORT        || 3000;
+/** Host rebuild API — single writer to live Astro source + dist bind-mount. */
+const ASTRO_REBUILD_URL = (process.env.ASTRO_REBUILD_URL || '').replace(/\/$/, '');
+const ASTRO_REBUILD_SECRET = process.env.ASTRO_REBUILD_SECRET || '';
+const BUILD_TIMEOUT_MS = Number(process.env.ASTRO_BUILD_TIMEOUT_MS || 180000);
 
-const PAGES = ['home', 'about', 'services', 'pricing', 'contact', 'global'];
+const PAGES = ['home', 'about', 'services', 'pricing', 'contact', 'global', 'blog', 'demos'];
 
-const NAV_ICONS = { home: '🏠', about: '👥', services: '⚙️', pricing: '💰', contact: '✉️', global: '🌐' };
+const NAV_ICONS = { home: '🏠', about: '👥', services: '⚙️', pricing: '💰', contact: '✉️', global: '🌐', blog: '📝', demos: '🚀' };
 
 const app = express();
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
@@ -123,6 +127,8 @@ function renderFields(val, name, depth = 0) {
   if (val === null || val === undefined) return '';
 
   // ── BOOLEAN → visible toggle switch ──
+  // CRITICAL: never emit name="${field}__type". qs parses apps[0][available]__type
+  // as another value for `available` ("boolean"), which forces every save to false.
   if (typeof val === 'boolean') {
     const id = name.replace(/[\[\].]/g, '_');
     const parts = name.split(/[\[\].]+/).filter(Boolean);
@@ -130,10 +136,10 @@ function renderFields(val, name, depth = 0) {
     return `<div class="field field-toggle">
       <label for="${id}">${esc(label)}</label>
       <label class="toggle-switch">
+        <input type="hidden" name="${esc(name)}" value="false" />
         <input type="checkbox" id="${id}" name="${esc(name)}" value="true" ${val ? 'checked' : ''} />
         <span class="toggle-slider"></span>
       </label>
-      <input type="hidden" name="${esc(name)}__type" value="boolean" />
     </div>`;
   }
 
@@ -145,7 +151,6 @@ function renderFields(val, name, depth = 0) {
     return `<div class="field">
       <label for="${id}">${esc(label)}</label>
       <input type="number" id="${id}" name="${esc(name)}" value="${val}" step="any" />
-      <input type="hidden" name="${esc(name)}__type" value="number" />
     </div>`;
   }
 
@@ -185,7 +190,6 @@ function renderFields(val, name, depth = 0) {
         ${rows}
       </div>
       <button type="button" class="btn-add-row" onclick="addArrayRow('container_${id}', '${esc(name)}')">+ Add Item</button>
-      <input type="hidden" name="${esc(name)}__type" value="string_array" />
     </div>`;
   }
 
@@ -245,14 +249,28 @@ function renderFields(val, name, depth = 0) {
 }
 
 // ── Merge form body back into original JSON (preserving types) ──
+function coerceBoolean(submitted) {
+  // Hidden false + checkbox true → qs may yield "false", "true", or ["false","true"]
+  if (Array.isArray(submitted)) {
+    return submitted.map(String).includes('true');
+  }
+  if (submitted === true || submitted === 'true') return true;
+  if (submitted === false || submitted === 'false' || submitted === '' || submitted == null) {
+    return false;
+  }
+  // Corrupted legacy payloads from name="field__type" (qs stuffed "boolean" into the field)
+  if (submitted === 'boolean' || submitted === 'number' || submitted === 'string_array') {
+    return false;
+  }
+  return false;
+}
+
 function mergeFormData(original, submitted) {
   if (original === null || original === undefined) return submitted;
 
-  // Boolean: checkbox present → true, absent → false
+  // Boolean: hidden "false" always posted; checkbox adds "true" when on
   if (typeof original === 'boolean') {
-    if (submitted === 'true' || submitted === true) return true;
-    if (submitted === 'false' || submitted === false) return false;
-    return false;
+    return coerceBoolean(submitted);
   }
 
   // Number: parse back to number
@@ -436,8 +454,146 @@ function layout(title, body, page = '') {
 }
 
 // ── Build state ───────────────────────────────────────────────────────────────
+// Rebuild MUST use live host source (demos.astro, blog, etc). The admin image
+// only bind-mounts data/dist/images — a local `npm run build` uses STALE pages
+// baked into the image and will hang or publish a broken site.
 
-let buildState = { running: false, log: '', exitCode: null };
+let buildState = { running: false, log: '', exitCode: null, startedAt: null };
+let buildTimer = null;
+
+function setBuildState( partial ) {
+  buildState = { ...buildState, ...partial };
+}
+
+function appendBuildLog(chunk) {
+  buildState.log = (buildState.log || '') + chunk;
+  if (buildState.log.length > 80000) {
+    buildState.log = buildState.log.slice(-60000);
+  }
+}
+
+async function triggerHostRebuild(reason) {
+  if (!ASTRO_REBUILD_URL) {
+    throw new Error(
+      'ASTRO_REBUILD_URL is not set. Admin must call the host rebuild service ' +
+        '(not build inside this container).'
+    );
+  }
+  const headers = { 'Content-Type': 'application/json' };
+  if (ASTRO_REBUILD_SECRET) {
+    headers.Authorization = `Bearer ${ASTRO_REBUILD_SECRET}`;
+  }
+  const res = await fetch(`${ASTRO_REBUILD_URL}/rebuild`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ reason: reason || 'kecktech-admin' }),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (res.status === 409 || body.started === false) {
+    throw new Error(body.error || 'Rebuild already running on host');
+  }
+  if (!res.ok && res.status !== 202) {
+    throw new Error(body.error || `Host rebuild HTTP ${res.status}`);
+  }
+}
+
+async function pollHostRebuildStatus() {
+  const headers = {};
+  if (ASTRO_REBUILD_SECRET) {
+    headers.Authorization = `Bearer ${ASTRO_REBUILD_SECRET}`;
+  }
+  const res = await fetch(`${ASTRO_REBUILD_URL}/status`, { headers });
+  if (!res.ok) throw new Error(`Host status HTTP ${res.status}`);
+  return res.json();
+}
+
+function finishBuild(exitCode, extraLog) {
+  if (buildTimer) {
+    clearTimeout(buildTimer);
+    buildTimer = null;
+  }
+  if (extraLog) appendBuildLog(extraLog);
+  setBuildState({
+    running: false,
+    exitCode,
+  });
+}
+
+function startLocalFallbackBuild() {
+  // Only used if ASTRO_REBUILD_URL is unset (dev). Still clears dist CONTENTS only.
+  appendBuildLog(
+    'WARNING: ASTRO_REBUILD_URL unset — falling back to in-container build.\n' +
+      'This uses image-baked pages and is unsafe for production.\n'
+  );
+  const child = spawn(
+    'sh',
+    [
+      '-c',
+      'find dist -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null; npm run build',
+    ],
+    { cwd: WEBSITE_DIR, env: process.env }
+  );
+  child.stdout.on('data', (d) => appendBuildLog(d.toString()));
+  child.stderr.on('data', (d) => appendBuildLog(d.toString()));
+  child.on('error', (err) => finishBuild(1, `\nspawn error: ${err.message}\n`));
+  child.on('close', (code) => {
+    finishBuild(
+      code ?? 1,
+      code === 0 ? '\n✅ Build complete! Site is live.\n' : `\n❌ Build failed (exit ${code}).\n`
+    );
+  });
+}
+
+function startBuild(reason) {
+  if (buildState.running) {
+    return { started: false, error: 'Build already running' };
+  }
+  setBuildState({
+    running: true,
+    log: 'Starting rebuild…\n',
+    exitCode: null,
+    startedAt: new Date().toISOString(),
+  });
+
+  buildTimer = setTimeout(() => {
+    if (!buildState.running) return;
+    appendBuildLog(
+      `\n❌ Build timed out after ${BUILD_TIMEOUT_MS / 1000}s. Check host rebuild service.\n`
+    );
+    finishBuild(1);
+  }, BUILD_TIMEOUT_MS);
+
+  if (!ASTRO_REBUILD_URL) {
+    startLocalFallbackBuild();
+    return { started: true, mode: 'local-fallback' };
+  }
+
+  triggerHostRebuild(reason)
+    .then(() => {
+      appendBuildLog(`Host rebuild accepted (${ASTRO_REBUILD_URL}).\n`);
+      const poll = setInterval(async () => {
+        try {
+          const st = await pollHostRebuildStatus();
+          if (typeof st.log === 'string' && st.log) {
+            buildState.log = st.log;
+          }
+          if (!st.running) {
+            clearInterval(poll);
+            const code = typeof st.exitCode === 'number' ? st.exitCode : 1;
+            finishBuild(code);
+          }
+        } catch (err) {
+          clearInterval(poll);
+          finishBuild(1, `\nHost status error: ${err.message}\n`);
+        }
+      }, 1000);
+    })
+    .catch((err) => {
+      finishBuild(1, `\n❌ Could not start host rebuild: ${err.message}\n`);
+    });
+
+  return { started: true, mode: 'host' };
+}
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 
@@ -538,19 +694,25 @@ app.get('/page/:name', (req, res) => {
         buildLog.hidden = false;
         buildOutput.textContent = 'Starting build…';
 
-        await fetch('/build', { method: 'POST' });
+        await fetch('/build', { method: 'POST' }).then(async (r) => {
+          const body = await r.json().catch(() => ({}));
+          if (!r.ok || body.started === false) {
+            buildOutput.textContent = (body.error || ('HTTP ' + r.status)) + '\\n';
+          }
+        });
 
         const poll = setInterval(async () => {
           const res  = await fetch('/build/status');
           const data = await res.json();
           buildOutput.textContent = data.log || '…';
+          buildOutput.scrollTop = buildOutput.scrollHeight;
           if (!data.running) {
             clearInterval(poll);
             buildBtn.disabled = false;
             buildBtn.innerHTML = '<svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Rebuild &amp; Publish';
-            buildOutput.textContent += data.exitCode === 0
-              ? '\\n\\n✅ Build complete! Site is live.'
-              : '\\n\\n❌ Build failed. See output above.';
+            if (data.exitCode !== 0) {
+              buildOutput.textContent += '\\n\\n❌ Build failed. See output above.';
+            }
           }
         }, 1000);
       });
@@ -608,16 +770,11 @@ app.post('/upload/photo', upload.single('photo'), (req, res) => {
 });
 
 app.post('/build', (req, res) => {
-  if (buildState.running) {
-    return res.json({ started: false, error: 'Build already running' });
+  const result = startBuild('kecktech-admin');
+  if (!result.started) {
+    return res.status(409).json(result);
   }
-  buildState = { running: true, log: 'Starting build…\n', exitCode: null };
-  exec('npm run build', { cwd: WEBSITE_DIR }, (err, stdout, stderr) => {
-    buildState.running  = false;
-    buildState.log      = (stdout || '') + (stderr || '');
-    buildState.exitCode = err ? (err.code || 1) : 0;
-  });
-  res.json({ started: true });
+  res.json(result);
 });
 
 app.get('/build/status', (req, res) => res.json(buildState));
@@ -629,4 +786,7 @@ app.listen(PORT, () => {
   console.log(`DATA_DIR:    ${DATA_DIR}`);
   console.log(`WEBSITE_DIR: ${WEBSITE_DIR}`);
   console.log(`IMAGES_DIR:  ${IMAGES_DIR}`);
+  console.log(
+    `ASTRO_REBUILD_URL: ${ASTRO_REBUILD_URL || '(unset — local fallback)'}`
+  );
 });

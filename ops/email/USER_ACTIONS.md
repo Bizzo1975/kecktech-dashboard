@@ -1,31 +1,38 @@
-# Actions only you can finish (payment / DNS / OWA)
+# Actions only you can finish
 
-Agent completed everything that does not require your Microsoft billing login or a purchased NumberBarn number.
+## Confirm mailbox
 
-## 1. Buy Microsoft 365 Business Basic (~$7/user/mo)
+Open shared mailbox OWA and confirm today’s form tests:
 
-Page opened in browser / use: https://www.microsoft.com/en-us/microsoft-365/business/microsoft-365-business-basic
+https://outlook.office.com/mail/support@kecktech.net/
 
-- Create a **new work tenant** (do not use Personal)
-- 1 license for yourself
-- Then run `ops/email/02-setup-shared-mailbox.ps1 -MemberUpn 'you@kecktech.net'`
-- Follow `ops/email/03-dns-records.md` and `ops/email/05-entra-graph-app.md`
-- Checklist: `ops/email/06-post-purchase-checklist.ps1`
+Optional alias probes (interactive Graph login):
 
-## 2. Buy NumberBarn Call Forwarding (~$6.99/mo)
+```powershell
+pwsh -File ops/email/12-send-alias-tests.ps1
+```
+
+## Optional: NumberBarn phone (kecktech.net only)
 
 https://www.numberbarn.com/ — prefer 316 area code
 
 - Forward to your cell
-- Reply here with the new number → we will update `global.json` / `contact.json` (kecktech.net only)
+- Reply with the new number to publish on kecktech.net only
 - Do **not** port Google Voice `(316) 768-0034`
+- Phone stays unpublished until you buy one
 
 ## Already done
 
-- Mailcow VM **110** shut down on Proxmox (`status: stopped`)
-- Graph mailer code (replaces Mailcow SMTP)
-- Shared mailbox PowerShell + DNS/Graph docs + contact registry
-- Per-app `contactEmail` on demos
-- willworkforlunch `ADMIN_EMAIL=jon@willworkforlunch.com`
-- jacob-roman footer `hello@jacob-roman.com`
-- unclejons `MAIL_FROM_ADDRESS=support@unclejonsitgarage.com`
+- Mailcow VM **110** shut down
+- Cloudflare MX/SPF/autodiscover/DMARC for all four domains → M365
+- Graph mailer live on kecktech (`/api/contact.php` → shared mailbox)
+- Brand `/contact` forms: WWFL `hello@`, jacob `hello@`, unclejons `support@`
+- AdGuard rewrites + Unbound privatedomain for brand zones (do not retouch during mail work)
+- Phone purged from public pages; Outlook guide `10-outlook-shared-mailbox.md`
+- Matrix notes: `ops/email/15-test-matrix-results.md`
+
+## Office-PC DNS safety
+
+- IP `10.10.0.100` / gw `10.10.0.1` / DNS prefer `10.10.0.1` (optional `8.8.8.8` secondary only)
+- Tailscale: `WantRunning=false`, `RouteAll=false`, `CorpDNS=false` while on mgmt LAN
+- **Never** edit Unbound forwarders, AdGuard bind port, or Tailscale routes for mail/contact work
