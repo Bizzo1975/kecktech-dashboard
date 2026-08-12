@@ -49,6 +49,9 @@ const apps = data.apps.filter((app) => app.available !== false);
             href={app.url}
             image={app.image}
             color={cardColors[i % cardColors.length]}
+            contactEmail={app.contactEmail}
+            demoUser={app.demoUser}
+            demoPassword={app.demoPassword}
           />
         ))}
       </div>

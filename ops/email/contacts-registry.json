@@ -1,0 +1,47 @@
+{
+  "note": "Canonical contact aliases for M365 shared mailbox. All deliver to support@kecktech.net shared mailbox after cutover.",
+  "sharedMailbox": "support@kecktech.net",
+  "phone": {
+    "publishOn": [],
+    "current": null,
+    "note": "Published phone removed from all public sites (2026-08-11). Quo/NumberBarn later if needed.",
+    "provider": null,
+    "targetProvider": "Quo or NumberBarn Forward — not published yet"
+  },
+  "kecktech.net": {
+    "primary": "support@kecktech.net",
+    "aliases": {
+      "help": "help@kecktech.net",
+      "portal": "portal@kecktech.net",
+      "marketlist": "marketlist@kecktech.net",
+      "flooros": "flooros@kecktech.net",
+      "farmbot": "farmbot@kecktech.net",
+      "cleaner": "cleaner@kecktech.net",
+      "argo": "argo@kecktech.net",
+      "netops": "netops@kecktech.net",
+      "chat": "chat@kecktech.net",
+      "hub": "hub@kecktech.net",
+      "hosting": "hosting@kecktech.net",
+      "wiki": "wiki@kecktech.net",
+      "sales": "sales@kecktech.net",
+      "info": "info@kecktech.net",
+      "billing": "billing@kecktech.net",
+      "privacy": "privacy@kecktech.net",
+      "noreply": "noreply@kecktech.net"
+    }
+  },
+  "willworkforlunch.com": {
+    "primary": "hello@willworkforlunch.com",
+    "also": ["jon@willworkforlunch.com", "info@willworkforlunch.com", "privacy@willworkforlunch.com"],
+    "phone": null
+  },
+  "jacob-roman.com": {
+    "primary": "hello@jacob-roman.com",
+    "phone": null,
+    "note": "Anonymous brand — never associate with Kecktech/Jon publicly"
+  },
+  "unclejonsitgarage.com": {
+    "primary": "support@unclejonsitgarage.com",
+    "phone": null
+  }
+}

@@ -1,8 +1,10 @@
 <?php
 // Kecktech contact form mailer
-// Receives POST from /api/contact.php, validates, and sends email
+// Receives POST from /api/contact.php, validates, and sends via Microsoft Graph
 
 header('Content-Type: application/json');
+
+require_once __DIR__ . '/graph_mail.php';
 
 // Only accept POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -57,7 +59,7 @@ if (file_exists($rate_file)) {
 file_put_contents($rate_file, $now);
 
 // Build email
-$to      = 'support@kecktech.net';
+$to = getenv('CONTACT_TO') ?: 'support@kecktech.net';
 $type_labels = [
     'new-service'      => 'New Service',
     'tech-support'     => 'Tech Support',
@@ -80,17 +82,18 @@ $body .= "\nMessage:\n{$message}\n\n";
 $body .= "---\nSent from kecktech.net contact form\n";
 $body .= "IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown') . "\n";
 
-$headers  = "From: support@kecktech.net\r\n";
-$headers .= "Reply-To: {$email}\r\n";
-$headers .= "X-Mailer: Kecktech-ContactForm/1.0\r\n";
-$headers .= "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-
-$mail_ok = mail($to, $subject, $body, $headers);
+$mail_ok = false;
+$mail_error = null;
+try {
+    $mail_ok = graph_send_mail($to, $subject, $body, $email);
+} catch (Throwable $e) {
+    $mail_error = $e->getMessage();
+    error_log('[contact] Graph send failed: ' . $mail_error);
+}
 
 // Fire-and-forget to n8n webhook for Zammad ticket creation
 // Non-blocking: failures here do not affect the user response
-$n8n_url = 'https://n8n.kecktech.net/webhook/contact-form';
+$n8n_url = getenv('N8N_CONTACT_WEBHOOK') ?: 'https://n8n.kecktech.net/webhook/contact-form';
 $n8n_payload = json_encode([
     'name'         => $name,
     'email'        => $email,

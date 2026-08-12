@@ -63,17 +63,17 @@ services:
     restart: always
     mem_limit: 64m
     environment:
-      - SMTP_HOST=10.20.0.110
-      - SMTP_PORT=587
-      - SMTP_USER=support@kecktech.net
-      - SMTP_PASS=${SMTP_PASS}
-      - SMTP_FROM=support@kecktech.net
+      - GRAPH_TENANT_ID=${GRAPH_TENANT_ID}
+      - GRAPH_CLIENT_ID=${GRAPH_CLIENT_ID}
+      - GRAPH_CLIENT_SECRET=${GRAPH_CLIENT_SECRET}
+      - GRAPH_MAILBOX=${GRAPH_MAILBOX:-support@kecktech.net}
+      - CONTACT_TO=${CONTACT_TO:-support@kecktech.net}
+      - N8N_CONTACT_WEBHOOK=${N8N_CONTACT_WEBHOOK:-https://n8n.kecktech.net/webhook/contact-form}
     extra_hosts:
       - "dev.kecktech.net:10.30.0.143"
       - "www.dev.kecktech.net:10.30.0.143"
       - "n8n.kecktech.net:10.20.0.111"
       - "tickets.kecktech.net:10.20.0.141"
-      - "mail.kecktech.net:10.20.0.110"
     volumes:
       - ./website/api:/var/www/html:ro
     ports:
@@ -111,6 +111,7 @@ services:
     restart: always
     mem_limit: 512m
     extra_hosts:
+      - "host.docker.internal:host-gateway"
       - "dev.kecktech.net:10.30.0.143"
       - "www.dev.kecktech.net:10.30.0.143"
       - "dev-admin.kecktech.net:10.30.0.143"
@@ -118,6 +119,12 @@ services:
       - "mail.kecktech.net:10.20.0.110"
     ports:
       - "8084:3000"
+    environment:
+      # Rebuild on the HOST (live Astro source). Never build from the stale
+      # image-baked /website pages — that hangs and can wipe published routes.
+      ASTRO_REBUILD_URL: http://host.docker.internal:9797
+      ASTRO_REBUILD_SECRET: ${KECKTECH_ASTRO_REBUILD_SECRET:-}
+      ASTRO_BUILD_TIMEOUT_MS: "180000"
     volumes:
       - ./website/src/data:/website/src/data
       - ./website/dist:/website/dist

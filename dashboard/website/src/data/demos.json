@@ -8,79 +8,98 @@
   "demos": {
     "label": "Built by Kecktech",
     "heading": "Try the Apps",
-    "intro": "Each card opens a running demo. Explore the product, then tell us what you want built for your business."
+    "intro": "Every card opens a live product. Where a login is required, use the demo credentials on the card — restricted demo accounts, not production admin access."
   },
   "apps": [
     {
       "id": "marketlist",
       "name": "Marketlist",
-      "description": "Household food system — shopping lists, pantry, recipes, and garden in one place.",
+      "description": "Marketlist is a household food system that keeps shopping lists, pantry inventory, recipes, meals, and garden harvest in one shared loop. Use the demo login on the card to walk the full product.",
       "url": "https://marketlist.kecktech.net",
       "image": "/images/demos/marketlist.jpg",
-      "available": true
+      "contactEmail": "marketlist@kecktech.net",
+      "available": true,
+      "demoUser": "demo@marketlist.app",
+      "demoPassword": "demo12345"
     },
     {
       "id": "flooros",
       "name": "FloorOS",
-      "description": "Flooring ERP companion for customers, quotes, and relationship workflow.",
-      "url": "https://flooros.kecktech.net",
+      "description": "FloorOS is a flooring operations companion on RFMS — customer relationships, showroom workflow, contractors, and job status. Sign in with the demo salesperson account, then open /app.",
+      "url": "https://flooros.kecktech.net/login",
       "image": "/images/demos/flooros.jpg",
-      "available": true
+      "contactEmail": "flooros@kecktech.net",
+      "available": true,
+      "demoUser": "sales1@demo.flooros.local",
+      "demoPassword": "password123"
     },
     {
       "id": "portal",
       "name": "Customer Portal",
-      "description": "Client portal for Kecktech customers — tickets, status, and account access.",
+      "description": "The Kecktech Customer Portal shows how clients track support tickets, invoices, and remote-help setup in one place. The public demo opens as a restricted demo customer — sample empty account, not a real customer mailbox.",
       "url": "https://portal.kecktech.net",
       "image": "/images/demos/portal.jpg",
-      "available": true
+      "contactEmail": "portal@kecktech.net",
+      "available": true,
+      "demoUser": "demo@kecktech.net",
+      "demoPassword": "(auto — opens as demo customer)"
     },
     {
       "id": "farmbot",
       "name": "FarmBot",
-      "description": "Self-hosted garden robot manager — pairs with Marketlist Garden.",
+      "description": "FarmBot is our self-hosted garden robot control plane — maps, sequences, and device tooling that pairs with Marketlist Garden. Use the demo login to enter the FarmBot web app.",
       "url": "https://farmbot.kecktech.net",
       "image": "/images/demos/farmbot.jpg",
-      "available": true
+      "contactEmail": "farmbot@kecktech.net",
+      "available": true,
+      "demoUser": "demo@kecktech.net",
+      "demoPassword": "DemoAccess2026!"
     },
     {
       "id": "cleaner",
       "name": "Cleaner",
-      "description": "Repo cleanup and maintenance tool for keeping codebases tidy.",
+      "description": "Cleaner is a self-hosted repo cleanup tool that runs formatters plus an AI semantic pass, then lets you review before changes land on a safe branch. Open the demo to explore the cleanup workflow UI.",
       "url": "https://cleaner.kecktech.net",
       "image": "/images/demos/cleaner.jpg",
+      "contactEmail": "cleaner@kecktech.net",
       "available": true
     },
     {
       "id": "argo",
       "name": "Argo",
-      "description": "In-house Kecktech application for day-to-day operations workflows.",
+      "description": "Argo turns a map region into a ranked research dossier — OpenCLIP scoring, spectral and DEM detectors, heritage distance, and literature join. Open the workspace from the landing page and explore the research cockpit.",
       "url": "https://argo.kecktech.net",
       "image": "/images/demos/argo.jpg",
+      "contactEmail": "argo@kecktech.net",
       "available": true
     },
     {
       "id": "netops",
       "name": "NetOps",
-      "description": "Sovereign NetOps network and infrastructure operations UI.",
+      "description": "NetOps is a fleet and security operations console — live agent inventory, host risk, scans, and operator views. Open the console from the landing page to browse the operator UI.",
       "url": "https://net-ops.kecktech.net",
       "image": "/images/demos/netops.jpg",
+      "contactEmail": "netops@kecktech.net",
       "available": true
     },
     {
       "id": "chat",
       "name": "Chat",
-      "description": "Local LLM chat powered by Open WebUI — private AI on our stack.",
+      "description": "Chat is private LLM access on our stack — Open WebUI talking to local models for drafting and coding help. Sign in with the restricted demo user (not an admin account).",
       "url": "https://chat.kecktech.net",
       "image": "/images/demos/chat.jpg",
-      "available": true
+      "contactEmail": "chat@kecktech.net",
+      "available": true,
+      "demoUser": "demo@kecktech.net",
+      "demoPassword": "DemoAccess2026!"
     },
     {
       "id": "sovereign-hub",
       "name": "Sovereign Hub",
-      "description": "Ops intelligence and agent hub for monitoring, incidents, and automation.",
+      "description": "Sovereign Hub is a self-hosted ops intelligence layer where one model proposes and another checks answers against your live infrastructure graph. Open the hub to explore the console.",
       "url": "https://sovereign-hub.kecktech.net",
       "image": "/images/demos/sovereign-hub.jpg",
+      "contactEmail": "hub@kecktech.net",
       "available": true
     }
   ],
