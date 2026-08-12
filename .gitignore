@@ -1,5 +1,9 @@
 .env
 *.env
+*.env.local
+ops/email/graph-mailer.env.local
+ops/email/graph-auth.log
+ops/email/graph-mailer-setup.log
 volumes/
 # Docker volume data directories
 /data/
