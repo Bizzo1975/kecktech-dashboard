@@ -101,6 +101,15 @@
       "image": "/images/demos/sovereign-hub.jpg",
       "contactEmail": "hub@kecktech.net",
       "available": true
+    },
+    {
+      "id": "aerocad",
+      "name": "AeroCAD",
+      "description": "AeroCAD is configuration-managed CAD document control — revisions, approvals, baselines, and traceability evidence for engineering CM (not a certification claim).",
+      "url": "https://aerocad.kecktech.net",
+      "image": "/images/demos/aerocad.jpg",
+      "contactEmail": "aerocad@kecktech.net",
+      "available": true
     }
   ],
   "cta": {

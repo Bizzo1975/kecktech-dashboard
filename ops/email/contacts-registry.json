@@ -1,5 +1,5 @@
 {
-  "note": "Canonical contact aliases for M365 shared mailbox. All deliver to support@kecktech.net shared mailbox after cutover.",
+  "note": "Canonical contact aliases for M365 shared mailbox. All deliver to support@kecktech.net shared mailbox after cutover. Synced from kecktech-dashboard/ops/email/contacts-registry.json",
   "sharedMailbox": "support@kecktech.net",
   "phone": {
     "publishOn": [],
@@ -10,6 +10,8 @@
   },
   "kecktech.net": {
     "primary": "support@kecktech.net",
+    "autoReply": true,
+    "brandName": "Kecktech IT Solutions",
     "aliases": {
       "help": "help@kecktech.net",
       "portal": "portal@kecktech.net",
@@ -32,16 +34,32 @@
   },
   "willworkforlunch.com": {
     "primary": "hello@willworkforlunch.com",
-    "also": ["jon@willworkforlunch.com", "info@willworkforlunch.com", "privacy@willworkforlunch.com"],
+    "autoReply": true,
+    "brandName": "willworkforlunch",
+    "also": [
+      "jon@willworkforlunch.com",
+      "info@willworkforlunch.com",
+      "privacy@willworkforlunch.com"
+    ],
+    "newsletter": {
+      "from": "hello@willworkforlunch.com",
+      "replyTo": "hello@willworkforlunch.com",
+      "listmonk": true,
+      "aliasOptional": "newsletter@willworkforlunch.com"
+    },
     "phone": null
   },
   "jacob-roman.com": {
     "primary": "hello@jacob-roman.com",
+    "autoReply": true,
+    "brandName": "Jacob Roman",
     "phone": null,
     "note": "Anonymous brand — never associate with Kecktech/Jon publicly"
   },
   "unclejonsitgarage.com": {
     "primary": "support@unclejonsitgarage.com",
+    "autoReply": true,
+    "brandName": "Uncle Jon's IT Garage",
     "phone": null
   }
 }

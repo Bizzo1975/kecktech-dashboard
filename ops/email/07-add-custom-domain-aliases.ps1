@@ -3,12 +3,18 @@
 .SYNOPSIS
   After custom domains are verified in M365 Admin Center, add aliases and
   optionally promote support@kecktech.net to primary SMTP.
+
+.NOTES
+  DEPRECATED pattern: hardcoded $aliases array below.
+  Prefer registry-driven: ops/email/17-onboard-domain.ps1 -FromRegistry -ApplyM365
+  or -Domain / -Primary / -Aliases for a single new domain.
 #>
 param(
   [string]$SharedMailbox = "support@KecktechITSolutions.onmicrosoft.com",
   [string]$NewPrimary = "support@kecktech.net",
   [switch]$SetPrimaryToKecktech
 )
+Write-Warning "07-add-custom-domain-aliases.ps1 is legacy. Prefer ops/email/17-onboard-domain.ps1 (contacts-registry.json)."
 
 $ErrorActionPreference = "Stop"
 Import-Module ExchangeOnlineManagement

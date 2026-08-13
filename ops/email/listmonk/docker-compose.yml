@@ -1,0 +1,50 @@
+# Listmonk (WWFL newsletter) — docker compose
+# Deploy on WWFL host (10.20.0.203) under /opt/docker/listmonk
+# Does NOT touch Unbound/AdGuard/LAN DNS. Cloudflare: mail RRsets only if needed.
+#
+# After up:
+#   1. Open http://10.20.0.203:9000 (or Traefik route listmonk.willworkforlunch.com)
+#   2. Create admin user on first visit
+#   3. Settings → SMTP: Microsoft 365 SMTP AUTH as hello@ / newsletter@ alias
+#      OR use Graph relay later — prefer SMTP AUTH with licensed mailbox / app password policy
+#   4. From email: hello@willworkforlunch.com (or newsletter@willworkforlunch.com)
+#   5. Reply-To: hello@willworkforlunch.com (lands in support@ shared mailbox)
+#   6. Create list "WWFL Newsletter"; enable double opt-in
+#   7. Set LISTMONK_* env on personal-website for signup API wire-up
+
+services:
+  listmonk-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: listmonk
+      POSTGRES_PASSWORD: ${LISTMONK_DB_PASSWORD:?set LISTMONK_DB_PASSWORD}
+      POSTGRES_DB: listmonk
+    volumes:
+      - listmonk_db:/var/lib/postgresql/data
+    networks:
+      - listmonk
+
+  listmonk:
+    image: listmonk/listmonk:latest
+    restart: unless-stopped
+    depends_on:
+      - listmonk-db
+    ports:
+      - "9000:9000"
+    environment:
+      TZ: America/Chicago
+    volumes:
+      - ./config.toml:/listmonk/config.toml:ro
+      - listmonk_uploads:/listmonk/uploads
+    networks:
+      - listmonk
+    command: [sh, -c, "./listmonk --install --yes --idempotent && ./listmonk --upgrade --yes && ./listmonk"]
+
+volumes:
+  listmonk_db:
+  listmonk_uploads:
+
+networks:
+  listmonk:
+    driver: bridge

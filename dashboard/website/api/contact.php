@@ -84,11 +84,25 @@ $body .= "IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown') . "\n";
 
 $mail_ok = false;
 $mail_error = null;
+$from_mailbox = getenv('GRAPH_MAILBOX') ?: 'support@kecktech.net';
 try {
-    $mail_ok = graph_send_mail($to, $subject, $body, $email);
+    $mail_ok = graph_send_mail($to, $subject, $body, $email, $from_mailbox);
 } catch (Throwable $e) {
     $mail_error = $e->getMessage();
     error_log('[contact] Graph send failed: ' . $mail_error);
+}
+
+if ($mail_ok) {
+    try {
+        graph_send_contact_confirmation(
+            $email,
+            $name,
+            $from_mailbox,
+            'Kecktech IT Solutions'
+        );
+    } catch (Throwable $e) {
+        error_log('[contact] Graph confirmation failed: ' . $e->getMessage());
+    }
 }
 
 // Fire-and-forget to n8n webhook for Zammad ticket creation
@@ -116,8 +130,8 @@ $n8n_ctx = stream_context_create([
 
 if ($mail_ok) {
     http_response_code(200);
-    echo json_encode(['success' => true]);
+    echo json_encode(['success' => true, 'message' => 'Message sent successfully']);
 } else {
     http_response_code(500);
-    echo json_encode(['error' => 'Mail delivery failed — please call or email directly']);
+    echo json_encode(['error' => 'Mail delivery failed — please email support@kecktech.net']);
 }
