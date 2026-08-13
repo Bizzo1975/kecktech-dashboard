@@ -51,9 +51,11 @@ After any bible or LiT session:
 
 | Item | Path | Status |
 |------|------|--------|
-| `/about` author copy | `Running Apps/psuedonym-site/app/about/page.tsx` → host `/opt/jacob-roman-blog` | **Deployed** (VM 304) |
-| `/contact` + Graph | `app/contact` + `app/api/contact` | **Deployed** (Graph env on host) |
-| ME Manager bridge | `/api/me-manager/posts*` | Live contract in SITE_HOOKS |
+| `/about` author copy | `Running Apps/psuedonym-site/app/about/page.tsx` → host `/opt/jacob-roman-blog` | **Deployed** (VM 304) — https://jacob-roman.com/about |
+| `/contact` + Graph | `app/contact` + `app/api/contact` | **Deployed** (Graph env on host) — https://jacob-roman.com/contact |
+| ME Manager posts bridge | `/api/me-manager/posts*` | Live (SITE_HOOKS) |
+| ME Manager projects bridge | `/api/me-manager/projects*` | Live (parity with WWFL/Keck) |
+| Git | https://github.com/Bizzo1975/psuedonym-site | `F:/Github/Running Apps/psuedonym-site` |
 
 ## Default ship target
 

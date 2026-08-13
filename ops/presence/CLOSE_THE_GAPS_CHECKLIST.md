@@ -8,7 +8,7 @@ Setup cutover is **done**. This file is a status snapshot, not a setup backlog.
 | CtrlPanel on `panel.` | **Done** — https://panel.unclejonsitgarage.com |
 | ME `unclejon` bridge + `cmsEnabled` | **Done** |
 | Jacob novel concept teasers | Ship to Inbox drafts → **Approve/schedule daily** |
-| Jacob `/about` + `/contact` | Code ready; deploy sync if host lag |
+| Jacob `/about` + `/contact` | **Done** — live on jacob-roman.com (VM 304) |
 | Games Portfolio + Ship hooks | Ready — use in Forge/Games daily pulse |
 | Forge Studio approve | **Daily** (Jon-only) |
 | Voice record 45–90 min + train | **Session workflow** (Voice PDF); SoVITS may be simulated until `GPT_SOVITS_TRAIN_CMD` set |

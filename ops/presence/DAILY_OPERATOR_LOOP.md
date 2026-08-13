@@ -40,8 +40,9 @@ Prefer NetOps Quality over standalone https://cleaner.kecktech.net (repo Quality
 
 1. https://me.willworkforlunch.com → Pipeline/Inbox  
 2. Process **every** awaiting item (all personas): edit → Approve / Hold / Reject  
-3. Destinations: `kecktech` (client proof) · `wwfl` (build-in-public) · `jacob-roman` (books only — never “both”) · `unclejon` (games/devlog)  
+3. Destinations: explicit multi-select of `wwfl` · `kecktech` · `jacob-roman` · `unclejon` (or Coordinator wizard at `/pipeline/wizard`) — do **not** rely on tech-only “both” for author/garage  
 4. Calendar — today’s scheduled posts  
+5. Optional: `/pipeline/wizard` Health tile — four-site bridge pulse 
 
 ### Block D — Progress intake (~10–20 min)
 
@@ -72,7 +73,7 @@ Prefer NetOps Quality over standalone https://cleaner.kecktech.net (repo Quality
 
 ## Weekly (90–120 min)
 
-1. Portfolio Sync — `POST /api/portfolio` `{ "action": "sync" }` — all demos + three games `stage` / `displaySites`  
+1. Portfolio Sync — `POST /api/portfolio` `{ "action": "sync" }` — then **verify** https://www.kecktech.net/demos still shows only the marketing allowlist (see [DEMOS_MSP.md](./DEMOS_MSP.md)); rebuild Astro if demos.json changed  
 2. NetOps: AppSec for critical apps; Cleaner coverage drain; inventory hygiene vs RMM + Vault names  
 3. Sovereign Hub glance (export-fed — not a NetOps substitute)  
 4. Sources & Outputs + Postiz health (LAN `10.20.0.205:4007`)  
@@ -82,6 +83,7 @@ Prefer NetOps Quality over standalone https://cleaner.kecktech.net (repo Quality
 8. Voice-clone upload if new audio; MSP outreach (5 CRM enrichments while zero clients)  
 9. Forge backlog empty or prioritized  
 10. Portal Stripe readiness check while zero clients (no fake invoices)  
+11. Coordinator wizard Health (`/pipeline/wizard`) — bridges green for all four siteKeys  
 
 ---
 

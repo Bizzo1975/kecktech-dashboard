@@ -13,7 +13,8 @@ Traefik (`prod-traefik-01`) + shared Cloudflare tunnel route hostnames; `panel.`
 - `siteKey`: **`unclejon`** (never `uncle-jons`)
 - Site env: `ME_MANAGER_API_KEY` / ingest keys
 - ME host: `UNCLEJON_CMS_URL` (LAN `http://10.20.0.202:3006` preferred) + `UNCLEJON_CMS_API_KEY`
-- Property `cmsEnabled: true` after `GET /api/me-manager/posts` → 200
+- Property **`cmsEnabled: true`** (bridge live — posts+projects 200)
+- Git: https://github.com/Bizzo1975/unclejons-itgarage-site (`F:/Github/unclejons-itgarage-site`)
 
 ## Daily content (not setup)
 
