@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
+import '../styles/accessibility.css';
 
 interface Props {
   title: string;
@@ -40,6 +41,23 @@ const canonicalUrl = new URL(Astro.url.pathname, 'https://www.kecktech.net');
   <!-- Preconnect for fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Apply saved a11y prefs before paint (WWFL-compatible keys) -->
+  <script is:inline>
+    (function () {
+      var d = document.documentElement;
+      try {
+        if (localStorage.getItem('high-contrast') === 'true') d.classList.add('high-contrast');
+        if (localStorage.getItem('reduce-motion') === 'true') d.classList.add('reduce-motion');
+        if (localStorage.getItem('keyboard-navigation') === 'true') d.classList.add('enhanced-focus');
+        var s = localStorage.getItem('text-scale');
+        if (s) {
+          var n = parseFloat(s);
+          if (n >= 0.875 && n <= 1.25) d.style.setProperty('--text-scale', String(n));
+        }
+      } catch (e) { /* private mode */ }
+    })();
+  </script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>

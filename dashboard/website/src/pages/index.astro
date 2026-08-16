@@ -3,8 +3,11 @@ import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import ValueCard from '../components/ValueCard.astro';
-import data from '../data/home.json';
+import staticData from '../data/home.json';
 import servicesData from '../data/services.json';
+import { loadPageContent } from '../lib/cms-pages';
+
+const { data } = await loadPageContent('home', staticData as any);
 
 // Build service cards from displayIds referencing services.json
 const serviceColorMap: Record<string, string> = {

@@ -1,0 +1,61 @@
+/* ── Accessibility preferences (WWFL-compatible localStorage keys) ─────────── */
+
+html {
+  --text-scale: 1;
+}
+
+body {
+  font-size: calc(18px * var(--text-scale, 1));
+}
+
+/* High contrast */
+html.high-contrast {
+  --navy: #000000;
+  --charcoal: #000000;
+  --steel: #000000;
+  --gold: #0000cc;
+  --gold-dark: #000099;
+  --muted: #000000;
+  --off-white: #ffffff;
+}
+
+html.high-contrast body {
+  background: #ffffff;
+  color: #000000;
+}
+
+html.high-contrast a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+html.high-contrast .site-header {
+  background: #000000;
+}
+
+html.high-contrast .btn-login {
+  background: #ffff00;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+/* Reduce motion */
+html.reduce-motion,
+html.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Enhanced focus (stored as keyboard-navigation) */
+html.enhanced-focus *:focus-visible {
+  outline: 3px solid var(--gold) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(192, 120, 16, 0.35) !important;
+}
+
+html.high-contrast.enhanced-focus *:focus-visible {
+  outline-color: #0000cc !important;
+  box-shadow: 0 0 0 6px rgba(0, 0, 204, 0.35) !important;
+}

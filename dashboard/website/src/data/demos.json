@@ -8,79 +8,109 @@
   "demos": {
     "label": "Built by Kecktech",
     "heading": "Try the Apps",
-    "intro": "Each card opens a running demo. Explore the product, then tell us what you want built for your business."
+    "intro": "Every card opens a live product. Where Authelia SSO is required, use the shared demo account (demo / DemoAccess2026!) — LLDAP group kecktech_demo, one-factor only, no admin/LLDAP/Traefik. Apps with their own login still show app-native demo credentials on the card."
   },
   "apps": [
     {
       "id": "marketlist",
       "name": "Marketlist",
-      "description": "Household food system — shopping lists, pantry, recipes, and garden in one place.",
+      "description": "Marketlist",
       "url": "https://marketlist.kecktech.net",
-      "image": "/images/demos/marketlist.jpg",
-      "available": true
+      "image": "https://www.kecktech.net/images/demos/marketlist.jpg",
+      "contactEmail": "marketlist@kecktech.net",
+      "available": true,
+      "demoUser": "demo@marketlist.app",
+      "demoPassword": "demo12345"
     },
     {
       "id": "flooros",
       "name": "FloorOS",
-      "description": "Flooring ERP companion for customers, quotes, and relationship workflow.",
-      "url": "https://flooros.kecktech.net",
-      "image": "/images/demos/flooros.jpg",
-      "available": true
+      "description": "FloorOS",
+      "url": "https://flooros.kecktech.net/login",
+      "image": "https://www.kecktech.net/images/demos/flooros.jpg",
+      "contactEmail": "flooros@kecktech.net",
+      "available": true,
+      "demoUser": "sales1@demo.flooros.local",
+      "demoPassword": "password123"
     },
     {
       "id": "portal",
       "name": "Customer Portal",
-      "description": "Client portal for Kecktech customers — tickets, status, and account access.",
+      "description": "Customer portal for Kecktech clients.",
       "url": "https://portal.kecktech.net",
       "image": "/images/demos/portal.jpg",
-      "available": true
+      "contactEmail": "portal@kecktech.net",
+      "available": true,
+      "demoUser": "demo",
+      "demoPassword": "DemoAccess2026!"
     },
     {
       "id": "farmbot",
       "name": "FarmBot",
-      "description": "Self-hosted garden robot manager — pairs with Marketlist Garden.",
+      "description": "Self-hosted garden robot control plane.",
       "url": "https://farmbot.kecktech.net",
       "image": "/images/demos/farmbot.jpg",
-      "available": true
+      "contactEmail": "farmbot@kecktech.net",
+      "available": true,
+      "demoUser": "demo@kecktech.net",
+      "demoPassword": "DemoAccess2026!"
     },
     {
       "id": "cleaner",
       "name": "Cleaner",
-      "description": "Repo cleanup and maintenance tool for keeping codebases tidy.",
+      "description": "Cleaner",
       "url": "https://cleaner.kecktech.net",
       "image": "/images/demos/cleaner.jpg",
+      "contactEmail": "cleaner@kecktech.net",
       "available": true
     },
     {
       "id": "argo",
       "name": "Argo",
-      "description": "In-house Kecktech application for day-to-day operations workflows.",
+      "description": "Argo",
       "url": "https://argo.kecktech.net",
-      "image": "/images/demos/argo.jpg",
+      "image": "https://www.kecktech.net/images/demos/argo.jpg",
+      "contactEmail": "argo@kecktech.net",
       "available": true
     },
     {
       "id": "netops",
       "name": "NetOps",
-      "description": "Sovereign NetOps network and infrastructure operations UI.",
+      "description": "Network / infra operator tooling (netops-tool + Sovereign NetOps surfaces).",
       "url": "https://net-ops.kecktech.net",
-      "image": "/images/demos/netops.jpg",
-      "available": true
+      "image": "https://www.kecktech.net/images/demos/netops.jpg",
+      "contactEmail": "netops@kecktech.net",
+      "available": true,
+      "demoUser": "demo",
+      "demoPassword": "DemoAccess2026!"
     },
     {
       "id": "chat",
       "name": "Chat",
-      "description": "Local LLM chat powered by Open WebUI — private AI on our stack.",
+      "description": "Open WebUI chat on Kecktech stack.",
       "url": "https://chat.kecktech.net",
       "image": "/images/demos/chat.jpg",
-      "available": true
+      "contactEmail": "chat@kecktech.net",
+      "available": true,
+      "demoUser": "demo",
+      "demoPassword": "DemoAccess2026!"
     },
     {
       "id": "sovereign-hub",
       "name": "Sovereign Hub",
-      "description": "Ops intelligence and agent hub for monitoring, incidents, and automation.",
+      "description": "Sovereign control / agent platform — API and related NetOps observability.",
       "url": "https://sovereign-hub.kecktech.net",
-      "image": "/images/demos/sovereign-hub.jpg",
+      "image": "https://www.kecktech.net/images/demos/sovereign-hub.jpg",
+      "contactEmail": "hub@kecktech.net",
+      "available": true
+    },
+    {
+      "id": "aerocad",
+      "name": "AeroCAD",
+      "description": "AeroCAD",
+      "url": "https://aerocad.kecktech.net",
+      "image": "https://me.willworkforlunch.com/api/library/files/20c9812f3e2080b0.png",
+      "contactEmail": "aerocad@kecktech.net",
       "available": true
     }
   ],

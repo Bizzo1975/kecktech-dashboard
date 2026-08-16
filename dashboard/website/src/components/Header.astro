@@ -1,4 +1,6 @@
 ---
+import AccessibilityToolbar from './AccessibilityToolbar.astro';
+
 const nav = [
   { label: 'Home',     href: '/' },
   { label: 'About',    href: '/about' },
@@ -29,6 +31,8 @@ const currentPath = Astro.url.pathname;
       ))}
     </nav>
 
+    <AccessibilityToolbar />
+
     <a href="/contact" class="btn-login">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -53,7 +57,7 @@ const currentPath = Astro.url.pathname;
   background: var(--navy);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 .header-inner {
@@ -64,10 +68,17 @@ const currentPath = Astro.url.pathname;
   display: flex;
   align-items: center;
   gap: 28px;
-  overflow: hidden;
+  /* visible so a11y panel can drop below the bar without being clipped */
+  overflow: visible;
 }
 .logo-img { height: 120px; width: auto; object-fit: contain; margin: -26px 0; }
-.logo-link { flex-shrink: 0; }
+.logo-link {
+  flex-shrink: 0;
+  max-height: 68px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
 
 .main-nav { display: flex; gap: 4px; margin-left: auto; }
 .nav-link {
