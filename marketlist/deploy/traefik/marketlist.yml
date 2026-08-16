@@ -1,0 +1,28 @@
+http:
+  routers:
+    marketlist-api:
+      rule: "Host(`marketlist.kecktech.net`) && (PathPrefix(`/api`) || PathPrefix(`/socket.io`))"
+      entryPoints:
+        - websecure
+      priority: 100
+      tls: {}
+      service: marketlist-api
+
+    marketlist:
+      rule: "Host(`marketlist.kecktech.net`)"
+      entryPoints:
+        - websecure
+      priority: 1
+      tls: {}
+      service: marketlist-web
+
+  services:
+    marketlist-api:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.0.143:8091"
+
+    marketlist-web:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.0.143:8090"

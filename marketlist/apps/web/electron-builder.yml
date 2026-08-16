@@ -1,0 +1,41 @@
+appId: com.marketlist.desktop
+productName: Marketlist
+copyright: Copyright © Marketlist
+directories:
+  output: dist-desktop
+  buildResources: build
+files:
+  - electron-main.js
+  - package.json
+extraMetadata:
+  main: electron-main.js
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: ${productName}-Setup-${version}.${ext}
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  category: public.app-category.productivity
+  artifactName: ${productName}-${version}-${arch}.${ext}
+dmg:
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+linux:
+  target:
+    - AppImage
+  category: Office

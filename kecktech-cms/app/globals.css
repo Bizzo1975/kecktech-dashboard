@@ -1,0 +1,280 @@
+@import "tailwindcss";
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+:root {
+  /* Future Tech Light Mode Colors */
+  --background: #f0f4f8;
+  --foreground: #0f172a;
+  --card: rgba(255, 255, 255, 0.7);
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  /* Primary: Electric Blue */
+  --primary: #0066ff;
+  --primary-foreground: #ffffff;
+  /* Secondary: Cool Gray */
+  --secondary: #f1f5f9;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  /* Accent: Cyan */
+  --accent: #06b6d4;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0066ff;
+  --radius: 0.75rem;
+  
+  /* Future Tech Gradients */
+  --gradient-primary: linear-gradient(135deg, #0066ff 0%, #00c6ff 100%);
+  --gradient-accent: linear-gradient(135deg, #06b6d4 0%, #00ffcc 100%);
+  --gradient-hero: linear-gradient(135deg, #0066ff 0%, #06b6d4 50%, #00ffcc 100%);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: rgba(0, 102, 255, 0.1);
+}
+
+.dark {
+  /* Future Tech Dark Mode Colors */
+  --background: #050a14; /* Deep, almost black blue */
+  --foreground: #f8fafc;
+  --card: rgba(15, 23, 42, 0.6);
+  --card-foreground: #f8fafc;
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
+  /* Primary: Neon Blue */
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  /* Accent: Neon Cyan */
+  --accent: #06b6d4;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(59, 130, 246, 0.2);
+  --input: rgba(59, 130, 246, 0.2);
+  --ring: #3b82f6;
+  
+  /* Future Tech Gradients - Dark */
+  --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  --gradient-accent: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
+  --gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+  
+  /* Glassmorphism - Dark */
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(59, 130, 246, 0.3);
+  --glass-shadow: rgba(0, 0, 0, 0.5);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: var(--foreground);
+  background: #05050a;
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+}
+
+/* Reset main and section - but DON'T override Container's margin */
+main {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+section {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  position: relative;
+}
+
+/* Force Container centering - ensure all Container divs are centered */
+section > div[class*="mx-auto"],
+header > div[class*="mx-auto"] {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: block;
+}
+
+header {
+  padding: 0;
+  margin: 0;
+}
+
+/* Professional Glassmorphism Effects */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+  border-radius: var(--radius-lg);
+}
+
+/* Professional Gradient Backgrounds */
+.bg-gradient-primary {
+  background: var(--gradient-primary);
+}
+
+.bg-gradient-accent {
+  background: var(--gradient-accent);
+}
+
+.gradient-hero {
+  background: var(--gradient-hero);
+}
+
+/* Professional Section Spacing */
+.section-padding {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* Professional Card Hover Effects */
+.card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 102, 255, 0.15);
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+}
+
+/* Professional Text Gradients */
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-accent {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Flip Card 3D Animation */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}

@@ -1,0 +1,104 @@
+{
+  "name": "Marketlist",
+  "slug": "marketlist",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "icon": "./assets/icon.png",
+  "scheme": "marketlist",
+  "userInterfaceStyle": "automatic",
+  "newArchEnabled": true,
+  "splash": {
+    "image": "./assets/splash-icon.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#E8F0EA"
+  },
+  "plugins": [
+    "expo-router",
+    "expo-secure-store",
+    "expo-font",
+    "expo-sqlite",
+    [
+      "expo-notifications",
+      {
+        "icon": "./assets/icon.png",
+        "color": "#E8A317",
+        "sounds": []
+      }
+    ],
+    [
+      "react-native-android-widget",
+      {
+        "widgets": [
+          {
+            "name": "ActiveList",
+            "label": "Marketlist lists",
+            "description": "Shows how many active shopping lists you have open",
+            "minWidth": "180dp",
+            "minHeight": "110dp",
+            "targetCellWidth": 3,
+            "targetCellHeight": 2,
+            "previewImage": "./assets/adaptive-icon.png",
+            "updatePeriodMillis": 1800000
+          }
+        ]
+      }
+    ],
+    [
+      "expo-camera",
+      {
+        "cameraPermission": "Allow Marketlist to scan product barcodes while shopping.",
+        "barcodeScannerEnabled": true
+      }
+    ],
+    [
+      "expo-image-picker",
+      {
+        "photosPermission": "Allow Marketlist to read receipt photos for item capture."
+      }
+    ],
+    [
+      "expo-speech-recognition",
+      {
+        "microphonePermission": "Allow Marketlist to use the microphone for grocery dictation.",
+        "speechRecognitionPermission": "Allow Marketlist to turn speech into grocery list items.",
+        "androidSpeechServicePackages": ["com.google.android.googlequicksearchbox"]
+      }
+    ]
+  ],
+  "experiments": {
+    "typedRoutes": true
+  },
+  "extra": {
+    "apiUrl": "http://localhost:3000/api",
+    "eas": {
+      "projectId": "marketlist-local"
+    },
+    "widget": {
+      "note": "See WIDGET.md — ActiveList Android widget via react-native-android-widget on EAS; JS snapshot in widgetBridge.ts"
+    }
+  },
+  "ios": {
+    "supportsTablet": true,
+    "bundleIdentifier": "com.marketlist.app",
+    "infoPlist": {
+      "NSCameraUsageDescription": "Scan barcodes to add groceries quickly.",
+      "NSPhotoLibraryUsageDescription": "Import receipt photos to review line items.",
+      "NSSpeechRecognitionUsageDescription": "Dictate grocery items hands-free.",
+      "NSMicrophoneUsageDescription": "Dictate grocery items hands-free."
+    }
+  },
+  "android": {
+    "package": "com.marketlist.app",
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/adaptive-icon.png",
+      "backgroundColor": "#E8F0EA"
+    },
+    "permissions": [
+      "CAMERA",
+      "RECORD_AUDIO",
+      "RECEIVE_BOOT_COMPLETED",
+      "VIBRATE",
+      "POST_NOTIFICATIONS"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@marketlist/web",
+  "version": "1.0.0",
+  "private": true,
+  "main": "electron-main.js",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "electron": "electron .",
+    "build:desktop": "electron-builder --config electron-builder.yml",
+    "a11y": "node scripts/a11y.mjs",
+    "a11y:install-browsers": "playwright install chromium"
+  },
+  "dependencies": {
+    "@marketlist/shared": "*",
+    "@sentry/nextjs": "^10.65.0",
+    "next": "^15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^19.0.4",
+    "electron": "^35.7.5",
+    "electron-builder": "^25.1.8",
+    "playwright": "^1.61.1",
+    "typescript": "^5.8.2"
+  }
+}

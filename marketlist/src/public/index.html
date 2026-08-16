@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h1>Grocery App</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" data-page="lists">Grocery Lists</a></li>
+                <li><a href="#" data-page="pantry">Pantry</a></li>
+                <li><a href="#" data-page="recipes">Recipe Suggestions</a></li>
+                <li><a href="#" data-page="prices">Price Comparison</a></li>
+                <li><a href="#" data-page="deals">Best Deals</a></li>
+            </ul>
+            <div class="user-info">
+                <span id="userName">Not logged in</span>
+                <button id="logoutBtn">Logout</button>
+            </div>
+        </nav>
+        <main class="main-content">
+            <div id="loginPage" class="page active">
+                <div class="login-container">
+                    <h2>Login</h2>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        <button type="submit">Login</button>
+                    </form>
+                    <p>Don't have an account? <a href="#" id="showRegister">Register</a></p>
+                </div>
+            </div>
+            <div id="registerPage" class="page">
+                <div class="register-container">
+                    <h2>Register</h2>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="regName">Name</label>
+                            <input type="text" id="regName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <button type="submit">Register</button>
+                    </form>
+                    <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+                </div>
+            </div>
+            <div id="listsPage" class="page">
+                <h2>Grocery Lists</h2>
+                <div class="lists-container">
+                    <div class="lists-header">
+                        <button id="createListBtn">Create New List</button>
+                    </div>
+                    <div id="listsList"></div>
+                </div>
+            </div>
+            <div id="pantryPage" class="page">
+                <h2>Pantry</h2>
+                <div class="pantry-container">
+                    <div class="pantry-header">
+                        <button id="addItemBtn">Add Item</button>
+                    </div>
+                    <div id="pantryList"></div>
+                </div>
+            </div>
+            <div id="recipesPage" class="page">
+                <h2>Recipe Suggestions</h2>
+                <div class="recipes-container">
+                    <div class="recipes-filters">
+                        <select id="recipeFilter">
+                            <option value="all">All Recipes</option>
+                            <option value="pantry">Based on Pantry</option>
+                            <option value="expiring">For Expiring Items</option>
+                        </select>
+                    </div>
+                    <div id="recipesList"></div>
+                </div>
+            </div>
+            <div id="pricesPage" class="page">
+                <h2>Price Comparison</h2>
+                <div class="prices-container">
+                    <div class="search-container">
+                        <input type="text" id="itemSearch" placeholder="Search items...">
+                        <button id="searchBtn">Search</button>
+                    </div>
+                    <div id="priceComparisonResults"></div>
+                </div>
+            </div>
+            <div id="dealsPage" class="page">
+                <h2>Best Deals</h2>
+                <div class="deals-container">
+                    <div class="deals-filters">
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                        </select>
+                        <input type="number" id="minDiscount" placeholder="Min. Discount %">
+                    </div>
+                    <div id="dealsList"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html> 

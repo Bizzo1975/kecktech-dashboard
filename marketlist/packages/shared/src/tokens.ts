@@ -1,0 +1,70 @@
+export const tokens = {
+  brand: {
+    name: 'Marketlist',
+    tagline: 'Shop smarter together',
+  },
+  color: {
+    light: {
+      ink: '#1A1F1C',
+      inkMuted: '#5C6B63',
+      sage: '#E8F0EA',
+      sageDeep: '#C5D9CB',
+      surface: '#F7FAF8',
+      surfaceElevated: '#FFFFFF',
+      citrus: '#E8A317',
+      citrusPressed: '#C9890F',
+      danger: '#C44536',
+      success: '#2F6F4E',
+      border: '#D5E0D8',
+      overlay: 'rgba(26, 31, 28, 0.45)',
+    },
+    dark: {
+      ink: '#F2F7F4',
+      inkMuted: '#A8B8AF',
+      sage: '#243029',
+      sageDeep: '#2F3F36',
+      surface: '#121816',
+      surfaceElevated: '#1A221E',
+      citrus: '#F0B429',
+      citrusPressed: '#D9A01A',
+      danger: '#E06A5C',
+      success: '#5CB88A',
+      border: '#2E3C34',
+      overlay: 'rgba(0, 0, 0, 0.55)',
+    },
+  },
+  space: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 48,
+  },
+  radius: {
+    sm: 8,
+    md: 12,
+    lg: 16,
+    xl: 24,
+    full: 9999,
+  },
+  type: {
+    display: 'Fraunces',
+    ui: 'DMSans',
+    sizes: {
+      xs: 12,
+      sm: 14,
+      md: 16,
+      lg: 20,
+      xl: 28,
+      hero: 40,
+    },
+  },
+  motion: {
+    fast: 150,
+    normal: 250,
+    slow: 400,
+  },
+} as const;
+
+export type ColorScheme = keyof typeof tokens.color;

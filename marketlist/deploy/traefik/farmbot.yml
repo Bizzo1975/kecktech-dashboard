@@ -1,0 +1,65 @@
+# Traefik — FarmBot (farmbot.kecktech.net)
+
+Install on `prod-traefik-01` as `/opt/docker/traefik/dynamic/farmbot.yml`.
+
+Requires Traefik static config entrypoints:
+
+- `websecure` (443) — already used by Marketlist
+- `mqtt` — `:8883` (TCP, TLS passthrough or TLS terminate per RabbitMQ setup)
+- `mqttws` — `:3002` (TCP/HTTP for MQTT over WebSockets)
+
+If entrypoints are missing, add them to Traefik’s static YAML and restart Traefik before this file takes effect.
+
+Backend guest: `prod-farmbot-01` at `10.20.0.145`.
+
+```yaml
+http:
+  routers:
+    farmbot-web:
+      rule: "Host(`farmbot.kecktech.net`)"
+      entryPoints:
+        - websecure
+      priority: 10
+      tls: {}
+      service: farmbot-web
+
+  services:
+    farmbot-web:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.0.145:3000"
+
+tcp:
+  routers:
+    farmbot-mqtt:
+      rule: "HostSNI(`*`)"
+      entryPoints:
+        - mqtt
+      service: farmbot-mqtt
+      tls:
+        passthrough: true
+    farmbot-mqttws:
+      rule: "HostSNI(`*`)"
+      entryPoints:
+        - mqttws
+      service: farmbot-mqttws
+      # If WSS terminates at Traefik, switch to http router instead of TCP.
+
+  services:
+    farmbot-mqtt:
+      loadBalancer:
+        servers:
+          - address: "10.20.0.145:8883"
+    farmbot-mqttws:
+      loadBalancer:
+        servers:
+          - address: "10.20.0.145:3002"
+```
+
+After install:
+
+```bash
+# On traefik host
+curl -fsS -o /dev/null -w "%{http_code}\n" https://farmbot.kecktech.net/
+# Expect 200 or 302 once FarmBot is up
+```

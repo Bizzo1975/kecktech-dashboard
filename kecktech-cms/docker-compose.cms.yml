@@ -1,0 +1,29 @@
+# Kecktech blog CMS — path-routed at /blog and /api/me-manager on kecktech.net
+services:
+  kecktech-cms:
+    build:
+      context: .
+      dockerfile: Dockerfile.cms
+    container_name: kecktech-cms
+    restart: unless-stopped
+    ports:
+      - "8085:3021"
+    environment:
+      NODE_ENV: production
+      PORT: "3021"
+      DATABASE_URL: file:/data/kecktech-cms.db
+      ME_MANAGER_API_KEY: ${ME_MANAGER_API_KEY}
+      ME_MANAGER_URL: ${ME_MANAGER_URL:-https://me.willworkforlunch.com}
+      ME_MANAGER_INGEST_KEY: ${ME_MANAGER_INGEST_KEY}
+      CRON_SECRET: ${CRON_SECRET}
+      NEXT_PUBLIC_SITE_URL: https://www.kecktech.net
+      NEXTAUTH_URL: https://www.kecktech.net
+      DEMOS_JSON_PATH: /astro-data/demos.json
+      KECKTECH_ASTRO_REBUILD_URL: ${KECKTECH_ASTRO_REBUILD_URL:-}
+      KECKTECH_ASTRO_REBUILD_TOKEN: ${KECKTECH_ASTRO_REBUILD_TOKEN:-}
+    volumes:
+      - kecktech_cms_data:/data
+      - /opt/docker/dashboard/website/src/data:/astro-data
+
+volumes:
+  kecktech_cms_data:

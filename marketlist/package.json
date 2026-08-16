@@ -1,0 +1,29 @@
+{
+  "name": "marketlist",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marketlist — consumer grocery app (Expo + Express monorepo)",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev -w @marketlist/api",
+    "dev:mobile": "npm run start -w @marketlist/mobile",
+    "dev:web": "npm run dev -w @marketlist/web",
+    "migrate": "npm run migrate -w @marketlist/api",
+    "seed": "npm run seed -w @marketlist/api",
+    "build:shared": "npm run build -w @marketlist/shared",
+    "postinstall": "npm run build:shared",
+    "test": "npm run test -w @marketlist/api",
+    "a11y": "npm run a11y -w @marketlist/web",
+    "build:desktop": "npm run build:desktop -w @marketlist/web",
+    "start": "npm run dev:api",
+    "demo": "startup-demo.bat"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "",
+  "license": "MIT"
+}

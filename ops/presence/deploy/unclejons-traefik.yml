@@ -1,0 +1,43 @@
+# Traefik edge: marketing on www/apex, CtrlPanel on panel.
+# Deployed to prod-traefik-01:/opt/docker/traefik/dynamic/unclejons.yml
+#
+# Backends on unclejonsitgarage-01 (10.20.0.202 / 100.107.11.11):
+#   CtrlPanel = host nginx :80
+#   Marketing = docker app :3006
+
+http:
+  routers:
+    unclejons-panel:
+      rule: "Host(`panel.unclejonsitgarage.com`)"
+      entrypoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: "panel.unclejonsitgarage.com"
+      service: unclejons-panel
+      priority: 20
+
+    unclejons-marketing:
+      rule: "Host(`unclejonsitgarage.com`) || Host(`www.unclejonsitgarage.com`)"
+      entrypoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: "unclejonsitgarage.com"
+            sans:
+              - "www.unclejonsitgarage.com"
+      service: unclejons-marketing
+      priority: 10
+
+  services:
+    unclejons-panel:
+      loadBalancer:
+        servers:
+          - url: "http://100.107.11.11:80"
+
+    unclejons-marketing:
+      loadBalancer:
+        servers:
+          - url: "http://100.107.11.11:3006"

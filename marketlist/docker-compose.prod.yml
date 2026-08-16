@@ -1,0 +1,68 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-grocery_app}
+      POSTGRES_USER: ${DB_USER:-marketlist}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD}
+    volumes:
+      - marketlist_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-marketlist} -d ${DB_NAME:-grocery_app}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: db
+      DB_NAME: ${DB_NAME:-grocery_app}
+      DB_USER: ${DB_USER:-marketlist}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:?set JWT_REFRESH_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
+      JWT_REFRESH_DAYS: ${JWT_REFRESH_DAYS:-7}
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      APP_PUBLIC_URL: ${APP_PUBLIC_URL:-https://marketlist.kecktech.net}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-}
+      TOKEN_ENCRYPTION_KEY: ${TOKEN_ENCRYPTION_KEY:?set TOKEN_ENCRYPTION_KEY}
+      FARMBOT_PUBLIC_URL: ${FARMBOT_PUBLIC_URL:-https://farmbot.kecktech.net}
+    ports:
+      - "8091:3000"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      NEXT_PUBLIC_API_URL: /api
+      API_PROXY_ORIGIN: http://api:3000
+      NEXT_PUBLIC_SENTRY_DSN: ${SENTRY_DSN:-}
+      NEXT_PUBLIC_FARMBOT_PUBLIC_URL: ${FARMBOT_PUBLIC_URL:-https://farmbot.kecktech.net}
+    ports:
+      - "8090:3001"
+
+volumes:
+  marketlist_pg:

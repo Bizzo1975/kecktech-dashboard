@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: marketlist
+          POSTGRES_PASSWORD: marketlist
+          POSTGRES_DB: grocery_app
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U marketlist -d grocery_app"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      RUN_INTEGRATION: '1'
+      DB_HOST: localhost
+      DB_USER: marketlist
+      DB_PASSWORD: marketlist
+      DB_NAME: grocery_app
+      JWT_SECRET: ci-test-access-secret-not-for-prod
+      JWT_REFRESH_SECRET: ci-test-refresh-secret-not-for-prod
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm install
+      - run: npm run build -w @marketlist/shared
+      - run: npm run test -w @marketlist/api
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm install
+      - run: npm run build -w @marketlist/shared
+      - run: npm run build -w @marketlist/web
+
+  mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm install
+      - run: npm run build -w @marketlist/shared
+      - run: npm run typecheck -w @marketlist/mobile

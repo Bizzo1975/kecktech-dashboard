@@ -1,0 +1,17 @@
+# Edge deploy for Uncle Jon marketing (no host :80/:443 — CtrlPanel keeps those).
+services:
+  app:
+    ports:
+      - "3006:3000"
+    networks:
+      - app-network
+  db:
+    networks:
+      - app-network
+  redis:
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model for admin authentication
+model User {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  passwordHash     String
+  name             String?
+  role             String    @default("admin") // admin, editor, viewer
+  twoFactorEnabled Boolean   @default(false)
+  twoFactorSecret  String?   // base32 TOTP secret when 2FA is enabled
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  sessions         Session[]
+  accounts         Account[]
+}
+
+// NextAuth session model
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// NextAuth account model
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// NextAuth verification token
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Service Category model
+model ServiceCategory {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  icon        String?   // Icon name or URL
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  services    Service[]
+}
+
+// Service model - main service offerings
+model Service {
+  id          String          @id @default(cuid())
+  title       String
+  slug        String          @unique
+  description String          // Short description
+  content     String          // Full content/description (markdown or HTML)
+  categoryId  String?
+  category    ServiceCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  price       String?         // Price or pricing description
+  image       String?         // Image URL
+  featured    Boolean         @default(false)
+  status      String          @default("active") // active, coming-soon, archived
+  order       Int             @default(0)
+  metaTitle   String?         // SEO meta title
+  metaDescription String?     // SEO meta description
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+// Page content model for CMS
+model Page {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String   // Full page content
+  metaTitle   String?
+  metaDescription String?
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Blog posts — ME Manager bridge target
+model Post {
+  id                 String    @id @default(cuid())
+  title              String
+  slug               String    @unique
+  excerpt            String?
+  content            String
+  tags               String    @default("[]") // JSON array as string for SQLite
+  author             String    @default("Kecktech")
+  status             String    @default("draft") // draft, scheduled, published
+  published          Boolean   @default(false)
+  featuredImage      String?
+  scheduledPublishAt DateTime?
+  publishedAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+// Demo / portfolio apps — ME Manager projects bridge + Astro demos.json sync
+model Project {
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  description  String?
+  content      String?
+  image        String?
+  technologies String   @default("[]") // JSON array
+  liveDemo     String?
+  sourceCode   String?
+  contactEmail String?
+  featured     Boolean  @default(false)
+  available    Boolean  @default(true)
+  status       String   @default("published") // draft, published, archived
+  publishedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Uploaded media files (admin media library)
+model MediaFile {
+  id           String   @id @default(cuid())
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  url          String
+  createdAt    DateTime @default(now())
+}
+
+// Settings model for site-wide settings
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+// Hero / marketing slideshow slides (admin CRUD; optional Astro consumer)
+model SlideshowSlide {
+  id        String   @id @default(cuid())
+  title     String?
+  imageUrl  String
+  altText   String?
+  linkUrl   String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Newsletter stubs — wire to Listmonk / Microsoft Graph later
+model NewsletterCampaign {
+  id          String    @id @default(cuid())
+  title       String
+  subject     String
+  content     String    @default("")
+  status      String    @default("draft") // draft, scheduled, sent, cancelled
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  active    Boolean  @default(true)
+  source    String?  // contact-form, admin, listmonk, etc.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

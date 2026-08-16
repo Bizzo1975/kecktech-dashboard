@@ -1,0 +1,28 @@
+appId: com.marketlist.app
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Email"
+    timeout: 15000
+- tapOn: "Email"
+- inputText: "demo@marketlist.app"
+- tapOn: "Password"
+- inputText: "demo12345"
+- tapOn: "Sign in"
+- extendedWaitUntil:
+    visible:
+      text: ".*(Home|Hi,|Lists|Marketlist).*"
+    timeout: 20000
+- tapOn:
+    text: "Lists"
+    optional: true
+- assertVisible:
+    text: ".*(Lists|Home|Hi,).*"
+    optional: true
+# Prefer opening a real list when seed data is present; keep optional for empty households
+- tapOn:
+    text: "Weekly run"
+    optional: true
+- tapOn:
+    text: ".*list.*"
+    optional: true
