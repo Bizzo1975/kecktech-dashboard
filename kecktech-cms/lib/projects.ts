@@ -101,7 +101,7 @@ export async function syncProjectsToDemosJson() {
   if (!demosPath) return { ok: false as const, reason: "DEMOS_JSON_PATH unset" };
 
   const projects = await prisma.project.findMany({
-    where: { status: { not: "archived" }, available: true },
+    where: { status: "published", available: true },
     orderBy: { updatedAt: "desc" },
   });
 
