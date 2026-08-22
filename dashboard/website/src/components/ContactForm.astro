@@ -6,6 +6,11 @@ const requestTypes = data.form.requestTypes;
 ---
 
 <form class="contact-form" id="contact-form" method="POST" action="/api/contact.php" novalidate>
+  <input type="hidden" id="form_rendered_at" name="form_rendered_at" value="" />
+  <div class="hp-field" aria-hidden="true">
+    <label for="website">Website</label>
+    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" value="" />
+  </div>
 
   <div class="form-group">
     <label>What can we help you with?</label>
@@ -76,6 +81,7 @@ const requestTypes = data.form.requestTypes;
 
 <style>
 .contact-form { display: flex; flex-direction: column; gap: 20px; }
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 label { font-family: var(--font-heading); font-size: 14px; font-weight: 600; color: var(--navy); }
@@ -119,6 +125,8 @@ textarea { resize: vertical; min-height: 120px; }
 <script>
 const typeButtons = document.querySelectorAll<HTMLButtonElement>('.type-btn');
 const requestTypeInput = document.getElementById('request_type') as HTMLInputElement;
+const renderedAtInput = document.getElementById('form_rendered_at') as HTMLInputElement;
+if (renderedAtInput) renderedAtInput.value = String(Date.now());
 const serviceSelect = document.getElementById('service') as HTMLSelectElement;
 const paramMap: Record<string, string> = {
   tech: 'tech-support', support: 'customer-support', sales: 'sales', general: 'general',
@@ -151,6 +159,7 @@ form?.addEventListener('submit', async (e) => {
       form.reset();
       typeButtons.forEach(b => b.classList.remove('active'));
       requestTypeInput.value = '';
+      if (renderedAtInput) renderedAtInput.value = String(Date.now());
       success.hidden = false;
       error.hidden = true;
     } else { throw new Error('non-200'); }
