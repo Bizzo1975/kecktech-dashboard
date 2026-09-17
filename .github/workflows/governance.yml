@@ -66,6 +66,7 @@ jobs:
         run: |
           ./tools/deployment/test-immutable-image-references.ps1
           ./tools/deployment/test-release-evidence.ps1
+          ./tools/deployment/test-deployment-workflow-safety.ps1
 
   website:
     name: Website deterministic build
