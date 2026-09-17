@@ -50,11 +50,16 @@ const apps = data.apps.filter((app) => app.available !== false);
             image={app.image}
             color={cardColors[i % cardColors.length]}
             contactEmail={app.contactEmail}
-            demoUser={app.demoUser}
-            demoPassword={app.demoPassword}
           />
         ))}
       </div>
+      {apps.length === 0 && (
+        <div class="demos-empty" role="status">
+          <h3>No public demos are available right now.</h3>
+          <p>Contact Kecktech to request a guided demonstration or time-limited access.</p>
+          <a href="/contact?type=general" class="btn-primary">Request a Demo →</a>
+        </div>
+      )}
     </div>
   </section>
 
@@ -89,6 +94,20 @@ const apps = data.apps.filter((app) => app.available !== false);
 .demos-grid--one {
   grid-template-columns: 1fr;
   max-width: 720px;
+}
+.demos-empty {
+  max-width: 720px;
+  padding: 28px;
+  border: 1px solid rgba(30, 58, 95, 0.16);
+  border-radius: 10px;
+  background: var(--white);
+}
+.demos-empty h3 {
+  margin: 0 0 8px;
+  color: var(--navy);
+}
+.demos-empty p {
+  margin: 0 0 20px;
 }
 @media (max-width: 800px) {
   .demos-grid {

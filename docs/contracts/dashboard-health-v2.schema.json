@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kecktech.net/schemas/dashboard-health-v2.schema.json",
+  "title": "Kecktech Dashboard Health API v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractVersion", "evidenceAt", "services", "summary"],
+  "properties": {
+    "contractVersion": { "const": "2.0.0" },
+    "evidenceAt": { "type": "string", "format": "date-time" },
+    "services": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/service" }
+    },
+    "summary": { "$ref": "#/$defs/summary" }
+  },
+  "$defs": {
+    "status": {
+      "enum": ["ready", "application_available", "reachable", "auth_required", "redirected", "degraded", "unreachable", "not_monitored"]
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "status", "reason", "latency", "statusCode"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "#/$defs/status" },
+        "reason": { "enum": ["success", "authentication_required", "redirect_response", "unexpected_http_status", "timeout", "tls_error", "network_error", "not_monitored"] },
+        "latency": { "type": "integer", "minimum": 0 },
+        "statusCode": { "type": "integer", "minimum": 0, "maximum": 599 }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "ready", "applicationAvailable", "reachable", "authRequired", "redirected", "degraded", "unreachable", "notMonitored"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "ready": { "type": "integer", "minimum": 0 },
+        "applicationAvailable": { "type": "integer", "minimum": 0 },
+        "reachable": { "type": "integer", "minimum": 0 },
+        "authRequired": { "type": "integer", "minimum": 0 },
+        "redirected": { "type": "integer", "minimum": 0 },
+        "degraded": { "type": "integer", "minimum": 0 },
+        "unreachable": { "type": "integer", "minimum": 0 },
+        "notMonitored": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

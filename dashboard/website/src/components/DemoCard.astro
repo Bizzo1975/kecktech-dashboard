@@ -6,8 +6,6 @@ interface Props {
   image: string;
   color?: string;
   contactEmail?: string;
-  demoUser?: string;
-  demoPassword?: string;
 }
 const {
   name,
@@ -16,8 +14,6 @@ const {
   image,
   color = '#1B6B93',
   contactEmail,
-  demoUser,
-  demoPassword,
 } = Astro.props;
 ---
 
@@ -30,13 +26,6 @@ const {
       <a href={href} target="_blank" rel="noopener noreferrer">{name}</a>
     </h3>
     <p class="demo-desc">{description}</p>
-    {demoUser && (
-      <div class="demo-creds">
-        <div class="demo-creds-label">Demo login</div>
-        <code>{demoUser}</code>
-        {demoPassword && <code>{demoPassword}</code>}
-      </div>
-    )}
     {contactEmail && (
       <p class="demo-email">
         Contact: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
@@ -117,27 +106,6 @@ const {
 }
 .demo-email a:hover {
   text-decoration: underline;
-}
-.demo-creds {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 10px 12px;
-  background: var(--off-white);
-  border: 1px solid rgba(30, 58, 95, 0.12);
-  border-radius: 8px;
-}
-.demo-creds-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ocean);
-}
-.demo-creds code {
-  font-size: 12px;
-  color: var(--navy);
-  word-break: break-all;
 }
 .demo-link {
   font-family: var(--font-heading);
