@@ -1,0 +1,17 @@
+---
+description: Container, CI, release, health, and deployment requirements
+globs: "**/{Dockerfile*,docker-compose*.yml,docker-compose*.yaml,compose*.yml,compose*.yaml,.github/workflows/*.yml,.github/workflows/*.yaml}"
+alwaysApply: false
+---
+
+# Containers and Deployment
+
+- Use minimal supported base images pinned by digest and deterministic locked installs.
+- Never publish production `latest` tags. Build once and promote the same immutable artifact.
+- Run non-root with only required capabilities; prefer read-only filesystems and explicit writable mounts.
+- Keep secrets out of images and plaintext configuration. Use managed runtime secret references.
+- Define resource limits, graceful shutdown, restart behavior, persistent storage, and backup ownership.
+- Liveness checks process state; readiness checks mandatory dependencies. Auth redirects are not backend health.
+- CI must verify policy, formatting, types, tests, security, dependencies, build, SBOM, image, provenance, and docs as applicable.
+- Production needs review, environment approval, recovery evidence, post-deploy validation, and rollback.
+- Do not trust a persistent self-hosted runner for provenance until its isolation and secret handling are proven.
