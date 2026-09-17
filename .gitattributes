@@ -1,9 +1,9 @@
 # Governance files have byte-level integrity checks and must not be rewritten by
 # platform-specific Git line-ending settings.
-PROJECT_INSTRUCTIONS.md text eol=lf
-AGENTS.md text eol=lf
-CONTRIBUTING.md text eol=lf
-SECURITY.md text eol=lf
+/PROJECT_INSTRUCTIONS.md text eol=lf
+/AGENTS.md text eol=lf
+/CONTRIBUTING.md text eol=lf
+/SECURITY.md text eol=lf
 .agents/** text eol=lf
 .cursor/** text eol=lf
 .policy/** text eol=lf
