@@ -1,19 +1,22 @@
-name: Deploy to Prod
+name: Deploy to Production (Blocked Pending Reconciliation)
 
 on:
   workflow_dispatch:
-    inputs:
-      confirm:
-        description: Type YES to confirm prod deploy
-        required: true
+
+permissions:
+  contents: read
 
 jobs:
-  deploy:
-    runs-on: self-hosted
-    if: github.event.inputs.confirm == 'YES'
+  deployment-blocked:
+    name: Deployment safety gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     environment: production
     steps:
-      - name: Deploy to prod-dashboard-01
-        shell: powershell
-        run: |
-          & C:\actions-runner\deploy.ps1 -target "10.20.0.143" -branch "main"
+      - name: Checkout immutable source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Reject deployment until the reviewed pipeline exists
+        shell: pwsh
+        run: ./tools/deployment/assert-deployment-authorized.ps1 -Environment production

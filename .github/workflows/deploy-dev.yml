@@ -1,15 +1,21 @@
-name: Deploy to Dev
+name: Deploy to Dev (Blocked Pending Reconciliation)
 
 on:
-  push:
-    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  deploy:
-    runs-on: self-hosted
+  deployment-blocked:
+    name: Deployment safety gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Deploy to dev-dashboard-01
-        shell: powershell
-        run: |
-          & C:\actions-runner\deploy.ps1 -target "10.30.0.143" -branch "dev"
-          if ($LASTEXITCODE -ne 0) { throw "Deploy failed with exit code $LASTEXITCODE" }
+      - name: Checkout immutable source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Reject deployment until the reviewed pipeline exists
+        shell: pwsh
+        run: ./tools/deployment/assert-deployment-authorized.ps1 -Environment development
