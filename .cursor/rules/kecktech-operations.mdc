@@ -1,0 +1,15 @@
+---
+description: Mandatory Kecktech operational evidence, knowledge, reconciliation, and incident controls
+alwaysApply: true
+---
+
+# Kecktech operations
+
+- Read AGENTS.md, PROJECT_INSTRUCTIONS.md, and .agents/skills/kecktech-operations/SKILL.md before infrastructure or operational work.
+- Prime from the latest Notion handoff, canonical execution plan, Known Issues, and relevant Brain pillars.
+- Reuse the completed fleet audit and deployment captures; do only targeted delta verification.
+- Preserve live and dirty work. Reconcile live, local, and remote evidence before deployment.
+- Never expose secrets, guess, weaken tests, alter golden answers, or add production stubs/fake health.
+- Keep KT-DNS-001 network/DNS mutations frozen until exact action-and-target approval.
+- Update canonical knowledge and executable records with verified facts; mark contradictions and unknowns honestly.
+- Daily Handoff writes require the operator to approve the complete draft first.

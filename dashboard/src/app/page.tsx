@@ -1,6 +1,6 @@
 import { TileGrid } from "@/components/TileGrid";
 import { SERVICES } from "@/lib/services";
-import { checkHealth } from "@/lib/checkHealth";
+import { checkHealth } from "@/lib/checkHealth.mjs";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -9,15 +9,15 @@ export default async function Dashboard() {
   const results = await Promise.all(
     SERVICES.map(async (svc) => {
       const health = svc.noHealthCheck
-        ? { status: "up" as const, latency: 0 }
-        : await checkHealth(svc.healthUrl, svc.healthHost);
+        ? { status: "not_monitored" as const, reason: "not_monitored" as const, latency: 0, statusCode: 0 }
+        : await checkHealth(svc.healthUrl, svc.healthHost, 5000, svc.healthSuccess);
       const { healthHost: _h, ...tile } = svc;
       return { ...tile, ...health };
     })
   );
 
   const healthChecked = results.filter((r) => !r.noHealthCheck);
-  const upCount = healthChecked.filter((r) => r.status === "up").length;
+  const upCount = healthChecked.filter((r) => r.status === "ready").length;
   const totalCount = healthChecked.length;
   const now = new Date().toLocaleString("en-US", {
     timeZone: "America/Chicago",
@@ -102,7 +102,7 @@ export default async function Dashboard() {
               color: upCount === totalCount ? "#34d399" : "#fbbf24",
             }}
           >
-            {upCount}/{totalCount} Services Up
+            {upCount}/{totalCount} Services Ready
           </div>
           <div style={{ fontSize: "13px", color: "#64748b", marginTop: "2px" }}>
             Last checked: {now}

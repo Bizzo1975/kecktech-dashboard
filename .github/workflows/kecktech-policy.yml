@@ -1,0 +1,24 @@
+name: Kecktech Policy
+
+on:
+  pull_request:
+  push:
+    branches: [main, master, dev]
+
+permissions:
+  contents: read
+
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate repository guidance
+        shell: pwsh
+        run: ./tools/policy/validate-repository-guidance.ps1
+      - name: Prove policy drift is blocked
+        shell: pwsh
+        run: ./tools/policy/test-repository-guidance.ps1

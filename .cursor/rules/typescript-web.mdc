@@ -1,0 +1,17 @@
+---
+description: TypeScript, React, Next.js, Astro, and web UI requirements
+globs: "**/*.{ts,tsx,js,jsx,astro}"
+alwaysApply: false
+---
+
+# TypeScript and Web
+
+- Keep strict TypeScript. Do not add implicit `any`, unchecked casts, ignored errors, or `@ts-ignore` without an approved exception.
+- Validate environment configuration and external payloads at trust boundaries.
+- Keep secrets and privileged operations server-only; make client-safe boundaries explicit.
+- Do not globally disable TLS, framework security, linting, type checks, or hydration warnings.
+- Enforce authorization server-side and use stable, redacted errors with correlation IDs.
+- Meet WCAG 2.2 AA: semantic HTML, labels, keyboard operation, visible focus, contrast, and reduced motion.
+- Implement loading, empty, degraded, error, and recovery states.
+- Define safe cache behavior and invalidation for mutable or sensitive content.
+- Test critical desktop and mobile flows. A defect fix requires a regression test.
