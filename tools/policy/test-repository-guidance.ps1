@@ -66,3 +66,8 @@ try {
         Remove-Item -LiteralPath $resolvedTest -Recurse -Force
     }
 }
+
+# The negative fixtures intentionally launch validators that exit non-zero.
+# PowerShell on Linux preserves that native exit code even after the assertions
+# pass, so make the successful harness outcome explicit for CI.
+exit 0
