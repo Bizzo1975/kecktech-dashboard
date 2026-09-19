@@ -4,11 +4,14 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev --host 0.0.0.0 --port 4321",
-    "build": "astro build",
-    "preview": "astro preview"
+    "build": "node scripts/run-astro.mjs build",
+    "preview": "astro preview",
+    "test:public-content": "node --test scripts/verify-public-content.test.mjs",
+    "verify:public-content": "node scripts/verify-public-content.mjs src",
+    "verify": "npm run test:public-content && npm run verify:public-content && npm run build && node scripts/verify-public-content.mjs dist"
   },
   "dependencies": {
-    "astro": "^5.6.1",
+    "astro": "7.2.3",
     "marked": "^15.0.12"
   }
 }

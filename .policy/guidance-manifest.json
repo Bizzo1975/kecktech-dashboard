@@ -1,0 +1,34 @@
+{
+  "policyVersion": "2026.08.18.1",
+  "canonicalDevelopmentPolicySha256": "943e916f42855fdcc42bf3f685c4c47106131547c629ec592748323a1e3db21d",
+  "files": {
+    "PROJECT_INSTRUCTIONS.md": "ecdbf37e53cd1d59957c928b3342104c045d87f79ccc3d181586a3aa7592a6d1",
+    ".cursor/rules/api-data.mdc": "e9219a63dec621f71804623cf8252de95163be7ddbeb46efae6ad3b5779c6313",
+    ".cursor/rules/containers-deployment.mdc": "9e029d6470d7177946752b0916ad59265f67354d7475a6bee4e74c27515b0b15",
+    ".cursor/rules/kecktech-operations.mdc": "27248a9459cbe6515a94aae1fd0c08e847185df2a1edff0493f37361c94d22a8",
+    ".cursor/rules/operations-scripts.mdc": "363b09b6f95b1c80d0a35c40763729e6f49c8662ad267d2a3e92cc49692f9be7",
+    ".cursor/rules/typescript-web.mdc": "f9c66424957d1a8e019f19806a2986cdf2e101cb2ccabbebdaa760715d22f1db",
+    ".agents/skills/kecktech-operations/SKILL.md": "436f0c58eca8b4c4897b1b49ac4e361702ddb1f7f8f91a8dafe466b5cf683e1d",
+    ".agents/skills/kecktech-operations/references/startup-prompt.md": "46af775187103d0a552a231a5715a36f44aeedb7bbd22f9e2e7ff879ecdc779a"
+  },
+  "managedBlocks": [
+    {
+      "path": "AGENTS.md",
+      "begin": "<!-- BEGIN KECKTECH OPERATIONS POLICY 2026.08.18.1 -->",
+      "end": "<!-- END KECKTECH OPERATIONS POLICY 2026.08.18.1 -->",
+      "sha256": "37d2cf55d4058bebd92fedd46ec49f097d85e3cb523ccf72f68fa4af0e5d67f6"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "begin": "<!-- BEGIN KECKTECH CONTRIBUTING POLICY 2026.08.18.1 -->",
+      "end": "<!-- END KECKTECH CONTRIBUTING POLICY 2026.08.18.1 -->",
+      "sha256": "16c0b27385d390a55b8d2d4c88ae911fd3fcd0f2296038d3740ffce96cbb6313"
+    },
+    {
+      "path": "SECURITY.md",
+      "begin": "<!-- BEGIN KECKTECH SECURITY POLICY 2026.08.18.1 -->",
+      "end": "<!-- END KECKTECH SECURITY POLICY 2026.08.18.1 -->",
+      "sha256": "88891ab79eff18de543a972a0402e41808de200b85987704718385d3087c8c8d"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kecktech.net/schemas/release-evidence-v1.schema.json",
+  "title": "Kecktech release evidence v1",
+  "type": "object",
+  "required": ["schemaVersion", "releaseId", "source", "artifacts", "promotion"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "releaseId": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "required": ["repository", "commitSha", "liveReconciled", "reconciliationEvidence"],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "commitSha": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "liveReconciled": { "const": true },
+        "reconciliationEvidence": { "type": "string", "minLength": 1 }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["role", "image", "sbom", "provenance", "signatureVerified"],
+        "properties": {
+          "role": { "type": "string", "minLength": 1 },
+          "image": { "type": "string", "pattern": "@sha256:[a-f0-9]{64}$" },
+          "sbom": { "type": "string", "minLength": 1 },
+          "provenance": { "type": "string", "minLength": 1 },
+          "signatureVerified": { "const": true }
+        }
+      }
+    },
+    "promotion": {
+      "type": "object",
+      "required": ["development", "production"],
+      "properties": {
+        "development": { "$ref": "#/$defs/environment" },
+        "production": {
+          "allOf": [
+            { "$ref": "#/$defs/environment" },
+            {
+              "type": "object",
+              "required": ["authorizedApproval", "recoveryEvidence", "previousImages", "rollbackReady"],
+              "properties": {
+                "authorizedApproval": { "type": "string", "minLength": 1 },
+                "recoveryEvidence": { "type": "string", "minLength": 1 },
+                "previousImages": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "@sha256:[a-f0-9]{64}$" } },
+                "rollbackReady": { "const": true }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "environment": {
+      "type": "object",
+      "required": ["images", "acceptancePassed", "evidence"],
+      "properties": {
+        "images": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "@sha256:[a-f0-9]{64}$" } },
+        "acceptancePassed": { "const": true },
+        "evidence": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

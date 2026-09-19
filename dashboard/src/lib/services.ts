@@ -3,34 +3,55 @@
  *  Health checks ping Traefik by IP from inside Docker (cannot hairpin public DNS),
  *  with healthHost set to the real vhost for name-based routing.
  */
-export type ServiceDef = {
+export type HealthSuccess = "ready" | "application_available" | "reachable";
+
+type ServiceBase = {
   name: string;
   description: string;
   url: string;
-  healthUrl: string;
   healthHost?: string;
   icon: string;
   color: string;
   logoUrl?: string;
-  /** When true, skip live health ping and always show a static "Running" badge */
-  noHealthCheck?: boolean;
 };
+
+type MonitoredServiceDef = ServiceBase & {
+  healthUrl: string;
+  /** What a successful 2xx probe actually proves. Required for every monitored service. */
+  healthSuccess: HealthSuccess;
+  noHealthCheck?: false;
+};
+
+type UnmonitoredServiceDef = ServiceBase & {
+  healthUrl: "";
+  healthSuccess?: never;
+  /** Skip probing and report Not Monitored. Never infer runtime state. */
+  noHealthCheck: true;
+};
+
+export type ServiceDef = MonitoredServiceDef | UnmonitoredServiceDef;
 
 /** Traefik LAN IP reachable from dashboard containers on kecktech_front */
 const TRAEFIK = "https://10.20.0.100";
 
-function viaTraefik(host: string, path = "/"): Pick<ServiceDef, "healthUrl" | "healthHost"> {
+function viaTraefik(
+  host: string,
+  path = "/",
+  healthSuccess: HealthSuccess = "reachable"
+): Pick<MonitoredServiceDef, "healthUrl" | "healthHost" | "healthSuccess"> {
   return {
     healthUrl: `${TRAEFIK}${path}`,
     healthHost: host,
+    healthSuccess,
   };
 }
 
-function brand(host: string, path = "/"): Pick<ServiceDef, "healthUrl" | "healthHost" | "noHealthCheck"> {
+function brand(host: string, path = "/"): Pick<MonitoredServiceDef, "healthUrl" | "healthHost" | "healthSuccess" | "noHealthCheck"> {
   // Brand domains hairpin poorly from dash containers — health via public URL with noHealthCheck false
   // uses external fetch in health API when healthHost omitted; keep explicit URL for ops.
   return {
     healthUrl: `https://${host}${path}`,
+    healthSuccess: path === "/api/health" ? "ready" : "reachable",
     noHealthCheck: false,
   };
 }
@@ -50,7 +71,7 @@ export const SERVICES: ServiceDef[] = [
     name: "ERPNext",
     description: "CRM · Billing · HaaS Fleet",
     url: "https://erp.kecktech.net",
-    ...viaTraefik("erp.kecktech.net", "/api/method/ping"),
+    ...viaTraefik("erp.kecktech.net", "/api/method/ping", "application_available"),
     icon: "briefcase",
     color: "#0089ff",
     logoUrl: "/logos/erpnext.png",
@@ -59,7 +80,7 @@ export const SERVICES: ServiceDef[] = [
     name: "Zammad",
     description: "White Glove Help Desk",
     url: "https://tickets.kecktech.net",
-    ...viaTraefik("tickets.kecktech.net", "/api/v1/signshow"),
+    ...viaTraefik("tickets.kecktech.net", "/api/v1/signshow", "application_available"),
     icon: "headset",
     color: "#0D6E6E",
     logoUrl: "/logos/zammad.svg",
@@ -68,7 +89,7 @@ export const SERVICES: ServiceDef[] = [
     name: "Vaultwarden",
     description: "Sovereign Secrets Vault",
     url: "https://vault.kecktech.net",
-    ...viaTraefik("vault.kecktech.net", "/alive"),
+    ...viaTraefik("vault.kecktech.net", "/alive", "application_available"),
     icon: "lock",
     color: "#818cf8",
     logoUrl: "/logos/vaultwarden.svg",
@@ -77,7 +98,7 @@ export const SERVICES: ServiceDef[] = [
     name: "n8n",
     description: "Workflow Automation",
     url: "https://n8n.kecktech.net",
-    ...viaTraefik("n8n.kecktech.net", "/healthz"),
+    ...viaTraefik("n8n.kecktech.net", "/healthz", "ready"),
     icon: "workflow",
     color: "#ff6d5a",
     logoUrl: "/logos/n8n.png",
@@ -104,7 +125,7 @@ export const SERVICES: ServiceDef[] = [
     name: "Custom Wiki",
     description: "Kecktech Help Center (also serves wiki/docs aliases)",
     url: "https://help.kecktech.net",
-    ...viaTraefik("help.kecktech.net", "/api/health"),
+    ...viaTraefik("help.kecktech.net", "/api/health", "ready"),
     icon: "book",
     color: "#0D6E6E",
     logoUrl: "/logos/kecktech.svg",
@@ -113,7 +134,7 @@ export const SERVICES: ServiceDef[] = [
     name: "Umami",
     description: "Privacy-First Analytics",
     url: "https://stats.kecktech.net",
-    ...viaTraefik("stats.kecktech.net", "/api/heartbeat"),
+    ...viaTraefik("stats.kecktech.net", "/api/heartbeat", "application_available"),
     icon: "chart",
     color: "#f59e0b",
     logoUrl: "/logos/umami.png",
@@ -158,7 +179,7 @@ export const SERVICES: ServiceDef[] = [
     name: "Traefik",
     description: "Reverse Proxy",
     url: "https://traefik.kecktech.net",
-    ...viaTraefik("traefik.kecktech.net", "/ping"),
+    ...viaTraefik("traefik.kecktech.net", "/ping", "ready"),
     icon: "route",
     color: "#38a3a5",
     logoUrl: "/logos/traefik.png",
@@ -167,7 +188,7 @@ export const SERVICES: ServiceDef[] = [
     name: "Authelia",
     description: "SSO Gateway",
     url: "https://auth.kecktech.net",
-    ...viaTraefik("auth.kecktech.net", "/api/health"),
+    ...viaTraefik("auth.kecktech.net", "/api/health", "ready"),
     icon: "shield",
     color: "#1a56db",
     logoUrl: "/logos/authelia.png",

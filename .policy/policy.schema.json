@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["policyVersion", "projectPolicy", "projectPolicySha256", "securityBaseline", "accessibilityBaseline", "supplyChainTarget", "exceptionDirectory", "reviewCadence"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "policyVersion": { "const": "2026.08.18.1" },
+    "projectPolicy": { "const": "PROJECT_INSTRUCTIONS.md" },
+    "projectPolicySha256": { "const": "ecdbf37e53cd1d59957c928b3342104c045d87f79ccc3d181586a3aa7592a6d1" },
+    "securityBaseline": { "const": "OWASP ASVS 5.0 Level 2" },
+    "accessibilityBaseline": { "const": "WCAG 2.2 AA" },
+    "supplyChainTarget": { "const": "SLSA Build Level 2 (v1.2)" },
+    "exceptionDirectory": { "const": ".policy/exceptions" },
+    "reviewCadence": { "const": "quarterly" }
+  }
+}

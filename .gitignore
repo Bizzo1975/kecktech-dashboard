@@ -1,6 +1,7 @@
 .env
 *.env
 *.env.local
+**/.env*
 ops/email/graph-mailer.env.local
 ops/email/graph-auth.log
 ops/email/graph-mailer-setup.log
@@ -15,5 +16,9 @@ acme.json
 **/dist/
 **/node_modules/
 **/.next/
+**/*.tsbuildinfo
 
 ops/presence/deploy/uj-site.tar
+
+# Sanitized live-source captures are operational evidence, not repository source.
+.recovery-private/

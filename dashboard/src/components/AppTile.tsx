@@ -1,3 +1,5 @@
+import type { HealthReason, HealthStatus } from "@/lib/checkHealth.mjs";
+
 const icons: Record<string, string> = {
   briefcase: "💼",
   headset: "🎧",
@@ -22,11 +24,13 @@ interface AppTileProps {
   url: string;
   icon: string;
   color: string;
-  status: "up" | "down";
+  status: HealthStatus;
+  reason: HealthReason;
+  statusCode: number;
   latency: number;
   logoUrl?: string;
   disableLink?: boolean;
-  /** When true, skip health ping display and show a static "Running" badge */
+  /** Retained as service metadata; it never implies a runtime state. */
   noHealthCheck?: boolean;
 }
 
@@ -37,17 +41,32 @@ export function AppTile({
   icon,
   color,
   status,
+  reason,
   latency,
   logoUrl,
   disableLink = false,
-  noHealthCheck = false,
 }: AppTileProps) {
+  const statusMeta: Record<HealthStatus, { label: string; detail: string; color: string }> = {
+    ready: { label: "Ready", detail: `${latency}ms readiness response`, color: "#34d399" },
+    application_available: { label: "App Available", detail: `${latency}ms application response; dependencies may be unverified`, color: "#60a5fa" },
+    reachable: { label: "Reachable", detail: `${latency}ms HTTP response; readiness unverified`, color: "#fbbf24" },
+    auth_required: { label: "Auth Required", detail: "Edge reachable; readiness unverified", color: "#fbbf24" },
+    redirected: { label: "Redirected", detail: "Redirect received; readiness unverified", color: "#fbbf24" },
+    degraded: { label: "Degraded", detail: "Unexpected application response", color: "#fb923c" },
+    unreachable: {
+      label: "Unreachable",
+      detail: reason === "timeout" ? "Readiness check timed out" : reason === "tls_error" ? "TLS verification failed" : "Network check failed",
+      color: "#f87171",
+    },
+    not_monitored: { label: "Not Monitored", detail: "No automated readiness check", color: "#94a3b8" },
+  };
+  const health = statusMeta[status];
   const tileBody = (
     <div
       style={{
         display: "block",
         background: "#1e293b",
-        border: `1px solid ${status === "up" ? "#334155" : "#7f1d1d"}`,
+        border: `1px solid ${status === "ready" ? "#334155" : `${health.color}66`}`,
         borderRadius: "12px",
         padding: "24px",
         transition: "transform 0.15s, border-color 0.15s",
@@ -97,15 +116,14 @@ export function AppTile({
         </div>
 
         {/* Status indicator */}
-        {noHealthCheck ? (
-          <div
+        <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: "6px",
               fontSize: "13px",
               fontWeight: 500,
-              color: "#34d399",
+              color: health.color,
             }}
           >
             <div
@@ -113,38 +131,12 @@ export function AppTile({
                 width: "8px",
                 height: "8px",
                 borderRadius: "50%",
-                background: "#34d399",
-                boxShadow: "0 0 8px rgba(52,211,153,0.5)",
+                background: health.color,
+                boxShadow: status === "ready" ? "0 0 8px rgba(52,211,153,0.5)" : "none",
               }}
             />
-            Running
+            {health.label}
           </div>
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "6px",
-              fontSize: "13px",
-              fontWeight: 500,
-              color: status === "up" ? "#34d399" : "#f87171",
-            }}
-          >
-            <div
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                background: status === "up" ? "#34d399" : "#f87171",
-                boxShadow:
-                  status === "up"
-                    ? "0 0 8px rgba(52,211,153,0.5)"
-                    : "0 0 8px rgba(248,113,113,0.5)",
-              }}
-            />
-            {status === "up" ? "Online" : "Offline"}
-          </div>
-        )}
       </div>
 
       {/* Name and description */}
@@ -164,7 +156,7 @@ export function AppTile({
 
       {/* Latency */}
       <div style={{ fontSize: "12px", color: "#64748b" }}>
-        {noHealthCheck ? "Direct TCP/UDP" : status === "up" ? `${latency}ms response` : "Unreachable"}
+        {health.detail}
       </div>
     </div>
   );

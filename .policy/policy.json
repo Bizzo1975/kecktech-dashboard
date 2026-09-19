@@ -1,0 +1,11 @@
+{
+  "$schema": "./policy.schema.json",
+  "policyVersion": "2026.08.18.1",
+  "projectPolicy": "PROJECT_INSTRUCTIONS.md",
+  "projectPolicySha256": "ecdbf37e53cd1d59957c928b3342104c045d87f79ccc3d181586a3aa7592a6d1",
+  "securityBaseline": "OWASP ASVS 5.0 Level 2",
+  "accessibilityBaseline": "WCAG 2.2 AA",
+  "supplyChainTarget": "SLSA Build Level 2 (v1.2)",
+  "exceptionDirectory": ".policy/exceptions",
+  "reviewCadence": "quarterly"
+}
