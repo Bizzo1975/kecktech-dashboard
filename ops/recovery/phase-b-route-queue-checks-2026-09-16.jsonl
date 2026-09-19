@@ -1,0 +1,5 @@
+{"url": "https://ops.kecktech.net/login", "errorType": "HTTPError"}
+{"url": "https://ops.kecktech.net/api/method/ping", "errorType": "HTTPError"}
+{"url": "https://stats.kecktech.net/login", "errorType": "HTTPError"}
+{"url": "https://stats.kecktech.net/api/heartbeat", "errorType": "HTTPError"}
+{"queues": [{"queue": "rq:queue:home-frappe-frappe-bench:long", "pendingJobs": 56}], "note": "Counts only; no job contents read or executed."}

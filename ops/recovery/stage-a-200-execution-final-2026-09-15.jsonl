@@ -1,0 +1,2 @@
+{"time": "2026-09-15T22:02:57.826809+00:00", "event": "baseline_loaded"}
+{"time": "2026-09-15T22:02:57.847717+00:00", "event": "stage_a_failed", "category": "RuntimeError", "reason": "preflight_drift:erpnext-frontend-1"}

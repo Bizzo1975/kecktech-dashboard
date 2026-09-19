@@ -1,0 +1,572 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-18T18:30:00Z",
+  "deployments": [
+    {
+      "id": "deploy-dashboard-vm230",
+      "host": "prod-dashboard-01",
+      "observedAt": "2026-08-18T17:50:31Z",
+      "repositoryId": "repo-kecktech-dashboard",
+      "git": {
+        "path": "/opt/docker",
+        "branch": "dev",
+        "head": "47aa2c8efd37c00b20de553463cc922dc597491a",
+        "headKnownLocally": true,
+        "upstreamReported": "origin/dev [ahead 7 on the host without a fetch; the same HEAD is current origin/dev in the workstation checkout]",
+        "trackedFilesChanged": 9,
+        "untrackedFiles": 12,
+        "diffInsertions": 449,
+        "diffDeletions": 605
+      },
+      "disk": {
+        "mount": "/",
+        "capacityPercent": 73,
+        "availableKiB": 10919584
+      },
+      "artifacts": [
+        {
+          "container": "dashboard",
+          "declaredImage": "kecktech/dashboard:latest",
+          "imageId": "sha256:52cfd044c5f90b8ec25d03ce146cdcbfca1879e1bd7e7243c2f0c500bfe24f77",
+          "createdAt": "2026-08-18T02:48:22.548836427Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["bind:/opt/docker/dashboard/data:/app/data"]
+        },
+        {
+          "container": "kecktech-web",
+          "declaredImage": "nginx:alpine",
+          "imageId": "sha256:5616878291a2eed594aee8db4dade5878cf7edcb475e59193904b198d9b830de",
+          "createdAt": "2026-04-22T05:56:50.566426856Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["bind:/opt/docker/dashboard/website/nginx/nginx.conf:/etc/nginx/conf.d/default.conf", "bind:/opt/docker/dashboard/website/dist:/usr/share/nginx/html"]
+        },
+        {
+          "container": "kecktech-cms",
+          "declaredImage": "kecktech-cms-kecktech-cms",
+          "imageId": "sha256:b1abe6b72e9b06c5fa1fc7f93f16de8d01e73a04968857819e9aec1aa7c77a08",
+          "createdAt": "2026-08-18T06:40:47.769298695Z",
+          "status": "running at capture time",
+          "mounts": ["volume:kecktech-cms_data:/data", "bind:/opt/docker/dashboard/website/src/data:/astro-data"]
+        },
+        {
+          "container": "kecktech-admin",
+          "declaredImage": "vboxuser-kecktech-admin:latest",
+          "imageId": "sha256:ba044d94defa464c06d6a2e6fcc01f01e7494dad924b9c9c3d8ec8285a26cd01",
+          "createdAt": "2026-08-07T19:24:37.237141424Z",
+          "status": "running at capture time",
+          "mounts": ["bind:/opt/docker/dashboard/website/dist:/website/dist", "bind:/opt/docker/dashboard/website/public/images:/website/public/images", "bind:/opt/docker/dashboard/website/src/data:/website/src/data", "bind:/opt/docker/dashboard/website/admin/public/style.css:/admin/public/style.css", "bind:/opt/docker/dashboard/website/admin/server.js:/admin/server.js"]
+        },
+        {
+          "container": "kecktech-mailer",
+          "declaredImage": "kecktech-mailer:latest",
+          "imageId": "sha256:f8281f9cd228863cf70ead5b7aa41c8a6bb0f54558315eb96c0029f698c62829",
+          "createdAt": "2026-08-12T03:42:50.739681280Z",
+          "status": "running at capture time",
+          "mounts": ["bind:/opt/docker/dashboard/website/api:/var/www/html"]
+        },
+        {
+          "container": "kecktech-portal",
+          "declaredImage": "vboxuser-kecktech-portal:latest",
+          "imageId": "sha256:9cfe8f4463625977589c85236b41a457a2c0ef29cde64a0757792a40839a0d23",
+          "createdAt": "2026-08-17T03:52:30.536119348Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": []
+        }
+      ],
+      "sensitivePathsExcluded": [
+        "/opt/docker/dashboard/.env",
+        "/opt/docker/dashboard/.env.bak.20260503",
+        "/opt/docker/dashboard/data",
+        "/opt/docker/kecktech-cms data volume",
+        "environment variables and secret mounts",
+        "database and contact/subscriber content"
+      ],
+      "liveCaptureState": "metadata_complete",
+      "notes": [
+        "The live dashboard and CMS share one Git worktree rooted at /opt/docker.",
+        "Website, admin, mailer, and CMS behavior can be affected directly by bind-mounted host files.",
+        "The live worktree is dirty and is the operational baseline; do not overwrite it from the workstation checkout.",
+        "Docker health is recorded only as Docker's reported state, not proof of dependency or user-journey readiness.",
+        "Mutable image tags remain a release-policy violation even though exact image IDs are captured."
+      ]
+    },
+    {
+      "id": "deploy-wiki-vm232",
+      "host": "prod-wiki-01",
+      "observedAt": "2026-08-18T17:53:52Z",
+      "repositoryId": "repo-kecktech-wiki",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 75, "availableKiB": 4815112 },
+      "artifacts": [
+        {
+          "container": "custom-wiki",
+          "declaredImage": "vboxuser-custom-wiki:latest",
+          "imageId": "sha256:62cb1283e53fa459bb6cd906d7dc6a29308db0bdcadafdaaa961276d84bbdf99",
+          "createdAt": "2026-08-13T20:30:49.598710496Z",
+          "status": "running at capture time",
+          "mounts": []
+        },
+        {
+          "container": "custom-wiki-db",
+          "declaredImage": "postgres:15-alpine",
+          "imageId": "sha256:eb72e44fdca6270e882be90645eaf7af032f55a45dbf096ba4dd9d08195b08e3",
+          "createdAt": "2026-05-03T07:11:25.604726220Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["volume:wiki_custom_wiki_db_data:/var/lib/postgresql/data"]
+        }
+      ],
+      "sensitivePathsExcluded": ["wiki_custom_wiki_db_data", "environment variables", "credentials", "private wiki content"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["/opt/docker is not a Git checkout.", "The application image uses a mutable latest tag; exact image ID is captured.", "Source-to-image provenance remains unknown."]
+    },
+    {
+      "id": "deploy-personal-site-vm302",
+      "host": "prod-personal-website-v2",
+      "observedAt": "2026-08-18T17:53:51Z",
+      "repositoryId": "repo-personal-website-gen",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 78, "availableKiB": 4404884 },
+      "artifacts": [
+        {
+          "container": "personal-website-app-1",
+          "declaredImage": "personal-website-app",
+          "imageId": "sha256:53a0533d6d1862cdf2d7b2149dbd3eebd448c903b07946dc4f4f8d030709a002",
+          "createdAt": "2026-08-16T18:15:45.666839463Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["bind:/opt/docker/personal-website/public/uploads:/app/public/uploads"]
+        },
+        {
+          "container": "personal-website-db-1",
+          "declaredImage": "postgres:15-alpine",
+          "imageId": "sha256:09e4f20b14ddb3dfe3a0c825b206032aaf8f28300ba2070c0b60fc1c10c6abc7",
+          "createdAt": "2026-08-13T21:55:51.367591634Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["bind:/opt/docker/personal-website/init.sql:/docker-entrypoint-initdb.d/01-init.sql", "volume:personal-website_postgres_data:/var/lib/postgresql/data"]
+        },
+        {
+          "container": "listmonk-listmonk-1",
+          "declaredImage": "listmonk/listmonk:latest",
+          "imageId": "sha256:f535d59e14991337a9f2d570273685378ae86b0d7698c3e00da444e3bc205286",
+          "createdAt": "2026-08-12T10:01:51.035434562Z",
+          "status": "running at capture time",
+          "mounts": ["bind:/opt/docker/listmonk/config.toml:/listmonk/config.toml", "volume:listmonk_listmonk_uploads:/listmonk/uploads"]
+        },
+        {
+          "container": "listmonk-listmonk-db-1",
+          "declaredImage": "postgres:16-alpine",
+          "imageId": "sha256:57c72fd2a128e416c7fcc499958864df5301e940bca0a56f58fddf30ffc07777",
+          "createdAt": "2026-08-12T10:01:43.628849098Z",
+          "status": "running at capture time",
+          "mounts": ["volume:listmonk_listmonk_db:/var/lib/postgresql/data"]
+        },
+        {
+          "container": "personal-website-redis-1",
+          "declaredImage": "redis:7-alpine",
+          "imageId": "sha256:7aec734b2bb298a1d769fd8729f13b8514a41bf90fcdd1f38ec52267fbaa8ee6",
+          "createdAt": "2026-05-02T22:55:02.518736607Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["volume:personal-website_redis_data:/data"]
+        },
+        {
+          "container": "personal-website-nginx-1",
+          "declaredImage": "nginx:1.25-alpine",
+          "imageId": "sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00",
+          "createdAt": "2026-05-02T05:11:46.031292894Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["bind:/opt/docker/personal-website/public:/var/www/html/public", "bind:/opt/docker/personal-website/nginx.conf:/etc/nginx/nginx.conf"]
+        }
+      ],
+      "sensitivePathsExcluded": ["database volumes", "uploads", "Listmonk configuration and subscriber data", "environment variables", "contact and access-request data"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["/opt/docker is not a Git checkout.", "Source-to-image provenance remains unknown.", "Listmonk uses a mutable latest tag; exact image ID is captured.", "The root filesystem is 78% used."]
+    },
+    {
+      "id": "deploy-me-manager-vm303",
+      "host": "prod-me-manager-01",
+      "observedAt": "2026-08-18T17:53:50Z",
+      "repositoryId": "repo-me-manager",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 79, "availableKiB": 17118860 },
+      "artifacts": [
+        {
+          "container": "me-manager-app",
+          "declaredImage": "me-manager-app",
+          "imageId": "sha256:86818adfcd732a8a63a552e354d74741590d79ffda9c9ed7497a86d71d794549",
+          "createdAt": "2026-08-18T06:32:46.174383206Z",
+          "status": "running at capture time",
+          "mounts": ["bind:/opt/me-manager/storage:/app/storage"]
+        },
+        {
+          "container": "me-manager-worker",
+          "declaredImage": "me-manager-worker",
+          "imageId": "sha256:e69e9867fb1d0cc9bbf9a10a5aa3ad354225ef0e66725b1b8611b08957b4771d",
+          "createdAt": "2026-08-18T06:32:46.173618917Z",
+          "status": "running at capture time",
+          "mounts": ["bind:/opt/me-manager/storage:/app/storage"]
+        },
+        {
+          "container": "me-manager-nginx",
+          "declaredImage": "nginx:1.27-alpine",
+          "imageId": "sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10",
+          "createdAt": "2026-08-13T19:52:12.584126689Z",
+          "status": "running at capture time",
+          "mounts": ["bind:/opt/me-manager/config/nginx.prod.conf:/etc/nginx/conf.d/default.conf"]
+        },
+        {
+          "container": "me-manager-postgres",
+          "declaredImage": "postgres:16-alpine",
+          "imageId": "sha256:57c72fd2a128e416c7fcc499958864df5301e940bca0a56f58fddf30ffc07777",
+          "createdAt": "2026-08-12T23:15:04.662201406Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["volume:me-manager_me_manager_pg:/var/lib/postgresql/data"]
+        },
+        {
+          "container": "me-manager-redis",
+          "declaredImage": "redis:7.2-alpine",
+          "imageId": "sha256:dfa18828cbc07b3ae6a95ec7343f6c214fdee2d836197b4be8e9904420762cd8",
+          "createdAt": "2026-08-12T23:15:04.660770942Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["volume:me-manager_me_manager_redis:/data"]
+        },
+        {
+          "container": "me-manager-postiz",
+          "declaredImage": "ghcr.io/gitroomhq/postiz-app:latest",
+          "imageId": "sha256:edcc9a8e3bfaafac72ccae30b630e5eed873b9538f726fcb97c5a7529e6ed10a",
+          "createdAt": "2026-08-05T23:50:46.942254844Z",
+          "status": "running at capture time",
+          "mounts": ["volume:postiz_postiz_config:/config", "volume:postiz_postiz_uploads:/uploads"]
+        },
+        {
+          "container": "me-manager-temporal",
+          "declaredImage": "temporalio/auto-setup:1.28.1",
+          "imageId": "sha256:607d68caa111338d754771efb876c92dfcdae06d056e4530bb31cd0f37406e6a",
+          "createdAt": "2026-08-05T23:47:40.654125191Z",
+          "status": "running at capture time",
+          "mounts": ["bind:/opt/me-manager/dynamicconfig:/etc/temporal/config/dynamicconfig"]
+        }
+      ],
+      "sensitivePathsExcluded": ["/opt/me-manager/storage content", "database and Redis volumes", "Postiz configuration and uploads", "environment variables", "voice and generated media", "credentials"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["/opt/docker is not a Git checkout; Me Manager is deployed under /opt/me-manager.", "Source-to-image provenance remains unknown.", "Postiz uses a mutable latest tag; exact image ID is captured.", "The root filesystem is 79% used."]
+    },
+    {
+      "id": "deploy-asset-forge-vm115",
+      "host": "prod-ollama-01",
+      "observedAt": "2026-08-18T18:06:36Z",
+      "repositoryId": "repo-asset-forge",
+      "git": {
+        "path": "/home/kecktech/asset-forge",
+        "branch": "main",
+        "head": "53bb405bd7a92c8a819a867081a9bba96f6cca2a",
+        "headKnownLocally": true,
+        "upstreamReported": "origin/main",
+        "trackedFilesChanged": 1,
+        "untrackedFiles": 2,
+        "diffInsertions": 4,
+        "diffDeletions": 1
+      },
+      "disk": { "mount": "/", "capacityPercent": 57, "availableKiB": 140613568 },
+      "artifacts": [],
+      "processes": [
+        {
+          "unit": "asset-forge.service",
+          "state": "active/running",
+          "workingDirectory": "/home/kecktech/asset-forge",
+          "fragmentPath": "/etc/systemd/system/asset-forge.service",
+          "activeSince": "2026-08-16T21:07:16Z"
+        }
+      ],
+      "sensitivePathsExcluded": ["/home/kecktech/asset-forge/data/data", "environment and service values", "generated assets", "model caches", "credentials"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["The active service runs directly from a dirty Git checkout.", "The untracked data/data path requires classification and must not be committed by assumption.", "No service restart or file content read occurred."]
+    },
+    {
+      "id": "deploy-gpu-broker-vm115",
+      "host": "prod-ollama-01",
+      "observedAt": "2026-08-18T18:06:36Z",
+      "repositoryId": "repo-gpu-broker",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 57, "availableKiB": 140613568 },
+      "artifacts": [],
+      "processes": [
+        {
+          "unit": "gpu-broker.service",
+          "state": "active/running",
+          "workingDirectory": "/home/kecktech/gpu-broker",
+          "fragmentPath": "/etc/systemd/system/gpu-broker.service",
+          "activeSince": "2026-08-15T20:14:14Z"
+        },
+        {
+          "unit": "gpu-agent.service",
+          "state": "active/running",
+          "workingDirectory": "/home/kecktech/gpu-broker",
+          "fragmentPath": "/etc/systemd/system/gpu-agent.service",
+          "activeSince": "2026-08-15T20:14:14Z"
+        }
+      ],
+      "sensitivePathsExcluded": ["job payloads", "runtime state", "environment and service values", "credentials", "generated model output"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["The live working directory is not a Git checkout.", "Source-to-process provenance remains unknown.", "The RTX 3090 local agent was active at capture time; no workload behavior is inferred from process state alone."]
+    },
+    {
+      "id": "deploy-cleaner-vm241",
+      "host": "prod-cleaner-01",
+      "observedAt": "2026-08-18T18:06:36Z",
+      "repositoryId": "repo-cleaner",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 63, "availableKiB": 7116032 },
+      "artifacts": [
+        {
+          "container": "cleaner",
+          "declaredImage": "cleaner-cleaner",
+          "imageId": "sha256:6beb37941705a1bf932f39dcc3bb72a2206a43850bb796a0f800c41cbf213c59",
+          "createdAt": "2026-08-14T05:13:36.332943549Z",
+          "status": "running at capture time",
+          "mounts": ["bind:/opt/cleaner/config:/app/config", "bind:/opt/cleaner/fixtures:/app/fixtures", "bind:/opt/cleaner/data:/data", "bind:/mnt/github-workstation:/data/local-repos"]
+        }
+      ],
+      "sensitivePathsExcluded": ["/opt/cleaner/data contents", "/mnt/github-workstation contents", "scan findings", "environment variables", "credentials"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["Neither /opt/docker nor /opt/cleaner is a Git checkout.", "The workstation repository share is mounted read-only with rprivate propagation, but exposed repository scope and sensitive-file exclusions require review.", "No repository content was read through the mount during this capture."]
+    },
+    {
+      "id": "deploy-sovereign-vm122",
+      "host": "prod-sovereign-01",
+      "observedAt": "2026-08-18T18:16:44Z",
+      "repositoryId": "repo-sovereign-standalone",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 35, "availableKiB": 65556508 },
+      "artifacts": [
+        {
+          "container": "sovereign-editor-ui",
+          "declaredImage": "nginx:alpine",
+          "imageId": "sha256:8b1e78743a03dbb2c95171cc58639fef29abc8816598e27fb910ed2e621e589a",
+          "createdAt": "2026-06-07T01:01:45.377359071Z",
+          "status": "exited; Docker reported stopped for about two months",
+          "mounts": ["bind:/opt/sovereign/editor-ui/nginx/default.conf:/etc/nginx/conf.d/default.conf", "bind:/opt/sovereign/editor-ui/dist:/usr/share/nginx/html"]
+        },
+        {
+          "container": "sovereign-prometheus",
+          "declaredImage": "prom/prometheus:v2.55.0",
+          "imageId": "sha256:378f4e03703557d1c6419e6caccf922f96e6d88a530f7431d66a4c4f4b1000fe",
+          "createdAt": "2026-06-05T22:07:21.299192324Z",
+          "status": "exited; Docker reported stopped for about two months",
+          "mounts": ["bind:/opt/sovereign/fixtures/prometheus/rules.yml:/etc/prometheus/rules.yml", "bind:/opt/sovereign/fixtures/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml", "volume:sovereign_prometheus_data:/prometheus"]
+        },
+        {
+          "container": "sovereign-postgres",
+          "declaredImage": "pgvector/pgvector:pg15",
+          "imageId": "sha256:bd12d6788a617f4147d5a2ae0b56d07921398adabfe5a033bd3f50c245df55a1",
+          "createdAt": "2026-06-05T22:07:21.302105613Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["bind:/opt/sovereign/schema/kb_init.sql:/docker-entrypoint-initdb.d/01-kb_init.sql", "bind:/opt/sovereign/postgres/data:/var/lib/postgresql/data"]
+        },
+        {
+          "container": "sovereign-neo4j",
+          "declaredImage": "neo4j:5-community",
+          "imageId": "sha256:0b5d3ab6ec1b866890dbfb53bf4fe1cf039f9e03c96165599a403005b7e7bcc3",
+          "createdAt": "2026-06-06T00:37:02.190402249Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["bind:/opt/sovereign/neo4j/data:/data", "bind:/opt/sovereign/neo4j/logs:/logs"]
+        },
+        {
+          "container": "sovereign-minio",
+          "declaredImage": "minio/minio:RELEASE.2024-06-13T22-53-53Z-cpuv1",
+          "imageId": "sha256:b8f64551be5e3e5a6ed8b3d49ec03f4ad7c4b215a05e2494b49fb9cc9db10639",
+          "createdAt": "2026-07-07T22:08:11.844949732Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["bind:/opt/sovereign/minio/data:/data"]
+        },
+        {
+          "container": "sovereign-redis",
+          "declaredImage": "redis:7-alpine",
+          "imageId": "sha256:6ab0b6e7381779332f97b8ca76193e45b0756f38d4c0dcda72dbb3c32061ab99",
+          "createdAt": "2026-06-09T19:30:20.991928211Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["bind:/opt/sovereign/redis/data:/data"]
+        }
+      ],
+      "processes": [
+        {
+          "unit": "sovereign-api.service",
+          "state": "active/running",
+          "workingDirectory": "/opt/sovereign",
+          "fragmentPath": "/etc/systemd/system/sovereign-api.service",
+          "activeSince": "2026-08-15T20:23:33Z"
+        },
+        {
+          "unit": "sovereign-alert-eval-light.service",
+          "state": "failed/failed; timer remains scheduled",
+          "workingDirectory": "/opt/sovereign",
+          "fragmentPath": "/etc/systemd/system/sovereign-alert-eval-light.service",
+          "activeSince": null
+        },
+        {
+          "unit": "sovereign-alert-eval-nightly.service",
+          "state": "failed/failed; timer remains scheduled",
+          "workingDirectory": "/opt/sovereign",
+          "fragmentPath": "/etc/systemd/system/sovereign-alert-eval-nightly.service",
+          "activeSince": null
+        }
+      ],
+      "sensitivePathsExcluded": ["/opt/sovereign/env", "database and object data", "logs", "temporary and evaluation output", "credentials", "service environment values"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["/opt/sovereign is not a Git checkout, so source provenance remains unknown.", "Process/container state does not prove the API or evaluator produces correct results.", "Failed evaluator timers must not be disabled or restarted without an approved remediation and rollback.", "The local sovereign-standalone checkout remains extremely dirty and must not be deployed over this host."]
+    },
+    {
+      "id": "deploy-unclejon-site-vm401",
+      "host": "unclejonsitgarage-01",
+      "observedAt": "2026-08-18T18:16:42Z",
+      "repositoryId": "repo-unclejons-itgarage-site",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 39, "availableKiB": 24382504 },
+      "artifacts": [
+        {
+          "container": "unclejons-itgarage-site-app-1",
+          "declaredImage": "unclejons-itgarage-site-app",
+          "imageId": "sha256:cb8c3d9ea98962533f0d9d3501381221640475fccaf844f43ca464f441f25f64",
+          "createdAt": "2026-08-17T01:14:11.589192260Z",
+          "status": "running at capture time",
+          "mounts": []
+        },
+        {
+          "container": "unclejons-itgarage-site-db-1",
+          "declaredImage": "postgres:15-alpine",
+          "imageId": "sha256:3d0f7584ed7d04e27fa050d6683a74746608faf21f202be78460d679cc56461f",
+          "createdAt": "2026-08-16T18:24:25.436841590Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["volume:unclejons-itgarage-site_uj_postgres_data:/var/lib/postgresql/data", "bind:/opt/unclejons-itgarage-site/config/init.sql:/docker-entrypoint-initdb.d/01-init.sql"]
+        },
+        {
+          "container": "unclejons-itgarage-site-redis-1",
+          "declaredImage": "redis:7-alpine",
+          "imageId": "sha256:e7723ff73d963f5cc6d9c4643ea3d989527a402a319239054e9472a7fb9219a2",
+          "createdAt": "2026-08-16T18:24:25.391719271Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["volume:unclejons-itgarage-site_uj_redis_data:/data"]
+        }
+      ],
+      "sensitivePathsExcluded": ["database and Redis volumes", "account and contact data", "environment values", "credentials", "private game-server information"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["/opt/unclejons-itgarage-site is not a Git checkout.", "Source-to-image provenance remains unknown.", "Running containers do not prove public routing, CMS, form, authentication, or user-journey readiness."]
+    },
+    {
+      "id": "deploy-mom-hub-vm242",
+      "host": "prod-mom-hub-01",
+      "observedAt": "2026-08-18T18:20:14Z",
+      "repositoryId": "repo-mom-hub",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 13, "availableKiB": 34643680 },
+      "artifacts": [
+        {
+          "container": "mom-hub-api",
+          "declaredImage": "deploy-mom-hub-api",
+          "imageId": "sha256:2b7a38c59a4d47c1f19108ca63f965335b48db5e003e3e4cf080e001de3f6bc8",
+          "createdAt": "2026-08-08T16:05:28.538746034Z",
+          "status": "running at capture time",
+          "mounts": ["volume:deploy_mom-hub-data:/data", "volume:deploy_mom-hub-uploads:/app/server/uploads"]
+        },
+        {
+          "container": "mom-hub-clamav",
+          "declaredImage": "clamav/clamav:stable",
+          "imageId": "sha256:0af8760cd96f9ab67d07977af36e155431581a9fe9f0ec8b256c9f855fda183e",
+          "createdAt": "2026-08-17T13:53:23.555772938Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["volume:deploy_clamav-db:/var/lib/clamav"]
+        }
+      ],
+      "sensitivePathsExcluded": ["Mom Hub data and uploads", "family, financial, health, and account information", "environment values", "credentials", "external integration tokens"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["/opt/docker/mom-hub is not a Git checkout.", "Source-to-image provenance remains unknown.", "SMTP/Yahoo, Stripe, Plaid, Meta, and family-account integrations remain gated and must not be simulated.", "Container state does not prove upload scanning, authorization, or integration behavior."]
+    },
+    {
+      "id": "deploy-psuedonym-site-vm304",
+      "host": "prod-jacob-roman-01",
+      "observedAt": "2026-08-18T18:20:14Z",
+      "repositoryId": "repo-psuedonym-site",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 76, "availableKiB": 4653476 },
+      "artifacts": [
+        {
+          "container": "jacob-roman-blog-app-prod",
+          "declaredImage": "jacob-roman-blog-app",
+          "imageId": "sha256:f1a085aac7b768e557db05db291e47a69efdd2ee4fa3ccb25a1f46d7aa71bd96",
+          "createdAt": "2026-08-17T14:15:47.564614677Z",
+          "status": "running at capture time",
+          "mounts": []
+        },
+        {
+          "container": "jacob-roman-blog-db-prod",
+          "declaredImage": "postgres:16-alpine",
+          "imageId": "sha256:57c72fd2a128e416c7fcc499958864df5301e940bca0a56f58fddf30ffc07777",
+          "createdAt": "2026-07-24T23:07:24.687529857Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["volume:jacob-roman-blog_postgres_data_prod:/var/lib/postgresql/data"]
+        },
+        {
+          "container": "jacob-roman-blog-redis-prod",
+          "declaredImage": "redis:7-alpine",
+          "imageId": "sha256:6ab0b6e7381779332f97b8ca76193e45b0756f38d4c0dcda72dbb3c32061ab99",
+          "createdAt": "2026-07-24T23:07:24.686674366Z",
+          "status": "running; Docker reported healthy at capture time",
+          "mounts": ["volume:jacob-roman-blog_redis_data_prod:/data"]
+        }
+      ],
+      "sensitivePathsExcluded": ["database and Redis volumes", "backups and logs", "unpublished content", "analytics identifiers", "source maps", "identity and authorship metadata", "credentials and environment values"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["The live host is VM304; VM206 references are stale.", "/opt/jacob-roman-blog is not a Git checkout.", "Source-to-image provenance and anonymity compliance remain unverified.", "Do not expose operator identity in public content, metadata, assets, analytics, repository history, or deployment evidence."]
+    },
+    {
+      "id": "deploy-voice-clone-vm115",
+      "host": "prod-ollama-01",
+      "observedAt": "2026-08-18T18:28:00Z",
+      "repositoryId": "repo-voice-clone-service",
+      "git": null,
+      "disk": { "mount": "/", "capacityPercent": 57, "availableKiB": 140613568 },
+      "artifacts": [],
+      "processes": [
+        {
+          "unit": "cron-launched python process",
+          "state": "running; listening on TCP 8008",
+          "workingDirectory": "/home/kecktech/voice-clone-service",
+          "fragmentPath": "cgroup /system.slice/cron.service",
+          "activeSince": "2026-08-15T20:16:01Z"
+        }
+      ],
+      "sensitivePathsExcluded": ["dataset", "reference clips", "generated audio", "models", "environment values", "API keys", "biometric identifiers"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["The live working directory is not a Git checkout.", "Health reported placeholder mode off and Chatterbox installed, but jon-v1 not ready.", "The live Linux cron deployment contradicts the repository's Windows scheduled-task installation instructions.", "No synthesis request was made because output validation and biometric handling require an isolated approved test."]
+    },
+    {
+      "id": "deploy-kecktech-cms-vm230",
+      "host": "prod-dashboard-01",
+      "observedAt": "2026-08-18T17:50:31Z",
+      "repositoryId": "repo-kecktech-cms",
+      "git": {
+        "path": "/opt/docker",
+        "branch": "dev",
+        "head": "47aa2c8efd37c00b20de553463cc922dc597491a",
+        "headKnownLocally": true,
+        "upstreamReported": "origin/dev [ahead 7 on the host without a fetch; same HEAD is current workstation origin/dev]",
+        "trackedFilesChanged": 5,
+        "untrackedFiles": 7,
+        "diffInsertions": 421,
+        "diffDeletions": 412
+      },
+      "disk": { "mount": "/", "capacityPercent": 73, "availableKiB": 10919584 },
+      "artifacts": [
+        {
+          "container": "kecktech-cms",
+          "declaredImage": "kecktech-cms-kecktech-cms",
+          "imageId": "sha256:b1abe6b72e9b06c5fa1fc7f93f16de8d01e73a04968857819e9aec1aa7c77a08",
+          "createdAt": "2026-08-18T06:40:47.769298695Z",
+          "status": "running at capture time",
+          "mounts": ["volume:kecktech-cms_data:/data", "bind:/opt/docker/dashboard/website/src/data:/astro-data"]
+        }
+      ],
+      "sensitivePathsExcluded": ["CMS data volume", "contact and subscriber data", "TOTP and credential material", "environment values", "unpublished content and private media"],
+      "liveCaptureState": "metadata_complete",
+      "notes": ["The live CMS is a sibling in VM230's shared /opt/docker Git worktree, not a checkout of the workstation Kecktech CMS repository history.", "Five tracked CMS files contain 421 insertions and 412 deletions; seven CMS paths are untracked.", "Do not overwrite the live CMS from either the dashboard or legacy CMS checkout."]
+    }
+  ]
+}

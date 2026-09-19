@@ -1,0 +1,17 @@
+---
+description: PowerShell, shell, Python automation, and operational safety
+globs: "**/*.{ps1,psm1,sh,py}"
+alwaysApply: false
+---
+
+# Operational Automation
+
+- Fail on errors and return clear exit codes with structured, redacted output.
+- Validate resolved targets before writes, moves, deletes, remote actions, or migrations.
+- Quote literal paths and avoid string-built destructive commands.
+- Make repeated execution safe and idempotent; provide validation/dry-run mode where feasible.
+- Never print secrets or pass them on command lines where process inspection can expose them.
+- Python services use supported runtimes, locked environments, typed public interfaces, schemas, and structured logs.
+- Bound network, subprocess, queue, GPU, upload, and file work with timeouts and size limits.
+- Workers require durable state, idempotency, cancellation, restart recovery, and observable failure.
+- Unsafe deserialization, dynamic execution, and shell interpolation are prohibited.

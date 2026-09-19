@@ -1,0 +1,10 @@
+import {mkdtemp} from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import {JsonStore} from '../../.recovery-private/nexus-preparation/dist/store.js';
+const directory=await mkdtemp(path.join(os.tmpdir(),'nexus-concurrency-review-'));
+const store=new JsonStore(path.join(directory,'state.json'));
+const results=await Promise.allSettled(Array.from({length:8},()=>store.createConversation()));
+let preserved=0;
+for(const result of results) if(result.status==='fulfilled' && await store.getConversation(result.value.id)) preserved++;
+console.log(JSON.stringify({requested:8,succeeded:results.filter(r=>r.status==='fulfilled').length,failed:results.filter(r=>r.status==='rejected').length,preserved,isolatedTemporaryState:true}));

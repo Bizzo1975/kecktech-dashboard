@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kecktech.net/schemas/recovery-deployments.schema.json",
+  "title": "Kecktech live deployment evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "deployments"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "deployments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "host", "observedAt", "repositoryId", "git", "disk", "artifacts", "sensitivePathsExcluded", "liveCaptureState", "notes"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^deploy-[a-z0-9-]+$" },
+          "host": { "type": "string", "minLength": 1 },
+          "observedAt": { "type": "string", "format": "date-time" },
+          "repositoryId": { "type": "string", "pattern": "^repo-[a-z0-9-]+$" },
+          "git": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "required": ["path", "branch", "head", "headKnownLocally", "upstreamReported", "trackedFilesChanged", "untrackedFiles", "diffInsertions", "diffDeletions"],
+            "properties": {
+              "path": { "type": "string" },
+              "branch": { "type": "string" },
+              "head": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+              "headKnownLocally": { "type": "boolean" },
+              "upstreamReported": { "type": "string" },
+              "trackedFilesChanged": { "type": "integer", "minimum": 0 },
+              "untrackedFiles": { "type": "integer", "minimum": 0 },
+              "diffInsertions": { "type": "integer", "minimum": 0 },
+              "diffDeletions": { "type": "integer", "minimum": 0 }
+            }
+          },
+          "disk": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["mount", "capacityPercent", "availableKiB"],
+            "properties": {
+              "mount": { "type": "string" },
+              "capacityPercent": { "type": "integer", "minimum": 0, "maximum": 100 },
+              "availableKiB": { "type": "integer", "minimum": 0 }
+            }
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["container", "declaredImage", "imageId", "createdAt", "status", "mounts"],
+              "properties": {
+                "container": { "type": "string" },
+                "declaredImage": { "type": "string" },
+                "imageId": { "type": "string" },
+                "createdAt": { "type": "string", "format": "date-time" },
+                "status": { "type": "string" },
+                "mounts": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          },
+          "processes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["unit", "state", "workingDirectory", "fragmentPath", "activeSince"],
+              "properties": {
+                "unit": { "type": "string" },
+                "state": { "type": "string" },
+                "workingDirectory": { "type": "string" },
+                "fragmentPath": { "type": "string" },
+                "activeSince": { "type": ["string", "null"], "format": "date-time" }
+              }
+            }
+          },
+          "sensitivePathsExcluded": { "type": "array", "items": { "type": "string" } },
+          "liveCaptureState": { "enum": ["started", "metadata_complete", "source_captured", "reconciled"] },
+          "notes": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

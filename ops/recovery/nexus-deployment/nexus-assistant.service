@@ -1,0 +1,36 @@
+[Unit]
+Description=Nexus assistant API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+WorkingDirectory=/opt/nexus/assistant/current
+EnvironmentFile=/etc/nexus/assistant.env
+Environment=NODE_ENV=production
+Environment=NEXUS_ASSISTANT_DATA_DIR=/var/lib/nexus-assistant
+Environment=NEXUS_ASSISTANT_PORT=8787
+Environment=NEXUS_ASSISTANT_CLOUD_ALLOWED=0
+ExecStartPre=/opt/nexus/runtime/bin/node deployment/preflight.mjs
+ExecStart=/opt/nexus/runtime/bin/node dist/index.js
+StateDirectory=nexus-assistant
+StateDirectoryMode=0700
+UMask=0077
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target

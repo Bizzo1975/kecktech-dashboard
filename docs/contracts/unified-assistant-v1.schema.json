@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kecktech.local/contracts/unified-assistant-v1.schema.json",
+  "title": "Unified Assistant v1 response envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["answer", "domain", "intent", "citations", "evidenceStatus", "model", "unknowns", "contradictions"],
+  "properties": {
+    "answer": { "type": "string", "minLength": 1 },
+    "domain": { "enum": ["homelab", "fiction", "repository", "cross-domain"] },
+    "intent": { "enum": ["question", "change-request"] },
+    "evidenceStatus": { "$ref": "#/$defs/evidenceStatus" },
+    "citations": { "type": "array", "items": { "$ref": "#/$defs/citation" }, "maxItems": 50 },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "reason"],
+      "properties": {
+        "provider": { "enum": ["gpu-broker", "none"] },
+        "model": { "type": ["string", "null"] },
+        "reason": { "type": "string", "minLength": 1 },
+        "jobId": { "type": "string", "minLength": 1 },
+        "budgets": { "$ref": "#/$defs/budgets" }
+      }
+    },
+    "unknowns": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "contradictions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "proposalId": { "type": "string", "format": "uuid" }
+  },
+  "$defs": {
+    "evidenceStatus": { "enum": ["verified", "historical-stale", "contradicted", "inferred", "unknown"] },
+    "citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source", "location", "revision", "capturedAt", "status", "excerpt"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "location": { "type": "string", "minLength": 1 },
+        "revision": { "type": ["string", "null"] },
+        "capturedAt": { "type": "string", "format": "date-time" },
+        "status": { "$ref": "#/$defs/evidenceStatus" },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "manuscriptId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxInputTokens", "maxOutputTokens", "timeoutMs", "maxRetries"],
+      "properties": {
+        "maxInputTokens": { "type": "integer", "minimum": 1 },
+        "maxOutputTokens": { "type": "integer", "minimum": 1 },
+        "timeoutMs": { "type": "integer", "minimum": 1000 },
+        "maxRetries": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "maxVramMb": { "type": "integer", "minimum": 1 },
+        "minFreeDiskGb": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

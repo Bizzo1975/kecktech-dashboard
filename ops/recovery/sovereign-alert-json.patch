@@ -1,0 +1,54 @@
+--- a/daily/alert_evaluator.py
++++ b/daily/alert_evaluator.py
+@@ -10,6 +10,7 @@
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+ sys.path.insert(0, str(ROOT / "app"))
++from alert_report_serialization import alert_json_default
+ sys.path.insert(0, str(ROOT / "daily"))
+ OUTPUT = Path(os.environ.get("ALERT_EVAL_OUTPUT", ROOT / "data" / "alert_evaluation.json"))
+ 
+@@ -89,7 +90,7 @@
+         "notifications": notifications,
+     }
+     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+-    OUTPUT.write_text(json.dumps(payload, indent=2), encoding="utf-8")
++    OUTPUT.write_text(json.dumps(payload, indent=2, default=alert_json_default), encoding="utf-8")
+     print(f"Wrote {OUTPUT} phase={phase}")
+     return 0
+ 
+--- a/daily/alert_evaluator_light.py
++++ b/daily/alert_evaluator_light.py
+@@ -14,6 +14,7 @@
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+ sys.path.insert(0, str(ROOT / "app"))
++from alert_report_serialization import alert_json_default
+ 
+ OUTPUT_PATH = Path(os.environ.get("ALERT_EVAL_LIGHT_OUTPUT", ROOT / "data" / "alert_evaluation_light.json"))
+ 
+@@ -376,7 +377,7 @@
+         "notifications": notifications,
+     }
+     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+-    OUTPUT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
++    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, default=alert_json_default), encoding="utf-8")
+     print(f"Wrote {OUTPUT_PATH}")
+     return 0
+ 
+--- /dev/null
++++ b/app/alert_report_serialization.py
+@@ -0,0 +1,13 @@
++"""JSON timestamp serialization for alert evaluator reports."""
++from datetime import date, datetime, time
++
++from neo4j.time import Date, DateTime, Time
++
++
++def alert_json_default(value):
++    """Preserve Neo4j temporal precision in ISO strings; reject unknown objects."""
++    if isinstance(value, (Date, DateTime, Time)):
++        return value.iso_format()
++    if isinstance(value, (date, datetime, time)):
++        return value.isoformat()
++    raise TypeError(f"Object of type {type(value).__name__} is not JSON serializable")

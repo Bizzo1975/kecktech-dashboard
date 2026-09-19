@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kecktech.net/schemas/recovery-services.schema.json",
+  "title": "Kecktech service evidence index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "services"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "host", "state", "evidenceAt", "repository", "deployment", "dataClass", "recoveryTier", "healthContract"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^svc-[a-z0-9-]+$" },
+          "name": { "type": "string", "minLength": 1 },
+          "host": { "type": "string", "minLength": 1 },
+          "state": { "enum": ["healthy", "degraded", "failed", "unknown", "intentionally_disabled", "retired"] },
+          "evidenceAt": { "type": "string", "format": "date-time" },
+          "repository": { "type": ["string", "null"] },
+          "deployment": { "type": "string", "minLength": 1 },
+          "dataClass": { "enum": ["public", "internal", "confidential", "restricted", "unknown"] },
+          "recoveryTier": { "enum": ["tier0", "tier1", "tier2", "tier3", "unknown"] },
+          "healthContract": { "type": "string", "minLength": 1 },
+          "publicNames": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}
+

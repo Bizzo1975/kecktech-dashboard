@@ -1,0 +1,7 @@
+{"at": "2026-09-16T13:49:54.990041+00:00", "event": "started", "name": "erpnext-redis-cache-1"}
+{"at": "2026-09-16T13:49:56.266790+00:00", "event": "started", "name": "erpnext-redis-queue-1"}
+{"at": "2026-09-16T13:49:56.711808+00:00", "event": "started", "name": "erpnext-backend-1"}
+{"at": "2026-09-16T13:49:56.899860+00:00", "event": "started", "name": "erpnext-websocket-1"}
+{"at": "2026-09-16T13:49:57.248815+00:00", "event": "started", "name": "erpnext-frontend-1"}
+{"at": "2026-09-16T13:49:59.335440+00:00", "event": "active_site_ping_passed"}
+{"at": "2026-09-16T13:50:29.398064+00:00", "event": "web_startup_passed", "workersAndScheduler": "paused", "applicationAcceptance": "incomplete"}

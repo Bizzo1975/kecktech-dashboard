@@ -1,0 +1,14 @@
+{"time": "2026-09-15T22:44:01.674061+00:00", "event": "database_started"}
+{"time": "2026-09-15T22:44:01.789561+00:00", "event": "application_database_queries_passed", "sites": 1}
+{"time": "2026-09-15T22:44:31.888715+00:00", "event": "observation_passed", "remainingSeconds": 270}
+{"time": "2026-09-15T22:45:01.992692+00:00", "event": "observation_passed", "remainingSeconds": 240}
+{"time": "2026-09-15T22:45:32.096949+00:00", "event": "observation_passed", "remainingSeconds": 210}
+{"time": "2026-09-15T22:46:02.211755+00:00", "event": "observation_passed", "remainingSeconds": 180}
+{"time": "2026-09-15T22:46:32.315615+00:00", "event": "observation_passed", "remainingSeconds": 149}
+{"time": "2026-09-15T22:47:02.417975+00:00", "event": "observation_passed", "remainingSeconds": 119}
+{"time": "2026-09-15T22:47:32.525530+00:00", "event": "observation_passed", "remainingSeconds": 89}
+{"time": "2026-09-15T22:48:02.629166+00:00", "event": "observation_passed", "remainingSeconds": 59}
+{"time": "2026-09-15T22:48:32.730053+00:00", "event": "observation_passed", "remainingSeconds": 29}
+{"time": "2026-09-15T22:49:01.891940+00:00", "event": "observation_passed", "remainingSeconds": 0}
+{"time": "2026-09-15T22:49:04.787876+00:00", "event": "startup_log_indicators", "corruption": 0, "errors": 0}
+{"time": "2026-09-15T22:49:04.787922+00:00", "event": "stage_a_passed", "database": "erpnext-db-1"}

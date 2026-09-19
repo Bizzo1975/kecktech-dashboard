@@ -1,0 +1,1 @@
+{"schema": {"ts": true, "ran_at": false, "verdict": true}, "original": {"success": false, "errorClass": "PostgresSyntaxError", "sqlstate": "42601"}, "parameter_only": {"success": false, "errorClass": "UndefinedColumnError", "sqlstate": "42703"}, "corrected": {"success": true, "runs": 1, "passed": 1}}

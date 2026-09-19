@@ -2,17 +2,13 @@ import { getUser } from "@/lib/auth";
 import { getClientGroups } from "@/lib/trmm";
 import { getOpenInvoices, getSubscriptionsByParty, getHaasAssets } from "@/lib/erpnext";
 import { SERVICES } from "@/lib/services";
-import { checkHealth as pingHealth } from "@/lib/checkHealth";
+import { checkHealth as pingHealth } from "@/lib/checkHealth.mjs";
+import { formatHealthStatus } from "@/lib/healthContract.mjs";
 import { ClientGroupCard } from "@/components/ops/ClientGroupCard";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-
-async function checkHealth(healthUrl: string, healthHost?: string): Promise<{ up: boolean; latency: number }> {
-  const h = await pingHealth(healthUrl, healthHost, 4000);
-  return { up: h.status === "up", latency: h.latency };
-}
 
 export default async function OpsPage() {
   const user = await getUser();
@@ -30,7 +26,9 @@ export default async function OpsPage() {
     getSubscriptionsByParty(),
     getHaasAssets(),
     Promise.all(SERVICES.map(async (svc) => {
-      const h = await checkHealth(svc.healthUrl, svc.healthHost);
+      const h = svc.noHealthCheck
+        ? { status: "not_monitored" as const, reason: "not_monitored" as const, latency: 0, statusCode: 0 }
+        : await pingHealth(svc.healthUrl, svc.healthHost, 4000, svc.healthSuccess);
       return { ...svc, ...h };
     })),
   ]);
@@ -63,7 +61,9 @@ export default async function OpsPage() {
     if (s in sevCount) sevCount[s]++;
   }
 
-  const stackUp = stackResults.filter((s) => s.up).length;
+  const stackReady = stackResults.filter((s) => s.status === "ready").length;
+  const stackMonitored = stackResults.filter((s) => s.status !== "not_monitored").length;
+  const stackNotMonitored = stackResults.length - stackMonitored;
 
   // HaaS asset age in months
   function assetAgeMonths(purchaseDate: string): number {
@@ -300,24 +300,29 @@ export default async function OpsPage() {
       {/* ── Stack Health ──────────────────────────────────────────────────── */}
       <section>
         <h2 style={{ margin: "0 0 14px", fontSize: "16px", fontWeight: 600, color: "#e2e8f0" }}>
-          🖥️ Stack Health — {stackUp}/{SERVICES.length} up
+          🖥️ Stack Health — {stackReady}/{stackMonitored} ready · {stackNotMonitored} not monitored
         </h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "10px" }}>
-          {stackResults.map((svc) => (
+          {stackResults.map((svc) => {
+            const isReady = svc.status === "ready";
+            const statusColor = isReady ? "#34d399" : svc.status === "unreachable" ? "#f87171" : svc.status === "not_monitored" ? "#94a3b8" : "#fbbf24";
+            const statusLabel = formatHealthStatus(svc.status, svc.reason, svc.latency);
+            return (
             <a
               key={svc.name}
               href={svc.url}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ display: "flex", alignItems: "center", gap: "10px", background: "#1e293b", border: `1px solid ${svc.up ? "#334155" : "#f8717144"}`, borderRadius: "8px", padding: "10px 14px", textDecoration: "none", color: "inherit" }}
+              style={{ display: "flex", alignItems: "center", gap: "10px", background: "#1e293b", border: `1px solid ${isReady ? "#334155" : `${statusColor}66`}`, borderRadius: "8px", padding: "10px 14px", textDecoration: "none", color: "inherit" }}
             >
-              <span style={{ display: "inline-block", width: "8px", height: "8px", borderRadius: "50%", background: svc.up ? "#34d399" : "#f87171", flexShrink: 0 }} />
+              <span style={{ display: "inline-block", width: "8px", height: "8px", borderRadius: "50%", background: statusColor, flexShrink: 0 }} />
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: "13px", fontWeight: 600, color: "#e2e8f0" }}>{svc.name}</div>
-                <div style={{ fontSize: "11px", color: svc.up ? "#475569" : "#f87171" }}>{svc.up ? `${svc.latency}ms` : "Down"}</div>
+                <div style={{ fontSize: "11px", color: isReady ? "#475569" : statusColor }}>{statusLabel}</div>
               </div>
             </a>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>

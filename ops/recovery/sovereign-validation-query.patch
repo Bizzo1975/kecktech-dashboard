@@ -1,0 +1,11 @@
+--- a/daily/alert_evaluator_light.py
++++ b/daily/alert_evaluator_light.py
+@@ -115,7 +115,7 @@
+                     SELECT COUNT(*) AS runs,
+                            COUNT(*) FILTER (WHERE verdict = 'pass') AS passed
+                     FROM validation_runs
+-                    WHERE ran_at >= NOW() - make_interval(days => $days)
++                    WHERE ts >= NOW() - make_interval(days => $1)
+                     """,
+                     window_days,
+                 )

@@ -1,0 +1,963 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-19T00:42:46Z",
+  "items": [
+    {
+      "id": "KT-DNS-001",
+      "title": "Stop recurring DNS outages and establish non-destructive recovery",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["DNS", "AdGuard Home", "OPNsense", "internet access"],
+        "repositories": ["kecktech-infrastructure"],
+        "hosts": ["ns-01", "pve-prod-01", "Office-PC"]
+      },
+      "observedState": "The operator reports five DNS/internet drops on 2026-08-18. The fifth occurrence recovered only after rebooting PVE-PROD-01, the production Proxmox host at 10.10.0.11; NS-01 was not rebooted for that occurrence. At 2026-08-18T20:53:31Z, Office-PC could reach NS-01 and the public internet by IP, but DNS queries to both its configured primary resolver 10.10.0.1 and configured secondary resolver 1.1.1.1 timed out. AdGuard Home is a separate service on NS-01, administered at 10.10.0.1:3000, rather than the OPNsense Unbound resolver. The failure domain and initiating cause are not yet verified.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T20:53:31Z",
+          "source": "Operator incident report and read-only Office-PC network snapshot",
+          "summary": "Office-PC used static IPv4 10.10.0.100/24, gateway 10.10.0.1, and DNS servers 10.10.0.1 then 1.1.1.1. Four ICMP requests to 10.10.0.1 and four to 1.1.1.1 succeeded with no loss. DNS queries to each resolver timed out, and TCP connectivity to 10.10.0.1:53 failed. The privileged adapter cmdlet was unavailable, so no router, host, service, or packet-level evidence was captured."
+        },
+        {
+          "observedAt": "2026-08-18T21:15:52Z",
+          "source": "Operator clarification in current task",
+          "summary": "The fifth outage was recovered by rebooting PVE-PROD-01, the production Proxmox host at 10.10.0.11. The operator also confirmed that AdGuard Home is a separate service on NS-01 at 10.10.0.1:3000 and is not the OPNsense Unbound resolver. Exact outage and reboot timestamps remain needs-capture."
+        }
+      ],
+      "requiredAction": [
+        "Preserve the DNS/network change freeze until the failure is understood and a reviewed change has exact approval.",
+        "Capture timestamped read-only evidence during the next failure from Office-PC, ns-01, and pve-prod-01: resolver process state, listeners, service logs, firewall decisions, interface/link state, resource pressure, packet counters, and upstream reachability.",
+        "Determine whether DNS traffic is failing at the client, OPNsense policy/NAT, AdGuard listener/process, Proxmox networking, or upstream path; do not infer causation from recovery after a reboot.",
+        "Define a least-disruptive recovery procedure that restores resolution without rebooting the router, hypervisor, or all guests, then validate it only with exact production approval.",
+        "Design monitoring and an appropriately independent resolver/recovery path so a single DNS service failure does not silently remove internet access."
+      ],
+      "acceptanceCriteria": [
+        "A timestamped incident capture identifies the failed layer before any reboot or restart changes its state.",
+        "The verified root cause is supported by router, resolver, hypervisor, and client evidence rather than correlation alone.",
+        "A documented least-disruptive recovery restores DNS and is validated without rebooting the router or Proxmox host.",
+        "Monitoring distinguishes gateway reachability, raw WAN reachability, local DNS service, external DNS reachability, and application-level resolution.",
+        "A reviewed redundancy or fail-safe design prevents one resolver or host failure from causing an unobserved site-wide DNS outage."
+      ],
+      "approvalGate": "Read-only observation and local documentation are allowed. No AdGuard, OPNsense, Unbound, DHCP, firewall, route, resolver, Proxmox networking, VM/LXC, DNS-client, or service change/restart/flush is permitted without exact separate approval naming the action and target.",
+      "rollback": "No live mutation is authorized. Preserve current configuration and collect evidence; any later approved change must export the prior configuration and define a tested reversal before execution.",
+      "dependencies": [],
+      "externalGate": "Root-cause confirmation requires timestamped read-only evidence during a failure and may require operator-approved console or log access.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-GIT-001",
+      "title": "Capture live deployments before repository reconciliation",
+      "priority": "P0",
+      "status": "blocked",
+      "scope": {
+        "services": ["all production-connected services"],
+        "repositories": ["all production-connected repositories"],
+        "hosts": ["all production hosts"]
+      },
+      "observedState": "Local repositories are dirty, divergent, or missing remotes, and live deployments have not been proven identical to repository revisions. Targeted VM230 comparison confirms that every selected Dashboard/CMS source capture differs from the corresponding local file or is missing locally; the served public artifact also differed from the captured host-side demos source.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T17:10:07Z",
+          "source": "Notion Daily Handoff 2026-08-18",
+          "summary": "No application repository was pulled, reset, pushed, or deployed; live revision reconciliation remains the first open task."
+        },
+        {
+          "observedAt": "2026-08-18T21:31:53Z",
+          "source": "Existing VM230 source captures compared with the preserved Dashboard and CMS worktrees",
+          "summary": "The captured live and current local Dashboard/CMS files are not byte-identical. Live-only CMS behavior, schema divergence, contradictory demo-publication rules, and missing source-to-image provenance prevent an accepted canonical disposition. No VM230 contact or mutation occurred."
+        }
+      ],
+      "requiredAction": [
+        "Record the running artifact, image digest or source checksum, configuration references, mounts, and deployment method for each service.",
+        "Scan captured material for secrets and private runtime data before placing source material in Git.",
+        "Compare live, local, and remote states and preserve each as separate evidence before constructing a canonical branch."
+      ],
+      "acceptanceCriteria": [
+        "Every production service has timestamped deployment evidence.",
+        "Every difference is classified as live implementation, local development, governance, generated output, runtime state, secret/private data, obsolete, or unknown.",
+        "No newer live implementation can be overwritten by an older repository revision."
+      ],
+      "approvalGate": "Read-only capture is allowed; any production write, deployment, restart, or destructive action requires exact separate approval.",
+      "rollback": "No production mutation is permitted in this issue; retain evidence captures and remove only through a reviewed non-production change.",
+      "dependencies": [],
+      "externalGate": null,
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-GOV-001",
+      "title": "Verify governance checksums and universal fleet distribution",
+      "priority": "P0",
+      "status": "verified",
+      "scope": {
+        "services": ["development governance"],
+        "repositories": ["kecktech-dashboard", "kecktech-infrastructure", "all production-connected repositories"],
+        "hosts": []
+      },
+      "observedState": "The two checksums apply to different governed documents: 943e916f... is the canonical infrastructure DEVELOPMENT_POLICY.md; ecdbf37e... is PROJECT_INSTRUCTIONS.md. Both reproduce correctly. The canonical policy repository distributes byte-identical Project instructions, five focused rule files, the operations skill, startup prompt, exact-manifest validator, negative tests, and a pinned universal policy workflow to all 14 production-connected repositories plus itself. Identical managed AGENTS, contribution, and security blocks coexist with preserved stricter local guidance.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T16:24:03Z",
+          "source": "Notion Known Issues / Cleanup Backlog",
+          "summary": "Notion identifies 943e916f... as the canonical infrastructure development-policy checksum."
+        },
+        {
+          "observedAt": "2026-08-18T17:30:00Z",
+          "source": "Local SHA-256 calculations, infrastructure AGENTS.md, and policy/REPOSITORIES.json",
+          "summary": "DEVELOPMENT_POLICY.md hashes to 943e916f...; dashboard PROJECT_INSTRUCTIONS.md hashes to ecdbf37e.... The canonical repository explicitly identifies DEVELOPMENT_POLICY.md as canonical."
+        },
+        {
+          "observedAt": "2026-08-18T23:12:40Z",
+          "source": "Canonical-source installer idempotency pass and expanded fleet guidance validator",
+          "summary": "All 14 registered production-connected repositories plus kecktech-infrastructure passed exact shared-file hash checks, exact managed-block checks, policy/skill version checks, and required guide/ownership/template presence checks. Changes are local only and are not represented as committed, pushed, CI-enforced, or deployed."
+        },
+        {
+          "observedAt": "2026-08-18T23:30:00Z",
+          "source": "Repository-local exact-manifest validators and negative tests executed from every governed repository",
+          "summary": "All 15 governed local repository roots passed the positive policy validator and negative tests proving shared-file drift and duplicate managed blocks fail. The universal workflow uses official actions/checkout v7.0.1 pinned to full tag SHA 3d3c42e5aac5ba805825da76410c181273ba90b1. Application CI capability remains repository-specific and is inventoried separately."
+        }
+      ],
+      "requiredAction": [
+        "Label each checksum with its exact document path wherever both documents are referenced.",
+        "Keep repository validators explicit about whether they validate the universal Project instructions or the canonical infrastructure development policy."
+        ,"Retain kecktech-infrastructure as the distribution source and block shared-file or managed-block drift across the fleet.",
+        "Implement only repository-specific application checks proven against each real stack and locked dependency state."
+      ],
+      "acceptanceCriteria": [
+        "The infrastructure development policy reproducibly hashes to 943e916f42855fdcc42bf3f685c4c47106131547c629ec592748323a1e3db21d.",
+        "The dashboard Project instructions reproducibly hash to ecdbf37e53cd1d59957c928b3342104c045d87f79ccc3d181586a3aa7592a6d1.",
+        "Documentation labels the checksums by document and does not describe them as a conflict.",
+        "All 14 production-connected repositories plus the canonical policy repository pass byte-identical universal-file and managed-block validation.",
+        "Every governed repository passes positive policy validation and negative drift/duplicate-block tests through the same pinned workflow definition."
+      ],
+      "approvalGate": "Local governance distribution is approved. Commit, push, CI/branch-protection changes, runner/Forgejo work, or deployment remain separately gated by reconciliation and infrastructure approval.",
+      "rollback": "Revert only an incorrect documentation-label change; do not alter either policy document to make their distinct hashes equal.",
+      "dependencies": [],
+      "externalGate": null,
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-REC-001",
+      "title": "Document space-constrained recovery coverage while PBS remains off",
+      "priority": "P0",
+      "status": "intentionally_disabled",
+      "scope": {
+        "services": ["recovery", "PBS"],
+        "repositories": ["kecktech-infrastructure"],
+        "hosts": ["VM120"]
+      },
+      "observedState": "PBS is intentionally disabled because available storage is limited. Existing backup age, scope, retention, failure-domain separation, and restore viability have not been fully verified.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T17:20:00Z",
+          "source": "Operator decision in current task",
+          "summary": "PBS was deliberately turned off due to limited space and must not be treated as a failed service."
+        }
+      ],
+      "requiredAction": [
+        "Inventory existing backups and application-consistent exports without starting PBS.",
+        "Measure capacity and change rates before proposing retention.",
+        "Prioritize identity, Git, edge configuration, databases, business data, CMS content, and unique assets.",
+        "Test representative restores within available non-production capacity."
+      ],
+      "acceptanceCriteria": [
+        "PBS remains stopped unless separately approved.",
+        "Every critical service states what is protected, where, when, and how it was restore-tested.",
+        "Snapshots are labeled as rollback aids rather than independent backups.",
+        "Unprotected data and the storage procurement gate are explicitly documented."
+      ],
+      "approvalGate": "No PBS start, prune, storage change, or new backup job without exact separate approval.",
+      "rollback": "Inventory work is read-only; any future backup configuration change must preserve the prior configuration and include a capacity-safe rollback.",
+      "dependencies": ["KT-GIT-001"],
+      "externalGate": "A second encrypted recovery location requires operator procurement and approval.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-OBS-001",
+      "title": "Replace permissive dashboard health semantics",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["operations dashboard", "service health"],
+        "repositories": ["kecktech-dashboard"],
+        "hosts": ["VM230"]
+      },
+      "observedState": "The local dashboard now distinguishes readiness, application availability, basic HTTP reachability, authentication-required, redirected, degraded, unreachable, and not-monitored states. Every monitored catalog entry must declare what its 2xx response proves. This remediation is tested locally but is not deployed; complete dependency checks and live VM230 behavior remain to be validated.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T17:30:00Z",
+          "source": "Recovery-register transcription of the 2026-08-18 read-only repository and live audit",
+          "summary": "The audit reported permissive status handling and TLS verification bypass; Umami's authentication redirect masked a failed backend. Current live revalidation remains required before remediation."
+        },
+        {
+          "observedAt": "2026-08-18T19:29:16Z",
+          "source": "Local Dockerfile, Compose, policy, and build verification",
+          "summary": "The local image no longer disables TLS verification and instead requires a read-only internal CA bundle through NODE_EXTRA_CA_CERTS. The local health check now uses 127.0.0.1. Policy and application verification pass, but the internal CA chain, hostnames, redirect semantics, and production behavior remain unverified and undeployed."
+        },
+        {
+          "observedAt": "2026-08-18T19:42:18Z",
+          "source": "Local dashboard health implementation and full verification",
+          "summary": "Only 2xx responses now report ready; redirects, 401/403, other HTTP failures, timeouts, TLS failures, network failures, and unmonitored services have explicit non-ready states. Four regression tests, strict type checking, the Next.js production build, the Astro website build, and public-content scanning passed. The website build could not reach the local CMS endpoint and therefore does not prove CMS integration readiness. No production deployment or live validation occurred."
+        },
+        {
+          "observedAt": "2026-08-18T19:49:03Z",
+          "source": "ADR-001, type-enforced service catalog, and local full verification",
+          "summary": "Successful probes are now classified as ready, application_available, or reachable according to an explicit per-service contract. Root-page probes cannot report readiness. Six health regression tests, strict type checking, both production builds, policy validation, recovery-register validation, and public-content scanning passed. Complete mandatory-dependency checks and live behavior remain unverified and undeployed."
+        },
+        {
+          "observedAt": "2026-08-18T19:54:37Z",
+          "source": "Dashboard Health API v2 schema, shared formatter/summary logic, and local full verification",
+          "summary": "Compatibility review found and fixed an Ops-page formatter that would have mislabeled the new weaker success states as Unreachable. The API now declares contract version 2.0.0 and evidenceAt, uses a shared summary that cannot promote weaker evidence, and has a synchronized JSON Schema. Ten health and contract tests, strict type checking, both production builds, policy validation, recovery-register validation, and public-content scanning passed. No live consumer or production behavior was tested or changed."
+        }
+      ],
+      "requiredAction": [
+        "Define explicit process, readiness, dependency, authenticated availability, public reachability, degraded, and unknown states.",
+        "Remove TLS bypasses and install the correct internal trust chain.",
+        "Add regression tests for redirects, authorization responses, TLS failure, timeout, dependency failure, stale evidence, and recovery."
+      ],
+      "acceptanceCriteria": [
+        "Redirects, 401, and 403 are not treated as proof of application readiness.",
+        "No production request disables TLS certificate validation.",
+        "Services without a current check display Unknown or Not Monitored, not Running.",
+        "Umami backend failure is visible even when the public route redirects to authentication."
+      ],
+      "approvalGate": "Repository implementation and tests are allowed; production deployment and trust-store changes require exact approval.",
+      "rollback": "Retain the prior dashboard artifact and configuration; rollback must not restore global TLS bypass behavior without an approved expiring exception.",
+      "dependencies": ["KT-GIT-001"],
+      "externalGate": null,
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-ACC-001",
+      "title": "Resolve remaining inaccessible hosts",
+      "priority": "P1",
+      "status": "blocked",
+      "scope": {
+        "services": ["game server", "Plex", "MediaTools"],
+        "repositories": ["kecktech-infrastructure"],
+        "hosts": ["VM400", "LXC501", "LXC502"]
+      },
+      "observedState": "VM400 reports running in Proxmox but remains unreachable through the verified jump path with No route to host and requires console inspection. LXC501 and LXC502 reject the audited key. VM402 was separately resolved as an active Conan Exiles server.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T16:24:03Z",
+          "source": "Notion Known Issues and read-only fleet audit",
+          "summary": "The listed systems could not be fully verified through the approved read-only access path."
+        },
+        {
+          "observedAt": "2026-08-18T18:21:36Z",
+          "source": "Live Proxmox inventory and bounded SSH checks",
+          "summary": "VM400 still returned No route to host. VM402 was reachable and identified as an active Conan Exiles Enhanced dedicated server, so it is no longer an unknown-purpose access gap."
+        }
+      ],
+      "requiredAction": [
+        "Inspect VM400 through the Proxmox console and capture the visible boot state.",
+        "Verify the supported access path and ownership for LXC501 and LXC502 without replacing credentials.",
+        "Confirm ownership and supported access paths for the remaining inaccessible systems."
+      ],
+      "acceptanceCriteria": [
+        "Each host has an observed state, purpose, owner, supported access path, workloads, and recovery classification.",
+        "Access repair does not rotate or expose credentials without credential-specific approval.",
+        "NetOps inventory matches the verified host facts."
+      ],
+      "approvalGate": "Console observation is read-only; authentication or credential changes require exact separate approval.",
+      "rollback": "No mutation is permitted during discovery; preserve access-control configuration until a reviewed repair exists.",
+      "dependencies": [],
+      "externalGate": "VM400 requires operator-visible Proxmox console access.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-SEC-001",
+      "title": "Bound Cleaner access to the workstation repository share",
+      "priority": "P1",
+      "status": "blocked",
+      "scope": {
+        "services": ["Cleaner"],
+        "repositories": ["cleaner", "all repositories visible through the mounted share"],
+        "hosts": ["VM241"]
+      },
+      "observedState": "The live Cleaner container bind-mounts /mnt/github-workstation read-only to /data/local-repos with rprivate propagation. Direct writes through this mount are disabled, but the exposed repository scope and sensitive-file exclusions remain unverified.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T18:08:00Z",
+          "source": "Read-only Docker inspect on prod-cleaner-01",
+          "summary": "Container mount metadata shows /mnt/github-workstation mapped to /data/local-repos with RW=false and rprivate propagation; no repository contents or environment values were read."
+        }
+      ],
+      "requiredAction": [
+        "Document the verified read-only/rprivate mount and capture its source export configuration and effective Cleaner permissions without modifying them.",
+        "Inventory the repository scope visible through the mount without reading private file contents.",
+        "Design least-privilege read-only repository access and a separately approved, reviewable remediation output path.",
+        "Contract-test that Cleaner cannot directly alter source, Git metadata, credentials, or production deployments."
+      ],
+      "acceptanceCriteria": [
+        "Cleaner source mounts are read-only and limited to approved repositories.",
+        "Cleaner cannot access Git credentials, secret files, biometric data, private customer/family data, or unrelated repositories.",
+        "Suggested changes are emitted as reviewable patches or findings and never applied automatically.",
+        "Attempts to write through the source mount fail and are covered by an isolated integration test."
+      ],
+      "approvalGate": "Read-only inspection is allowed; changing mounts, Compose configuration, permissions, or the running container requires exact production approval.",
+      "rollback": "Retain the current Compose definition and exact image ID; any approved mount hardening must support restoring the prior configuration without deleting data.",
+      "dependencies": ["KT-GIT-001"],
+      "externalGate": null,
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "pending"
+      }
+    },
+    {
+      "id": "KT-CICD-001",
+      "title": "Replace external mutable-branch deployment with reviewed immutable promotion",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["Dashboard deployment", "public website deployment", "Kecktech CMS deployment"],
+        "repositories": ["kecktech-dashboard", "kecktech-cms", "kecktech-infrastructure"],
+        "hosts": ["VM230", "self-hosted GitHub Actions runner"]
+      },
+      "observedState": "The repository deployment workflows invoked C:\\actions-runner\\deploy.ps1 outside reviewed source on a broad self-hosted runner and deployed mutable branches directly. The local workflow definitions now replace automatic or confirmation-only deployment with explicit failing safety gates, but the remote workflows remain unchanged until a reviewed commit is published.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T18:50:12Z",
+          "source": "Local workflow audit and deployment-gate test",
+          "summary": "Both legacy workflows lacked immutable artifact identity, provenance, in-repository deployment behavior, rollback evidence, and post-deployment acceptance. Replacement YAML parsed successfully and the development gate exited nonzero as intended. No remote workflow or production system changed."
+        },
+        {
+          "observedAt": "2026-08-18T19:29:16Z",
+          "source": "Official registry digest lookup and local policy/deployment tests",
+          "summary": "Node and nginx bases are pinned to registry-observed SHA-256 digests; custom images are mandatory release inputs with no mutable defaults. The immutable-reference validator rejects latest, Compose parses without interpolation, and policy validation passes. No images were built, published, or deployed."
+        },
+        {
+          "observedAt": "2026-08-18T20:05:15Z",
+          "source": "Local release-evidence contract, negative regression suite, and governance workflow review",
+          "summary": "A versioned release-evidence schema and dependency-free validator now require live-to-Git reconciliation, immutable unique artifacts, SBOM/provenance references, recorded signature verification, exact artifact identity across development and production, development acceptance, authorized production approval, recovery evidence, previous immutable images, production acceptance, and rollback readiness. Negative tests block unreconciled source, mutable images, digest substitution, missing approval, and missing rollback evidence. CI now runs dashboard tests and the deployment-contract regressions. Both deployment workflows remain intentionally blocked; no cryptographic verification, runner configuration, publication, or deployment occurred."
+        }
+      ],
+      "requiredAction": [
+        "Reconcile the authoritative VM230 source with reviewed repository history before enabling deployment.",
+        "Implement the deployment logic inside reviewed versioned source and remove dependence on an unversioned runner-local script.",
+        "Build once, generate SBOM and signed provenance, scan, and promote the same immutable digest through development and production.",
+        "Require protected reviews, isolated least-privilege runners, pre-deployment recovery evidence, post-deployment acceptance, and automatic stop or rollback.",
+        "Demonstrate that an unsigned, mutable, unreviewed, secret-bearing, or acceptance-failing artifact cannot be promoted."
+      ],
+      "acceptanceCriteria": [
+        "A push to a mutable branch cannot directly deploy to any environment.",
+        "All deployment behavior is versioned and reviewed in the canonical infrastructure or application repository.",
+        "Development and production report the same immutable artifact digest and verified provenance.",
+        "Production requires an authorized environment review and current rollback/recovery evidence.",
+        "Failed readiness, security, migration, or post-deployment acceptance stops promotion or restores the recorded prior digest."
+      ],
+      "approvalGate": "Local blocking workflows and tests are allowed. Publishing workflow changes, configuring runners/environments, enabling deployment, or changing production requires the applicable repository and production approvals.",
+      "rollback": "Until the replacement pipeline is proven, rollback is to keep deployment disabled. The eventual pipeline must retain and verify the previously running immutable digest before every promotion.",
+      "dependencies": ["KT-GIT-001", "KT-WEB-001"],
+      "externalGate": "Forgejo/GitHub environment controls and isolated runner provisioning require infrastructure approval and configuration.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-WEB-001",
+      "title": "Remove reusable credentials from public demo content and make CMS publication atomic",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["Kecktech public website", "Kecktech CMS", "demo authentication"],
+        "repositories": ["kecktech-dashboard", "kecktech-cms"],
+        "hosts": ["VM230"]
+      },
+      "observedState": "The deployed public demos page returns HTTP 200 and includes a reusable demo credential in browser-delivered content. The live source catalog contains credential fields, while the current host-side demos source has an empty apps array. CMS synchronization replaces the entire public app list and suppresses synchronization failures after create, update, and delete operations.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T18:34:15Z",
+          "source": "Sanitized VM230 live-source capture and read-only public page verification",
+          "summary": "The public response was checked for the known credential without recording its value; exposure was confirmed. The temporary HTML response was deleted. Captured source hashes and exclusions are recorded in live-capture-manifest.json."
+        },
+        {
+          "observedAt": "2026-08-18T18:43:35Z",
+          "source": "Local kecktech-dashboard remediation and verification",
+          "summary": "Reusable credential fields and their rendering path were removed from the local public website. A source-and-dist scanner plus regression tests now prove an intentionally fake demo credential field blocks verification without printing its value. The full local Dashboard verification passed; no production deployment or credential change occurred."
+        }
+      ],
+      "requiredAction": [
+        "Remove all reusable credentials from browser bundles, static JSON, source, documentation, and generated public artifacts without silently breaking demo access.",
+        "Design an approved demo-access flow using server-enforced authorization, least privilege, abuse controls, expiration or rotation, and no public reusable secret.",
+        "Make CMS-to-static publication validated and atomic, preserve the last known-good artifact on failure, and surface synchronization failure to the operator instead of logging and returning success.",
+        "Reconcile the empty host-side apps source with the currently deployed static artifact and CMS database without copying private data into Git.",
+        "Add regression tests proving secrets cannot enter client artifacts and failed/empty synchronization cannot erase a valid published catalog unintentionally."
+      ],
+      "acceptanceCriteria": [
+        "No public page, static asset, JavaScript bundle, source file, log, health response, or documentation contains a reusable credential.",
+        "Demo authorization is server-enforced, bounded, observable, and can be disabled without rebuilding public content.",
+        "CMS mutations fail clearly when publication fails, and the last known-good public catalog remains intact.",
+        "An intentionally empty catalog requires an explicit reviewed state and renders an honest user-facing unavailable or empty state.",
+        "Development and production acceptance tests verify the public demo journeys without exposing secret values in CI artifacts."
+      ],
+      "approvalGate": "Repository remediation and tests are allowed. Changing or revoking the exposed demo credential, identity configuration, production CMS data, public deployment, or authentication routing requires exact separate approval naming the affected credential or production component.",
+      "rollback": "Preserve the current image IDs and sanitized source hashes. Rollback must restore the last known-good non-secret artifact and must never reintroduce a public reusable credential.",
+      "dependencies": ["KT-GIT-001"],
+      "externalGate": "Credential-specific approval is required before rotation or revocation of the exposed demo account credential.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-PROD-001",
+      "title": "Remove Voice Clone placeholder production behavior and reconcile deployment",
+      "priority": "P0",
+      "status": "blocked",
+      "scope": {
+        "services": ["Voice Clone", "Me Manager video and voice workflows"],
+        "repositories": ["voice-clone-service", "me-manager"],
+        "hosts": ["VM115", "VM303"]
+      },
+      "observedState": "The live VM115 service reports placeholder mode off and Chatterbox installed, but jon-v1 is not ready. The repository README still permits placeholder WAV output when Chatterbox is absent, and its documented Windows deployment mechanism contradicts the live Linux cron deployment.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T18:28:00Z",
+          "source": "Read-only VM115 listener/process/health inspection and local repository documentation review",
+          "summary": "TCP 8008 is served by a cron-launched Python process from a non-Git directory; health reported placeholder_mode=false, chatterbox_installed=true, and jon_v1_ready=false. No synthesis or biometric data read occurred."
+        }
+      ],
+      "requiredAction": [
+        "Remove placeholder WAV generation from every production execution path and return a clear unavailable error when no real engine/voice is usable.",
+        "Replace contradictory Windows-only deployment instructions with the reviewed live Linux service model or migrate through an approved immutable deployment.",
+        "Reconcile live source with the canonical repository without copying datasets, reference clips, generated audio, keys, models, or other biometric/runtime data into Git.",
+        "Implement isolated real-service tests for authorization, synthesis, invalid input, engine unavailable, model not ready, GPU contention, timeout, cancellation, and recovery."
+      ],
+      "acceptanceCriteria": [
+        "Production cannot emit placeholder or simulated speech under any dependency state.",
+        "Health distinguishes process availability, engine availability, approved voice readiness, GPU dependency, and degraded/unavailable states.",
+        "A real approved synthesis test produces valid non-placeholder audio and records quality/latency evidence without retaining biometric material in CI artifacts.",
+        "Me Manager presents an honest unavailable state until the selected voice is genuinely ready.",
+        "Deployment is reproducible from reviewed source and has rollback evidence."
+      ],
+      "approvalGate": "Repository changes and isolated non-biometric tests are allowed; production deployment, biometric dataset/model handling, credential changes, or real voice-generation tests require exact approval and privacy controls.",
+      "rollback": "Preserve the exact running process metadata and prior package; an approved deployment must restore the prior real-engine version without re-enabling placeholder output.",
+      "dependencies": ["KT-GIT-001"],
+      "externalGate": "Approved biometric test material and operator acceptance of the selected voice are required for end-to-end completion.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "pending"
+      }
+    },
+    {
+      "id": "KT-SEC-002",
+      "title": "Rotate the exposed Neo4j credential and verify all consumers",
+      "priority": "P0",
+      "status": "blocked",
+      "scope": {
+        "services": ["Neo4j", "applications using Neo4j"],
+        "repositories": ["kecktech-infrastructure", "all Neo4j consumers"],
+        "hosts": []
+      },
+      "observedState": "A plaintext Neo4j credential appeared in historical operator-provided memory. Its value is intentionally excluded from this register and Notion. Current validity, scope, and consumers have not been verified.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T21:31:53Z",
+          "source": "Operator-provided historical memory reviewed during canonical knowledge reconciliation",
+          "summary": "Credential exposure was confirmed without reproducing or testing the value. No credential, application, database, or service was changed."
+        }
+      ],
+      "requiredAction": [
+        "Identify the credential owner and all consumers without displaying or copying the credential value.",
+        "Prepare a least-disruptive rotation and consumer rollout with rollback and explicit credential-specific approval.",
+        "After approval, rotate or revoke the exposed credential, update managed secret references, validate every consumer, and verify the old credential no longer authenticates without logging either value."
+      ],
+      "acceptanceCriteria": [
+        "Every consumer and owner is documented with current evidence.",
+        "The replacement is stored only through approved secret mechanisms and never appears in Git, Notion, prompts, logs, fixtures, images, or command output.",
+        "All consumers pass authentication and functional checks after rotation, and the exposed credential is invalidated.",
+        "Rollback does not restore the exposed credential."
+      ],
+      "approvalGate": "Discovery that cannot expose the credential is allowed. Reading, testing, rotating, revoking, or replacing the credential and changing any consumer requires exact separate credential-specific approval.",
+      "rollback": "Prepare consumer-specific rollback to the new credential deployment state; never restore the exposed credential after invalidation.",
+      "dependencies": ["KT-GIT-001"],
+      "externalGate": "Credential owner, managed secret location, and all consumers require targeted capture before an approval request can be safely scoped.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-DOC-001",
+      "title": "Resolve contradictory application and route records with targeted evidence",
+      "priority": "P1",
+      "status": "blocked",
+      "scope": {
+        "services": ["Claudette", "Mailcow routes", "Jacob Roman", "Authelia SMTP", "RateMyRack", "Mom Hub ClamAV"],
+        "repositories": ["kecktech-infrastructure", "psuedonym-site", "mom-hub"],
+        "hosts": ["VM304", "VM320"]
+      },
+      "observedState": "Canonical documentation contains unresolved conflicts about Claudette containers, Mailcow Traefik routes, Jacob Roman application/container health, Authelia SMTP delivery, RateMyRack post-recreate state, and the Mom Hub ClamAV investigation. The completed broad audit must not be repeated.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T21:31:53Z",
+          "source": "Canonical Notion execution plan and synchronized Known Issues review",
+          "summary": "Conflicting and incomplete claims were preserved as CONTRADICTED or NEEDS CAPTURE instead of being promoted to verified facts."
+        }
+      ],
+      "requiredAction": [
+        "Use existing audit and deployment records first, then capture only the missing or conflicting evidence for each named service.",
+        "Record the accepted disposition in the service/deployment register and replace the exact affected Notion section after fetching it.",
+        "Do not infer application health from HTTP, container, process, or route presence alone."
+      ],
+      "acceptanceCriteria": [
+        "Each named contradiction has timestamped current evidence or remains visibly unresolved with an owner and next capture.",
+        "Notion, service/deployment records, and live observations agree on host, route, runtime, dependencies, and health meaning.",
+        "No broad fleet rediscovery or production mutation was used to resolve the documentation state."
+      ],
+      "approvalGate": "Read-only targeted verification and documentation are allowed. Authentication changes, route changes, container/service operations, or production writes require the applicable exact approval.",
+      "rollback": "Documentation edits must retain the prior claim in change history and be reverted if their cited evidence is shown to be invalid; no live rollback applies because no mutation is authorized.",
+      "dependencies": ["KT-DNS-001"],
+      "externalGate": "Some checks require approved access paths or occurrence-specific evidence.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-CMS-001",
+      "title": "Reconcile and complete secure atomic CMS publication",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["Kecktech CMS", "Kecktech public website publication"],
+        "repositories": ["kecktech-cms", "kecktech-dashboard"],
+        "hosts": ["VM230"]
+      },
+      "observedState": "The separate local CMS now performs atomic sanitized public JSON replacement, declares its test toolchain, removes the hard-coded authentication secret fallback, and has a zero-vulnerability dependency audit. Under Node 24.19.0, all 11 tests pass, strict TypeScript passes, ESLint reports zero errors and 139 warnings, and the optimized Next.js 16.3.1 production build succeeds. Live VM230 still contains service fields, publication code, and schema behavior absent from or contradictory to the local checkout.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T21:31:53Z",
+          "source": "Local CMS implementation, Node 24 test/build/audit runs, and existing VM230 source captures",
+          "summary": "Atomic-write and credential-field-removal regressions pass; all 11 declared tests, strict TypeScript, zero-error ESLint, and the optimized production build pass under Node 24.19.0; npm audit reports zero known vulnerabilities. ESLint retains 139 non-blocking warnings and Next.js reports the middleware-to-proxy deprecation. No production or database state changed."
+        }
+      ],
+      "requiredAction": [
+        "Accept the canonical demo visibility rule and reconcile live-only routes, fields, schema, and publication behavior.",
+        "Resolve remaining lint warnings and the middleware-to-proxy deprecation in bounded tested slices without hiding warnings, disabling rules, or excluding production paths.",
+        "Add route-level publication-failure, authorization, duplicate/retry, and recovery tests.",
+        "Rehearse the schema and publication path against an isolated compatible CMS with sanitized production-shaped data."
+      ],
+      "acceptanceCriteria": [
+        "Full tests, lint, strict type check, production build, and zero-vulnerability audit pass from a clean locked install under a supported Node runtime.",
+        "Publication is validated and atomic, preserves last-known-good on failure, removes credential-bearing fields, and returns a stable non-success result when synchronization fails.",
+        "Live-only behavior and schema are preserved or deliberately migrated through an accepted disposition and rehearsed migration.",
+        "Real CMS-to-Astro integration, authentication, authorization, failure, retry, recovery, browser, accessibility, and rollback tests pass before deployment."
+      ],
+      "approvalGate": "Local repository implementation and isolated sanitized tests are allowed. Reading production CMS data, changing credentials or schema, deploying, or modifying VM230 requires exact separate approval.",
+      "rollback": "Preserve the live VM230 artifact/source evidence and local pre-change Git/worktree state. Any future deployment must retain the last-known-good non-secret static artifact and prior immutable CMS image.",
+      "dependencies": ["KT-DNS-001", "KT-GIT-001", "KT-WEB-001"],
+      "externalGate": "Operator decision is required for the marketing allowlist versus every published/available project.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-MOM-001",
+      "title": "Remove Mom Hub fixed authentication fallbacks and define fail-closed upload scanning",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["Mom Hub API", "Mom Hub web and receipt clients", "Mom Hub ClamAV integration"],
+        "repositories": ["mom-hub"],
+        "hosts": ["VM304"]
+      },
+      "observedState": "The local Mom Hub production path contains a fixed fallback service token, fixed fallback owner and family passwords, and a client-side default token. The API reports these defaults as not ready but continues to start, bootstrap users, and accept the fallback service token. ClamAV connection failures return a skipped verdict. Root and receipt-PWA TypeScript checks pass, while lint fails with 50 errors and 6 warnings; no automated test command or test framework was found, and test:app is an interactive application launch rather than a test suite.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T23:47:13Z",
+          "source": "Local Mom Hub source, package-manifest, and Node 24.19.0 lint/type verification",
+          "summary": "Inspection confirmed fixed authentication values in server/src/auth.js, src/lib/services/receiptCloudService.ts, and server documentation. Readiness detects but does not disable them. ClamAV unavailability is represented as skipped. Non-incremental TypeScript passed for the root and receipt PWA; ESLint reported 50 errors and 6 warnings. No external service, production data, database, ClamAV listener, deployment, or live host was contacted or changed."
+        }
+      ],
+      "requiredAction": [
+        "Reconcile the local authentication and scanning behavior with the captured VM304 deployment before selecting the canonical implementation.",
+        "Remove all fixed production-path tokens and passwords; require managed configuration and fail startup or disable protected functionality clearly when required credentials are absent.",
+        "Remove client-side default credentials and ensure credentials are never embedded in browser or desktop distributables.",
+        "Define whether each upload path requires malware scanning; fail closed for required scanning and expose an honest unavailable state when ClamAV cannot be reached.",
+        "Add isolated authentication, authorization, upload, ClamAV unavailable/infected/clean, startup-configuration, and recovery regression tests.",
+        "Resolve lint failures without weakening rules, then pass strict type checking, automated tests, builds, dependency audit, and real compatible integration acceptance in isolation."
+      ],
+      "acceptanceCriteria": [
+        "No fixed token or password is accepted, bootstrapped, documented, or bundled by any production execution path.",
+        "Missing required authentication configuration prevents protected service startup or presents an explicit unavailable state.",
+        "Every upload route has a documented scanning requirement and cannot treat unavailable mandatory scanning as successful or safe.",
+        "Unauthorized and incorrectly authorized requests fail through server-enforced tests for every protected role and service-token path.",
+        "Lint, strict type checking, deterministic automated tests, builds, security checks, and isolated real-service acceptance pass under the supported locked runtime."
+      ],
+      "approvalGate": "Local source changes and isolated non-secret tests are allowed after live-to-Git disposition is accepted. Reading or rotating live credentials, accessing family/financial data, changing ClamAV or VM304, deploying, or testing production endpoints requires exact separate approval.",
+      "rollback": "No live mutation is authorized. Preserve captured VM304 evidence and the dirty local worktree. Any later credential migration must retain an independently tested recovery path without restoring a known fixed credential.",
+      "dependencies": ["KT-DNS-001", "KT-GIT-001"],
+      "externalGate": "The required-versus-optional malware-scanning policy for each upload flow and the managed credential owner/location require operator acceptance after deployment reconciliation.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-JR-001",
+      "title": "Enforce Jacob Roman pseudonym separation and restore blocking quality gates",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["Jacob Roman public site", "Jacob Roman contact delivery", "Jacob Roman Asset Forge integration"],
+        "repositories": ["psuedonym-site"],
+        "hosts": ["VM304"]
+      },
+      "observedState": "The local production path defaults the contact-mail sending mailbox to a Kecktech address and the Asset Forge client to a Kecktech hostname, conflicting with the repository's non-negotiable anonymity boundary. The Next.js configuration ignores ESLint failures during builds. Strict TypeScript passes, lint fails with 3 errors and 3 warnings, formatting fails across 185 files, and no automated test command exists. The worktree contains extensive unreconciled application and schema changes.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T23:53:00Z",
+          "source": "Local pseudonym-site source/configuration inspection and Node 24.19.0 format/lint/type verification",
+          "summary": "Production-path source references Kecktech infrastructure/mail defaults; next.config ignores lint during builds. Non-incremental TypeScript passed. Lint reported 3 errors and 3 warnings and formatting reported 185 files. No test command was declared. No build, Prisma generation, database operation, external request, deployment, or live host access occurred."
+        }
+      ],
+      "requiredAction": [
+        "Reconcile the heavily dirty local repository with the captured VM304 deployment and resolve the contradictory live application/container state before selecting canonical code.",
+        "Threat-model observable identity leakage through mail headers, domains, DNS/TLS, analytics, source maps, browser bundles, asset metadata, error messages, infrastructure integrations, and operator-facing callbacks.",
+        "Remove Kecktech/Jon-identifying production defaults and require explicit pseudonym-safe configuration; place unavoidable internal adapters behind a server-only boundary proven not observable to public users or message recipients.",
+        "Remove the build lint bypass, migrate from deprecated next lint to the supported ESLint CLI, add deterministic automated security/route/browser tests, and resolve format/lint failures without weakening rules.",
+        "Validate contact abuse controls, schema-validated input, redacted errors, delivery identity, authentication/authorization, and failure/recovery behavior in an isolated compatible environment."
+      ],
+      "acceptanceCriteria": [
+        "Public pages, bundles, source maps, headers, assets, analytics, mail headers/content, DNS/TLS presentation, errors, and integrations reveal no association with Jon Keck or Kecktech.",
+        "Missing pseudonym-safe mail or integration configuration fails clearly and cannot fall back to a Kecktech identity.",
+        "Lint and tests are mandatory build gates and cannot be ignored; format, lint, strict type, tests, build, security, accessibility, and browser checks pass from a clean locked checkout.",
+        "VM304 deployment provenance and the current serving/container topology are reconciled before any deployment."
+      ],
+      "approvalGate": "Local inspection and isolated non-secret tests are allowed. Reading live mail credentials or messages, changing domains/mail/DNS/TLS, accessing production data, deploying, or changing VM304 requires exact separate approval.",
+      "rollback": "No live mutation is authorized. Preserve the dirty worktree and captured VM304 evidence. Any later identity-boundary change requires an immutable prior artifact and a rollback that does not reintroduce observable Kecktech linkage.",
+      "dependencies": ["KT-DNS-001", "KT-GIT-001", "KT-DOC-001"],
+      "externalGate": "The accepted pseudonym-safe mail and internal-integration architecture requires operator review after the exposure paths are fully inventoried.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-UJ-001",
+      "title": "Remove Uncle Jon fixed database fallback and restore mandatory build gates",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["Uncle Jon public site", "Uncle Jon admin CMS", "Uncle Jon contact and Me Manager integrations"],
+        "repositories": ["unclejons-itgarage-site"],
+        "hosts": ["VM401", "VM400"]
+      },
+      "observedState": "The local repository's production build ignores TypeScript and ESLint failures. Two authenticated admin content routes contain a fixed fallback PostgreSQL credential and an inherited personal-site database name. Strict TypeScript fails across admin and email-service code. The declared lint command opens interactive configuration because no usable ESLint configuration exists. Jest reports 14 failed and 2 passed suites, with 31 failed and 31 passed tests. The deployment workflows are deliberately blocked because inherited targets could overwrite the wrong public site.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-19T00:27:38Z",
+          "source": "Local Uncle Jon source/workflow inspection and Node 24.19.0 type/lint/Jest execution",
+          "summary": "Inspection confirmed build-time type/lint bypasses and a fixed fallback database credential in two admin routes. TypeScript failed; lint prompted for initial configuration instead of enforcing a check; Jest produced 14 failed/2 passed suites and 31 failed/31 passed tests. Existing deployment workflows fail closed because their inherited targets are unsafe. No build, database connection, browser suite, external integration, deployment, VM, game backend, credential, or production operation occurred."
+        }
+      ],
+      "requiredAction": [
+        "Reconcile the heavily dirty local repository with the captured VM401 deployment and preserve the deliberately blocked deployment workflows until the correct immutable target is accepted.",
+        "Remove the fixed database fallback and inherited database identity; require validated managed configuration and fail startup or the affected feature clearly when absent.",
+        "Remove TypeScript and ESLint build bypasses, add a non-interactive supported ESLint configuration/command, and correct compiler failures without weakening types.",
+        "Repair the existing tests against the accepted branded routes and components, distinguishing obsolete expectations from real regressions without changing golden answers merely to pass.",
+        "Add server-enforced authorization, input-validation, contact/Me Manager contract, failure/recovery, accessibility, browser, and actual game-platform CTA tests in isolated compatible environments.",
+        "Reconcile the VM400 game-backend state before claiming game links or platform functionality are operational."
+      ],
+      "acceptanceCriteria": [
+        "No fixed database credential, inherited database identity, or silent configuration fallback remains in a production execution path.",
+        "A clean locked checkout fails on type, lint, test, security, accessibility, browser, or contract defects and cannot bypass them during build.",
+        "All maintained unit/integration tests pass with explicit isolated dependencies, and real compatible service acceptance covers contact and Me Manager flows.",
+        "Every public game CTA matches the reconciled VM400/platform truth and has an honest unavailable state when its backend is unavailable.",
+        "The VM401 deployment target, source revision, immutable artifact, rollback, and post-deployment acceptance are proven before release."
+      ],
+      "approvalGate": "Local inspection and isolated non-secret tests are allowed. Reading/testing/rotating credentials, accessing any live database, changing VM400/VM401, deploying, or testing production endpoints requires exact separate approval.",
+      "rollback": "No live mutation is authorized. Preserve the dirty repository and captured VM401 evidence. Any later credential/configuration migration must retain the prior immutable artifact but must not restore a known fixed credential fallback.",
+      "dependencies": ["KT-DNS-001", "KT-GIT-001", "KT-DOC-001"],
+      "externalGate": "Correct VM401 deployment target, managed database owner/configuration, and VM400 game-platform truth require accepted reconciliation and operator review.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-WWFL-001",
+      "title": "Disable mutable Personal Website deployment and restore mandatory security gates",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["willworkforlunch.com", "Personal Website admin CMS", "Personal Website deployment pipeline"],
+        "repositories": ["personal-website-gen"],
+        "hosts": ["VM302", "VM702"]
+      },
+      "observedState": "The local repository contains active workflows that deploy from mutable branches to Vercel or over SSH. The SSH workflow hard-resets the live checkout to the remote production branch, rebuilds, and restarts services, which can destroy authoritative live-only changes. Actions are referenced by mutable major/version tags. The application build ignores TypeScript and ESLint failures, two admin routes contain a fixed fallback database credential, strict TypeScript fails, lint is unconfigured/interactive, and Jest reports 14 failed/2 passed suites with 18 failed/22 passed tests.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-19T00:35:00Z",
+          "source": "Local Personal Website source/workflow inspection and Node 24.19.0 type/lint/Jest execution",
+          "summary": "Inspection confirmed mutable direct deployment, live hard-reset behavior, unpinned actions, build quality bypasses, and a fixed fallback database credential. TypeScript failed; lint prompted for setup; Jest produced 14 failed/2 passed suites and 18 failed/22 passed tests. No workflow, build, browser suite, database connection, external integration, credential, host, deployment, or production operation occurred."
+        }
+      ],
+      "requiredAction": [
+        "Reconcile VM302 and VM702 deployment/source evidence before any repository publication or workflow execution; preserve authoritative live-only changes.",
+        "Keep all direct deployment paths disabled until replaced by reviewed immutable build-once promotion with isolated runners, protected approval, recovery evidence, and rollback.",
+        "Remove live git reset/rebuild/restart behavior and mutable branch/artifact deployment; pin every action by verified full commit SHA and least privileges.",
+        "Remove the fixed database fallback, require validated managed configuration, and remove TypeScript/ESLint build bypasses.",
+        "Install a non-interactive supported lint gate, fix the Jest configuration and real test failures without weakening expectations, and add missing route/security/contract/browser/accessibility tests.",
+        "Verify CMS, contact, scheduling, cache invalidation, and Me Manager integrations against isolated compatible services before development acceptance."
+      ],
+      "acceptanceCriteria": [
+        "No workflow can reset, overwrite, rebuild, restart, or deploy a production host from an unreviewed mutable branch or local checkout.",
+        "The same signed immutable artifact digest passes development acceptance and is promoted to production only after authorized approval and current rollback/recovery evidence.",
+        "No fixed database credential or silent configuration fallback exists in a production execution path.",
+        "A clean locked checkout passes mandatory formatting, lint, strict type, unit/integration, security, accessibility, browser, build, SBOM, scan, and provenance checks.",
+        "VM302/VM702 source provenance, deployment target, public journeys, integrations, health semantics, and rollback are current and linked."
+      ],
+      "approvalGate": "Local inspection and isolated non-secret tests are allowed. Editing/enabling remote workflows, reading/testing/rotating credentials, accessing live databases, changing VM302/VM702, deploying, restarting, or testing production endpoints requires exact separate approval.",
+      "rollback": "No live mutation is authorized. Preserve the dirty local worktree and captured VM302/VM702 evidence. The replacement pipeline must record the prior immutable artifact and must never use a destructive Git reset as rollback.",
+      "dependencies": ["KT-DNS-001", "KT-GIT-001", "KT-CICD-001"],
+      "externalGate": "Accepted VM302/VM702 reconciliation, canonical hosting target, runner isolation, and production environment controls require operator review and infrastructure approval.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-WIKI-001",
+      "title": "Replace Wiki destructive deployment and database-mutating validation paths",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["Kecktech Wiki", "Wiki article review workflow", "Wiki deployment pipeline"],
+        "repositories": ["kecktech-wiki"],
+        "hosts": ["VM232", "VM732"]
+      },
+      "observedState": "The repository has no npm lockfile, installed dependency tree, automated test command, or explicit type-check command. Its command named validate:articles updates database review status, notes, and timestamps for pages and writes a report, so it is not a read-only validation gate. Active dev/prod workflows use a broad self-hosted runner to hard-reset live checkouts and rebuild/restart Docker; production SSH disables host-key verification. VM232 deployment provenance remains incomplete.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-19T00:39:21Z",
+          "source": "Local Wiki manifest/script/workflow inspection and bounded TypeScript attempt",
+          "summary": "Inspection confirmed database writes inside validate:articles and destructive mutable-branch deployment behavior with SSH host-key bypass. Direct TypeScript could not start because no installed TypeScript dependency exists, and no lockfile exists from which to reproduce dependencies. No dependency installation, validation script, database connection, workflow, SSH connection, container operation, deployment, host, credential, or production action occurred."
+        }
+      ],
+      "requiredAction": [
+        "Reconcile VM232 and VM732 source/deployment evidence before publishing or enabling any workflow; preserve authoritative live-only content/code.",
+        "Disable and replace live hard-reset/rebuild/restart workflows with reviewed immutable build-once promotion and strict SSH host verification on isolated least-privilege runners.",
+        "Create a reviewed deterministic dependency lock from the accepted canonical source and supported Node runtime, then add explicit formatting, lint, strict type, unit/integration, security, build, and schema gates.",
+        "Split article checking into a side-effect-free validator that accepts an explicit sanitized input/export and a separately named, approval-gated remediation command for database updates.",
+        "Add tests proving the CI validator cannot connect to or mutate a database and that article remediation is transactional, authorized, auditable, reversible, and isolated.",
+        "Rehearse schema/content changes against sanitized production-shaped data with backup/restore evidence before any live article update."
+      ],
+      "acceptanceCriteria": [
+        "No push or mutable branch can hard-reset, rebuild, restart, or deploy VM232/VM732.",
+        "SSH host identity is pinned/verified and no workflow disables known-host checks.",
+        "A clean checkout installs deterministically from a reviewed lock and passes mandatory lint, strict type, tests, security, build, SBOM, scan, and provenance gates.",
+        "The CI article validator is demonstrably read-only and cannot update database rows or production content.",
+        "Any remediation command requires explicit target/environment approval, produces an auditable change set, and has tested rollback/restore behavior.",
+        "VM232/VM732 source revision, immutable artifact, schema/content ownership, development acceptance, production approval, and rollback evidence are current."
+      ],
+      "approvalGate": "Local inspection and side-effect-free tests are allowed. Installing an unreviewed dependency state, running current article validation/remediation, connecting to a database, editing/enabling workflows, SSH/VM/container actions, deployment, or production content changes require applicable exact approval.",
+      "rollback": "No live mutation is authorized. Preserve dirty local work and captured VM232 evidence. The replacement delivery path must retain the prior immutable artifact; content remediation must use transaction/backup restoration rather than destructive Git reset.",
+      "dependencies": ["KT-DNS-001", "KT-GIT-001", "KT-CICD-001"],
+      "externalGate": "Accepted VM232/VM732 reconciliation, canonical dependency lock, database/content ownership, runner isolation, and production environment controls require operator review.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-ASSET-001",
+      "title": "Restore deterministic Asset Forge tests and broker lifecycle contracts",
+      "priority": "P1",
+      "status": "in_progress",
+      "scope": {
+        "services": ["Asset Forge", "Asset Forge web", "Asset Forge client packages", "GPU Broker contract"],
+        "repositories": ["asset-forge", "gpu-broker"],
+        "hosts": ["VM115"]
+      },
+      "observedState": "The existing isolated Asset Forge Python environment reports 48 passed and 23 failed tests. Failures include a missing Pillow installation despite a non-exact Pillow requirement, request-lifecycle fixtures rejected by the newer no-empty-kit invariant, GPU exclusivity-state disagreement, manifest expectation drift, and webhook setup blocked by request creation. Top-level Python dependencies are non-exact. The locked web workspace has build only, with no lint/type/test command, and client packages lack complete locked verification. Existing capture proves one live API file matches local but does not prove full deployment parity.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-19T00:42:46Z",
+          "source": "Existing VM115 capture plus local Asset Forge manifest/test inspection and isolated pytest execution",
+          "summary": "After separating a sandbox temporary-directory failure, the existing .venv ran 71 isolated tests: 48 passed and 23 failed. Tests use temporary FORGE_DATA_DIR state and open-auth only in test fixtures. No GPU, broker, worker, model, generated media, live callback, external service, VM115, credential, deployment, or production operation occurred."
+        }
+      ],
+      "requiredAction": [
+        "Complete VM115 live-to-Git reconciliation beyond the single matching API file and record the accepted canonical Asset Forge/Broker contract.",
+        "Create supported exact Python dependency locks for application and development/test environments and prove clean installation, including image QA dependencies.",
+        "Classify each failing lifecycle, GPU exclusivity, manifest, and webhook test as obsolete contract or real regression using accepted requirements; update implementation and tests together without weakening invariants.",
+        "Add explicit Python lint/type/security/package commands and web/client format/lint/type/test/build commands with deterministic locks.",
+        "Contract-test durable job state, approval gates, idempotency, cancellation, bounded retry, restart recovery, dead-letter behavior, and GPU Broker leasing from both provider and consumer sides.",
+        "Keep real GPU/model/media acceptance isolated, privacy/storage bounded, approval-gated, and separate from general CI."
+      ],
+      "acceptanceCriteria": [
+        "A clean supported Python environment installs exactly from reviewed locks and all isolated tests, lint, type, security, and packaging checks pass.",
+        "Web and client packages have locked deterministic lint/type/test/build gates and no production placeholder or simulated completion path.",
+        "Asset Forge and GPU Broker agree through versioned contract tests on exclusivity, leasing, retries, cancellation, recovery, and failure states.",
+        "Human approval gates cannot be bypassed and a job without complete kits cannot be silently accepted or stranded.",
+        "VM115 source/artifact provenance, development acceptance, real controlled GPU acceptance, rollback, and production verification are current before release."
+      ],
+      "approvalGate": "Local isolated tests using temporary non-secret data are allowed. Dependency changes, real GPU/model/media execution, live broker/worker/callback access, VM115 changes, credential access, deployment, or production operations require applicable exact approval.",
+      "rollback": "No live mutation is authorized. Preserve the existing VM115 capture and local worktree. Future contract/dependency changes require versioned rollback and the prior immutable artifact.",
+      "dependencies": ["KT-DNS-001", "KT-GIT-001"],
+      "externalGate": "Accepted Asset Forge/GPU Broker contract and controlled GPU acceptance window require operator review after reconciliation.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-CLEANER-001",
+      "title": "Enforce Cleaner authorization and bounded change approvals",
+      "priority": "P0",
+      "status": "in_progress",
+      "scope": {
+        "services": ["Cleaner", "repository cleanup automation"],
+        "repositories": ["cleaner"],
+        "hosts": ["VM309"]
+      },
+      "observedState": "Cleaner passes its 6 existing local safety/preflight tests, but they do not cover API authorization or the full mutation boundary. When NETOPS_SERVICE_KEY is configured, middleware rejects only an incorrect supplied key or a missing key paired with a specific NetOps header; a request with neither header is allowed on all API routes based on an unverified assumption that Traefik/Authelia authenticated it. Mutation routes include settings and secret configuration, standards changes/deletion, scan creation, proposal acceptance, branch push, merge, cancellation, and audit reversal. Low-severity changes default to automatic acceptance, and Tier-0 can automatically delete and commit files inside the cloned workdir. Dependencies are non-exact and lint/type/security/package gates are absent.",
+      "evidence": [{
+        "observedAt": "2026-08-19T01:35:00Z",
+        "source": "Local Cleaner source, container, manifest, and isolated pytest inspection",
+        "summary": "All 6 existing tests passed with temporary data and explicit non-secret loopback overrides. Source inspection confirmed fail-open missing-header behavior, application mutation routes without verified identity, default AUTO_ACCEPT_LOW=true, and automatic Tier-0 deletion/commit behavior. No mounted repository, remote, GPU Broker, Ollama, credential value, VM309, network, deployment, or production service was contacted."
+      }],
+      "requiredAction": [
+        "Define the approved Cleaner exposure and identity architecture, then require a cryptographically trustworthy application-enforced identity on every non-health API request; reject missing, invalid, and insufficient authorization by default.",
+        "Separate read, scan, propose, accept, push, merge, settings/secret, standards, and audit-reversal permissions with least-privilege server authorization and CSRF/replay protections appropriate to the chosen session/service mechanisms.",
+        "Default automatic acceptance off until exact bounded policy is approved; require explicit review for deletions and material changes, and prove the original mounted repository remains read-only and outside every cleanup target.",
+        "Validate resolved workdir and file targets against an owned run root before copy, delete, diff, commit, retention, or reversal; fail closed on links, ambiguous paths, partial failure, and unavailable analysis dependencies.",
+        "Lock supported dependencies and add lint, strict type, security, package, API authorization, path-boundary, symlink, failure/recovery, idempotency, and push/merge policy tests.",
+        "Reconcile VM309 source, routing, mounted paths, identity headers, runtime configuration, and deployment provenance before any controlled integration or release."
+      ],
+      "acceptanceCriteria": [
+        "Every non-health API route rejects missing and invalid identity and enforces a documented least-privilege permission; trusted-proxy identity cannot be forged directly.",
+        "Tests prove unauthorized callers cannot read or change settings, secrets, standards, runs, proposals, files, audit events, branches, pushes, merges, or cancellations.",
+        "The mounted source is demonstrably read-only; all writes remain inside a validated isolated workdir, links cannot escape it, and deletion/change approval is explicit and auditable.",
+        "A clean locked environment passes lint, strict type, security, package, unit, integration, authorization, destructive-boundary, failure, restart-recovery, and rollback tests.",
+        "Reconciled VM309 development acceptance and rollback evidence are current before an immutable artifact is approved for production."
+      ],
+      "approvalGate": "Local inspection and isolated temporary-directory tests are allowed. Reading credentials, scanning a real repository, contacting Git remotes/models/broker/VM309, accepting/applying/pushing/merging changes, changing identity/routing/mounts, deploying, or mutating production requires exact separate approval.",
+      "rollback": "No live mutation is authorized. Preserve the dirty checkout and VM309 evidence. Future identity, policy, or storage changes require configuration backup, immutable prior artifact, database/workdir compatibility plan, and tested restoration.",
+      "dependencies": ["KT-DNS-001", "KT-GIT-001"],
+      "externalGate": "Operator approval is required for Cleaner exposure/identity design and any controlled real-repository acceptance after reconciliation.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "pending"
+      }
+    },
+    {
+      "id": "KT-GPU-001",
+      "title": "Secure and make GPU Broker state durable across restart",
+      "priority": "P1",
+      "status": "in_progress",
+      "scope": {
+        "services": [
+          "GPU Broker",
+          "GPU Broker browser UI",
+          "GPU job and lease coordination"
+        ],
+        "repositories": [
+          "gpu-broker",
+          "asset-forge"
+        ],
+        "hosts": [
+          "VM115",
+          "Office-PC"
+        ]
+      },
+      "observedState": "The local GPU Broker passes 15 of 15 isolated tests only when dotenv loading is externally disabled and simulated/dry-run GPU settings are forced. Its normal test setup removes the API-key override before application import, permitting the repository .env to restore a real local key; the observed normal run passed 2 tests and failed 13 with unauthorized responses. The unauthenticated browser bootstrap response includes the broker API key. Job and lease coordination are memory-only, so restart loses queued, running, completed, and leased state despite the repository requirement for durable state and restart recovery. Dependencies are non-exact, pytest is undeclared, the Node client is unlocked and has no verification scripts, and tests still center deprecated endpoints.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-19T01:20:00Z",
+          "source": "Local GPU Broker source, manifest, workflow, and isolated pytest inspection",
+          "summary": "The first local run demonstrated .env coupling: 2 passed and 13 failed with 401 responses. With PYTHON_DOTENV_DISABLED=1 plus explicit dry-run and simulated-memory settings, 15 passed with three deprecation warnings. Source inspection confirmed /v1/ui-bootstrap returns API_KEY and both JobStore and LeaseStore keep state in process memory. No live broker, GPU, worker, model, VM115, credential value, network, deployment, or production operation was used."
+        }
+      ],
+      "requiredAction": [
+        "Remove all credential material from browser responses and require server-enforced authenticated, authorized access to operational UI and maintained APIs; add regression tests proving secrets cannot reach browser, logs, responses, or fixtures.",
+        "Replace memory-only job and lease coordination with reviewed durable atomic state that preserves idempotency, ownership, cancellation, expiry, recovery, and conflict safety across process and host restart.",
+        "Make tests hermetic by disabling dotenv and external adapters within test configuration before application import, using explicit non-secret test authentication, and proving that no local .env or live endpoint can be consumed.",
+        "Define and lock supported Python application/test dependencies, declare lint/type/security/package gates, and add a locked verified Node client toolchain.",
+        "Version the maintained /v1/jobs provider contract and add provider/consumer tests for exclusivity, busy/queued states, bounded retry, cancellation, restart recovery, stale leases, dead-letter behavior, and safe dependency failure; retire deprecated endpoint tests only through an approved compatibility plan.",
+        "Complete VM115 and Office-PC source-to-running-artifact reconciliation before any deployment or real controlled GPU acceptance."
+      ],
+      "acceptanceCriteria": [
+        "No API key or credential is returned to browser code or any unauthenticated response, and unauthorized/insufficiently authorized requests fail consistently.",
+        "Queued, running, held, completed, canceled, failed jobs and active/expired leases recover correctly after controlled process and host restart without duplicate execution or orphaned GPU ownership.",
+        "A clean supported environment installs exactly from reviewed locks and passes lint, strict type, security, package, isolated test, and maintained-contract checks without reading repository or user .env files.",
+        "GPU Broker and every maintained consumer agree on versioned exclusivity, busy/queued, idempotency, timeout, cancellation, retry, stale-state, and recovery semantics.",
+        "Reconciled immutable artifacts pass development acceptance, separately approved real GPU failure/recovery testing, rollback validation, and production post-deployment verification."
+      ],
+      "approvalGate": "Local source inspection and hermetic simulated tests are allowed. Reading or rotating credentials, contacting broker/GPU/worker/model endpoints, changing VM115 or Office-PC services, exercising real jobs, restarting processes/hosts, deploying, or mutating production requires exact separate approval.",
+      "rollback": "No live mutation is authorized. Preserve the dirty worktree and captured deployment evidence. Future state-store and authentication migrations require backups, compatibility rehearsal, prior immutable artifact, and tested restoration of both code and coordination state.",
+      "dependencies": [
+        "KT-DNS-001",
+        "KT-GIT-001"
+      ],
+      "externalGate": "The durable-state architecture, maintained compatibility window, and controlled real-GPU restart/recovery test require operator review after live reconciliation.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    },
+    {
+      "id": "KT-FORGE-001",
+      "title": "Define Forge authentication boundary and remove browser-held provider secrets",
+      "priority": "P1",
+      "status": "blocked",
+      "scope": {
+        "services": ["Forge project-priming application"],
+        "repositories": ["forge"],
+        "hosts": []
+      },
+      "observedState": "The local Forge repository has no verified live deployment mapping. Its browser settings page stores an Anthropic API key in localStorage and sends it to a provider-test endpoint. The inspected application API routes have no authentication boundary. Current CI execution also exposes two lint errors, two warnings, and one real TypeScript error; 39 tests pass against the repository-local Prisma test database.",
+      "evidence": [
+        {
+          "observedAt": "2026-08-18T23:35:00Z",
+          "source": "Local Forge source inspection and Node 24.19.0 lint/type/test execution",
+          "summary": "Lint fails on synchronous effect state updates; strict TypeScript fails because a GPU Broker result specifies ok twice; 39 of 39 tests pass when the explicit Prisma test.db is writable. The settings page accepts/stores a provider API key in browser localStorage and the provider-test/session routes lack an observed authentication gate. No production or external service was contacted."
+        }
+      ],
+      "requiredAction": [
+        "Determine whether Forge is local-only, authenticated internal, or internet-facing and record the decision in an ADR.",
+        "Keep provider credentials server-side in managed secret configuration; remove browser persistence and request-body credential transport.",
+        "Implement and regression-test server-enforced authentication, authorization, CSRF/abuse controls as applicable, and stable redacted errors across maintained routes.",
+        "Fix the real lint and TypeScript defects without preserving the insecure client-secret design, then run lint, type, all tests, build, audit, and route security tests."
+      ],
+      "acceptanceCriteria": [
+        "The intended deployment/exposure and authentication architecture are approved and documented.",
+        "No provider credential is accepted from, stored in, or returned to browser code, localStorage, logs, fixtures, or documentation.",
+        "Unauthorized and insufficiently authorized requests fail on every maintained mutation and sensitive read route.",
+        "Lint, strict type checking, all tests, production build, dependency audit, and authentication/authorization/failure regressions pass under the supported locked runtime."
+      ],
+      "approvalGate": "Local inspection and isolated tests are allowed. Selecting an authentication architecture, creating credentials, changing live routing, or deploying Forge requires separate approval and accepted deployment reconciliation.",
+      "rollback": "No live mutation is authorized. Preserve the current dirty worktree; any future authentication migration requires a versioned rollback and prior immutable artifact.",
+      "dependencies": ["KT-GIT-001", "KT-GOV-001"],
+      "externalGate": "Operator decision is required for Forge deployment exposure and identity provider selection.",
+      "notionSync": {
+        "page": "https://app.notion.com/p/3be92bae832281ee8feec4954b217a7e",
+        "state": "current"
+      }
+    }
+  ]
+}

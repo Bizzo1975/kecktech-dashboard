@@ -1,0 +1,6 @@
+{"time": "2026-09-15T22:25:07.827527+00:00", "event": "baseline_loaded"}
+{"time": "2026-09-15T22:25:07.838621+00:00", "event": "agent_baseline", "host": "200", "containerId": "959bc13f8dc70f0f9b3fa0ace7b271c4823ba81b3e1fc51834488a0964f48f7b", "imageId": "sha256:7af856876dcb2778108bf6846f3da31b176443db90e3de31fcfdf17e5ab7857e"}
+{"time": "2026-09-15T22:25:09.590637+00:00", "event": "stopped", "name": "portainer_agent"}
+{"time": "2026-09-15T22:25:09.816978+00:00", "event": "preflight_passed", "host": "200", "apparentBytes": 293302120}
+{"time": "2026-09-15T22:26:10.550988+00:00", "event": "agent_restored", "host": "200", "containerId": "959bc13f8dc70f0f9b3fa0ace7b271c4823ba81b3e1fc51834488a0964f48f7b"}
+{"time": "2026-09-15T22:26:10.551030+00:00", "event": "stage_a_failed", "category": "TimeoutExpired", "reason": "execution_interrupted_or_failed"}

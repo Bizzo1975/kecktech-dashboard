@@ -1,0 +1,54 @@
+{
+  "at": "2026-09-17T01:01:46.009784+00:00",
+  "status": "REVIEW CANDIDATE \u2014 NOT DEPLOYABLE UNTIL READINESS GAPS CLOSE",
+  "source": {
+    "src/adapters.ts": "f497d99eb042e2a81c7dd9696c1669cc368c64f22f7c34a18ca86fa6823e0541",
+    "src/config.ts": "73504feba8dc928f3e43d4d204d63bf21be5085bf34703494c4b4ee723ab8139",
+    "src/contracts.ts": "78d0a7cf1ceb68a7054f918737ed8b09d10f2e33a2842d029e886b2d20107906",
+    "src/gpuBroker.ts": "d0b9b789f755e551fae0887b9d05c0463df07b67ec9608a778239b240b615046",
+    "src/index.ts": "c1bbe0ef83ae87fb310b28313bfa236d5c613e8e9803bc00cd945705c59126fa",
+    "src/service.ts": "180c3eb2eeaa2b97cfee83104b68be05172353d8cb9ca62230ed8bfa6b60d523",
+    "src/store.ts": "e224e51f1b351553b1ef7e7ec93c3c2ad078b9e4e966603ea014f4166b86c8d3",
+    "src/streaming.ts": "a0a9f476547ca498ca178bdf5749ca36a7a3462295f6f99cc0f9385cd0c67f6f",
+    "src/test/adapters.test.ts": "c2f25eaf56caef9e0aa0e6b0a0f1aa825f72c3594f70b7569a77a81de6cfb659",
+    "src/test/gpuBroker.test.ts": "46c2abab8120f2267f8d4cb2c7a948ecf568ca630b2fc3cc595f5fe6ef9cf5b7",
+    "src/test/service.test.ts": "6995c51b10274e69bb724b0f9390978886211c0a813350fa46eb05576a2ae0cd",
+    "src/test/store.test.ts": "d32502555d70bf19a16fbead3e6bb21d429b601116657829bd0ace85c2a75b0e",
+    "src/test/streaming.test.ts": "1bc5315d36ba2fbb59b225be8edfa0cb7fe3cff4b2a37d303cb5cb846fd6682d",
+    "package.json": "9ce9c3de179e30f0f0bee425f47f2e15a8964cce2cf096f4e6c0f1762fdd225b",
+    "tsconfig.json": "410c0bdc44d4a6d111ea6cac4490019447290b789f6210a44f7812bcc56d1e79"
+  },
+  "artifactIdentity": "d137953f806a9afd4ed597bada03ea45abfe85214f7110f511e2e381fe0dc069",
+  "archive": "F:\\Github\\kecktech-dashboard\\.recovery-private\\nexus-preparation\\nexus-assistant-d137953f806a9afd.tar.gz",
+  "archiveSha256": "f5cfa70acec5669490a302403631d3c9548077eed763d1532a6ef3e0b06a71b6",
+  "files": {
+    "deployment/nexus-assistant.service": "ef9fe39a83ae6ca5595218a21a63afc40a6ca5ae027179e78ad171116cd395ae",
+    "deployment/preflight.mjs": "9330dba43cd8f42d36733e7516ac88308ba7dd2d4f4303290c9674d39d892944",
+    "dist/adapters.js": "9298c5fa34ad93b13cbd7835120e72b8cd8ebfe0738a6aa34cc3e11f37260b33",
+    "dist/config.js": "6e5c8f46e511a3b54d8cfdc5d0896486e63f6ab6a650537cb66c93d7ab25a9cf",
+    "dist/contracts.js": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+    "dist/gpuBroker.js": "f90a694708cbea23b80a8f15157b6c3d7f4a7e64402ffe1895b8d9dbd7a0fcc5",
+    "dist/index.js": "dcf212229488fe2bb453be55d50340e937cddf2b48b094407d777cc6f0a32c03",
+    "dist/service.js": "69b14a56c1a1a8d682db33512b75ada71046e2500425d6c0652ce2616224573a",
+    "dist/store.js": "e144b2af1855d805719c3eecab77daa435324c968270ca02aabbe731c336cb2e",
+    "dist/streaming.js": "1371c448f1b1f57ba6c944a5269c18b6c6ad69738c840508870a0bc93a268fa5",
+    "package.json": "f7109bdc6648bd4bdf31f8573e4d8ae903495cdb20a84c6353a5cd9d1c2de1a2"
+  },
+  "runtime": "Node 24.19.0 Linux (not installed on VM125)",
+  "testFiles": [
+    "adapters.test.js",
+    "gpuBroker.test.js",
+    "service.test.js",
+    "store.test.js",
+    "streaming.test.js"
+  ],
+  "excluded": [
+    ".env",
+    "credentials",
+    "state",
+    "node_modules",
+    "unrelated Nexus apps",
+    "tests"
+  ],
+  "concurrentSourceChange": false
+}

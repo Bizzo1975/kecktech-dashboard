@@ -1,0 +1,15 @@
+{"time": "2026-09-15T22:34:00.245293+00:00", "event": "baseline_loaded"}
+{"time": "2026-09-15T22:34:00.256485+00:00", "event": "agent_baseline", "host": "200", "containerId": "959bc13f8dc70f0f9b3fa0ace7b271c4823ba81b3e1fc51834488a0964f48f7b", "imageId": "sha256:7af856876dcb2778108bf6846f3da31b176443db90e3de31fcfdf17e5ab7857e"}
+{"time": "2026-09-15T22:34:01.754257+00:00", "event": "stopped", "name": "portainer_agent"}
+{"time": "2026-09-15T22:34:01.992634+00:00", "event": "preflight_passed", "host": "200", "apparentBytes": 293332320}
+{"time": "2026-09-15T22:34:08.660711+00:00", "event": "stopped", "name": "erpnext-scheduler-1", "signal": "SIGINT"}
+{"time": "2026-09-15T22:34:19.849326+00:00", "event": "stopped", "name": "erpnext-frontend-1"}
+{"time": "2026-09-15T22:34:25.034873+00:00", "event": "stopped", "name": "erpnext-websocket-1"}
+{"time": "2026-09-15T22:34:27.399952+00:00", "event": "copy_verified", "archive": "/var/backups/kecktech-recovery/2026-09-15-stage-a/erpnext_db-data.tar", "sha256": "89732f86fd8184ed5e6806c1819abd071c0573d705409a7e354143ca445dcdbc", "bytes": 268789760, "sourceCompared": true}
+{"time": "2026-09-15T22:34:27.792761+00:00", "event": "copy_verified", "archive": "/var/backups/kecktech-recovery/2026-09-15-stage-a/erpnext_sites.tar", "sha256": "bf4b229ff269bf6210dcec47866934e7b148a9fc35de66d93a321bed8223575b", "bytes": 27627520, "sourceCompared": true}
+{"time": "2026-09-15T22:34:27.800980+00:00", "event": "copy_verified", "archive": "/var/backups/kecktech-recovery/2026-09-15-stage-a/erpnext_redis-queue-data.tar", "sha256": "e30ff40145f9313af66734ddfff885e6cb22962f9823ae88e0bbd92eb7bca864", "bytes": 81920, "sourceCompared": true}
+{"time": "2026-09-15T22:34:52.978549+00:00", "event": "database_started", "name": "erpnext-db-1"}
+{"time": "2026-09-15T22:35:25.608267+00:00", "event": "stopped", "name": "erpnext-db-1"}
+{"time": "2026-09-15T22:35:25.608305+00:00", "event": "rollback_database_stopped", "name": "erpnext-db-1"}
+{"time": "2026-09-15T22:35:30.482412+00:00", "event": "agent_restored", "host": "200", "containerId": "959bc13f8dc70f0f9b3fa0ace7b271c4823ba81b3e1fc51834488a0964f48f7b"}
+{"time": "2026-09-15T22:35:30.482465+00:00", "event": "stage_a_failed", "category": "RuntimeError", "reason": "database_query_failed"}

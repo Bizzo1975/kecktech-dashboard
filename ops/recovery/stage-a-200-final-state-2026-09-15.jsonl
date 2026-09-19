@@ -1,0 +1,4 @@
+{"name": "erpnext-scheduler-1", "state": "running", "startedAt": "2026-09-15T02:15:35.576886356Z", "restartCount": 0}
+{"name": "erpnext-db-1", "state": "exited", "startedAt": "2026-09-05T22:15:53.601647535Z", "restartCount": 0}
+{"name": "portainer_agent", "state": "running", "startedAt": "2026-09-15T22:26:05.536448785Z", "restartCount": 0}
+{"recoveryDirectoryExists": false}

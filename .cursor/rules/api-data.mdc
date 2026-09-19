@@ -1,0 +1,18 @@
+---
+description: API, integration, database, and migration requirements
+globs: "**/*.{ts,tsx,js,jsx,py,sql,prisma,yaml,yml,json}"
+alwaysApply: false
+---
+
+# APIs and Data
+
+- Maintain a versioned OpenAPI or equivalent schema for maintained APIs.
+- Validate request, response, webhook, queue, and vendor payloads.
+- Use stable machine-readable error codes, correlation IDs, explicit timeouts, and bounded retries.
+- Make retriable mutations and webhook processing idempotent; authenticate webhooks and prevent replay.
+- Define ownership, classification, pagination, limits, and compatibility policy.
+- Use parameterized database operations and database constraints for correctness.
+- Rehearse migrations with production-shaped, non-sensitive data.
+- Schema changes require backup evidence, compatibility analysis, and forward plus rollback/restore plans.
+- Use expand/migrate/contract for near-zero-downtime changes.
+- Contract-test both sides of shared integrations; mocks alone do not prove production readiness.

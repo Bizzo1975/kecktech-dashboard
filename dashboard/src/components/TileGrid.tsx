@@ -17,6 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { AppTile } from "./AppTile";
+import type { HealthReason, HealthStatus } from "@/lib/checkHealth.mjs";
 
 interface TileData {
   name: string;
@@ -24,7 +25,9 @@ interface TileData {
   url: string;
   icon: string;
   color: string;
-  status: "up" | "down";
+  status: HealthStatus;
+  reason: HealthReason;
+  statusCode: number;
   latency: number;
   logoUrl?: string;
   noHealthCheck?: boolean;

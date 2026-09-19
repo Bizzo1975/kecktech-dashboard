@@ -1,0 +1,45 @@
+{
+  "at": "2026-09-17T10:56:15.288537+00:00",
+  "status": "PREPARED \u2014 INSTALLATION REQUIRES APPROVAL",
+  "host": "VM125 / 10.20.0.125",
+  "release": {
+    "path": "F:\\Github\\kecktech-dashboard\\.recovery-private\\nexus-preparation\\nexus-assistant-d137953f806a9afd.tar.gz",
+    "sha256": "f5cfa70acec5669490a302403631d3c9548077eed763d1532a6ef3e0b06a71b6",
+    "identity": "d137953f806a9afd4ed597bada03ea45abfe85214f7110f511e2e381fe0dc069"
+  },
+  "runtime": {
+    "path": "F:\\Github\\kecktech-dashboard\\.recovery-private\\nexus-preparation\\node-v24.19.0-linux-x64.tar.xz",
+    "sha256": "14b342e71204f811bde6153be8e04b62aef63c236fef92b55f9c83154b409647",
+    "source": "https://nodejs.org/dist/v24.19.0/node-v24.19.0-linux-x64.tar.xz",
+    "version": "24.19.0"
+  },
+  "repositoryDocuments": {
+    "path": "F:\\Github\\kecktech-dashboard\\.recovery-private\\nexus-preparation\\nexus-repository-documents-5606a98c003cec12.tar.gz",
+    "sha256": "afd2ea542349d0cc57d082425c4c808786cb765c9a98269cea9cf27d17d8ec8d",
+    "identity": "5606a98c003cec122db2d088676b62098aa3cff0442285b7330cda9a18c6bdab",
+    "files": {
+      "kecktech-dashboard/AGENTS.md": "2d4d57550d66df4443fa07a97c9aae2d464e3bbf33794137f7a4ff676d74427d",
+      "kecktech-dashboard/PROJECT_INSTRUCTIONS.md": "ecdbf37e53cd1d59957c928b3342104c045d87f79ccc3d181586a3aa7592a6d1",
+      "kecktech-infrastructure/AGENTS.md": "c36305992cd8dce1f44a7eee21463b0dc2c227f7f9dab652587c5263d0ab4ab3",
+      "kecktech-infrastructure/PROJECT_INSTRUCTIONS.md": "ecdbf37e53cd1d59957c928b3342104c045d87f79ccc3d181586a3aa7592a6d1",
+      "kecktech-infrastructure/README.md": "7e24144f0a8f61a1331eeaa98b1788ddd3770aa1857317358dc70bd59290d6a1",
+      "kecktech-infrastructure/inventory/README.md": "fefee52289fe434014d7a1aca6f6796ee32a14c21a92ad4e2013a2d8419e6b1a"
+    },
+    "scope": "Bounded current documentation snapshots, not complete repositories or deployed source"
+  },
+  "cleanBuildLockSha256": "780cfb30787d0fd2c3204cd92af8b49d14bda85ae6e29441879584b32cc28f1d",
+  "tests": {
+    "linuxUnitTests": 26,
+    "concurrentHttpRecordsAfterRestart": 8,
+    "linuxOutputMatchesPackage": true
+  },
+  "configuration": {
+    "sovereignUrl": "http://10.20.0.122:8200",
+    "litUrl": "http://10.20.0.115:8202",
+    "listen": "127.0.0.1:8787",
+    "writeKeys": "OMIT",
+    "modelKeys": "OMIT",
+    "cloudAllowed": false,
+    "credentials": "Reuse existing operator token and domain READ keys from operator-owned local configuration; values excluded"
+  }
+}

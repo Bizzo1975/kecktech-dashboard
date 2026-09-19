@@ -5,7 +5,7 @@ networks:
     external: true
 services:
   dashboard:
-    image: kecktech/dashboard:latest
+    image: ${DASHBOARD_IMAGE:?DASHBOARD_IMAGE must be an immutable digest reference}
     container_name: dashboard
     restart: always
     mem_limit: 256m
@@ -30,18 +30,19 @@ services:
       - RUSTDESK_SERVER_HOST=10.20.0.113
       - RUSTDESK_PUBLIC_KEY=BPJWx0dInTDWjiRXq3yHcfuvJNOjPBR7Q2YbocPYnEw=
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://0.0.0.0:3000/ || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/ || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 30s
     volumes:
       - ./data:/app/data
+      - ${DASHBOARD_INTERNAL_CA_FILE:?DASHBOARD_INTERNAL_CA_FILE must name the reviewed internal CA bundle}:/run/kecktech-ca/internal-ca.pem:ro
     networks:
       - kecktech_front
       - kecktech_internal
   kecktech-web:
-    image: nginx:alpine
+    image: nginx:alpine@sha256:4a73073bd557c65b759505da037898b61f1be6cbcc3c2c3aeac22d2a470c1752
     container_name: kecktech-web
     restart: always
     mem_limit: 64m
@@ -61,7 +62,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.mailer
-    image: kecktech-mailer:latest
+    image: ${MAILER_IMAGE:?MAILER_IMAGE must be an immutable digest reference}
     container_name: kecktech-mailer
     restart: always
     mem_limit: 64m
@@ -84,7 +85,7 @@ services:
     networks:
       - kecktech_front
   kecktech-portal:
-    image: vboxuser-kecktech-portal:latest
+    image: ${PORTAL_IMAGE:?PORTAL_IMAGE must be an immutable digest reference}
     container_name: kecktech-portal
     restart: always
     mem_limit: 512m
@@ -110,7 +111,7 @@ services:
     networks:
       - kecktech_front
   kecktech-admin:
-    image: vboxuser-kecktech-admin:latest
+    image: ${ADMIN_IMAGE:?ADMIN_IMAGE must be an immutable digest reference}
     container_name: kecktech-admin
     restart: always
     mem_limit: 512m

@@ -8,30 +8,26 @@
   "demos": {
     "label": "Built by Kecktech",
     "heading": "Try the Apps",
-    "intro": "Every card opens a live product. Where a login is required, use the demo credentials on the card — restricted demo accounts, not production admin access."
+    "intro": "Open the available public demos below. If a product requires sign-in, contact Kecktech for guided or time-limited access. Reusable credentials are never published on this site."
   },
   "apps": [
     {
       "id": "marketlist",
       "name": "Marketlist",
-      "description": "Marketlist is a household food system that keeps shopping lists, pantry inventory, recipes, meals, and garden harvest in one shared loop. Use the demo login on the card to walk the full product.",
+      "description": "Marketlist is a household food system that keeps shopping lists, pantry inventory, recipes, meals, and garden harvest in one shared loop. Contact Kecktech for guided or time-limited access.",
       "url": "https://marketlist.kecktech.net",
       "image": "/images/demos/marketlist.jpg",
       "contactEmail": "marketlist@kecktech.net",
-      "available": true,
-      "demoUser": "demo@marketlist.app",
-      "demoPassword": "demo12345"
+      "available": true
     },
     {
       "id": "flooros",
       "name": "FloorOS",
-      "description": "FloorOS is a flooring operations companion on RFMS — customer relationships, showroom workflow, contractors, and job status. Sign in with the demo salesperson account, then open /app.",
+      "description": "FloorOS is a flooring operations companion on RFMS — customer relationships, showroom workflow, contractors, and job status. Contact Kecktech for guided or time-limited access.",
       "url": "https://flooros.kecktech.net/login",
       "image": "/images/demos/flooros.jpg",
       "contactEmail": "flooros@kecktech.net",
-      "available": true,
-      "demoUser": "sales1@demo.flooros.local",
-      "demoPassword": "password123"
+      "available": true
     },
     {
       "id": "portal",
@@ -40,20 +36,16 @@
       "url": "https://portal.kecktech.net",
       "image": "/images/demos/portal.jpg",
       "contactEmail": "portal@kecktech.net",
-      "available": true,
-      "demoUser": "demo@kecktech.net",
-      "demoPassword": "(auto — opens as demo customer)"
+      "available": true
     },
     {
       "id": "farmbot",
       "name": "FarmBot",
-      "description": "FarmBot is our self-hosted garden robot control plane — maps, sequences, and device tooling that pairs with Marketlist Garden. Use the demo login to enter the FarmBot web app.",
+      "description": "FarmBot is our self-hosted garden robot control plane — maps, sequences, and device tooling that pairs with Marketlist Garden. Contact Kecktech for guided or time-limited access.",
       "url": "https://farmbot.kecktech.net",
       "image": "/images/demos/farmbot.jpg",
       "contactEmail": "farmbot@kecktech.net",
-      "available": true,
-      "demoUser": "demo@kecktech.net",
-      "demoPassword": "DemoAccess2026!"
+      "available": true
     },
     {
       "id": "cleaner",
@@ -85,13 +77,11 @@
     {
       "id": "chat",
       "name": "Chat",
-      "description": "Chat is private LLM access on our stack — Open WebUI talking to local models for drafting and coding help. Sign in with the restricted demo user (not an admin account).",
+      "description": "Chat is private LLM access on our stack — Open WebUI talking to local models for drafting and coding help. Contact Kecktech for guided or time-limited access.",
       "url": "https://chat.kecktech.net",
       "image": "/images/demos/chat.jpg",
       "contactEmail": "chat@kecktech.net",
-      "available": true,
-      "demoUser": "demo@kecktech.net",
-      "demoPassword": "DemoAccess2026!"
+      "available": true
     },
     {
       "id": "sovereign-hub",

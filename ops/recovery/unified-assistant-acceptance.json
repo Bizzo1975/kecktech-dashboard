@@ -1,0 +1,24 @@
+{
+  "contractVersion": "1.0",
+  "evidenceStatus": "LOCALLY VERIFIED — NOT DEPLOYED",
+  "preparedAt": "2026-09-01T00:00:00-05:00",
+  "deploymentAuthorized": false,
+  "localGates": [
+    { "id": "LOCAL-NEXUS-BUILD", "repository": "nexus", "required": true, "status": "pass", "evidence": ["assistant-api TypeScript build passed", "assistant-ui audited static build passed"] },
+    { "id": "LOCAL-NEXUS-TEST", "repository": "nexus", "required": true, "status": "pass", "evidence": ["assistant-api isolated tests 15/15 passed", "assistant-ui isolated test 1/1 passed"] },
+    { "id": "LOCAL-SOV-CONTRACT", "repository": "sovereign-standalone", "required": true, "status": "pass", "evidence": ["read-only project-scoped KB evidence endpoint compiled", "targeted provenance test 1/1 passed", "operational execution fails closed pending native approval receipt contract"] },
+    { "id": "LOCAL-LIT-CONTRACT", "repository": "Huxley", "required": true, "status": "pass", "evidence": ["authenticated manuscript-scoped evidence and native mutation adapter compiled", "targeted revision tests 2/2 passed"] },
+    { "id": "LOCAL-BROKER-CONTRACT", "repository": "gpu-broker", "required": true, "status": "pass", "evidence": ["Nexus job policy integrated before queue submission", "budget and model-download policy tests 5/5 passed"] },
+    { "id": "LOCAL-CROSS-REPO-E2E", "repository": "multiple", "required": true, "status": "partial", "evidence": ["cross-repository schema/security tests 22/22 passed", "real compatible service E2E remains gated by host recovery"] },
+    { "id": "LOCAL-GOVERNANCE", "repository": "kecktech-dashboard", "required": true, "status": "pass", "evidence": ["Unified response and domain schemas added", "cross-repository contract tests 22/22 passed", "policy validation passed 2026.08.18.1", "repository guidance validation passed 2026.08.18.1", "recovery/deployment gate documented"] }
+  ],
+  "liveGates": [
+    { "id": "LIVE-NOTION-PRIME", "status": "needs-capture", "approvalRequired": false },
+    { "id": "LIVE-SOURCE-RECONCILIATION", "status": "needs-capture", "approvalRequired": true },
+    { "id": "LIVE-IMMUTABLE-ARTIFACTS", "status": "needs-capture", "approvalRequired": true },
+    { "id": "LIVE-AUTH-CONFIGURATION", "status": "needs-capture", "approvalRequired": true },
+    { "id": "LIVE-DEPLOYMENT", "status": "needs-capture", "approvalRequired": true },
+    { "id": "LIVE-GPU-RECOVERY", "status": "needs-capture", "approvalRequired": true },
+    { "id": "LIVE-POST-DEPLOYMENT", "status": "needs-capture", "approvalRequired": true }
+  ]
+}

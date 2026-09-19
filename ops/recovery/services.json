@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-18T18:30:00Z",
+  "services": [
+    {
+      "id": "svc-pbs",
+      "name": "Proxmox Backup Server",
+      "host": "VM120",
+      "state": "intentionally_disabled",
+      "evidenceAt": "2026-08-18T17:20:00Z",
+      "repository": "kecktech-infrastructure",
+      "deployment": "VM; configuration and current recovery coverage need capture",
+      "dataClass": "restricted",
+      "recoveryTier": "unknown",
+      "healthContract": "Maintenance state must suppress failure claims while preserving capacity and recovery-coverage warnings.",
+      "publicNames": [],
+      "notes": [
+        "Intentionally off due to limited storage.",
+        "Proxmox reported VM120 powered on at 2026-08-18T18:19:46Z; VM power state does not establish that backup jobs or the PBS function are enabled.",
+        "Do not start, prune, reconfigure, or add jobs without separate approval.",
+        "Existing restore viability is unverified."
+      ]
+    },
+    {
+      "id": "svc-umami",
+      "name": "Umami analytics",
+      "host": "VM112",
+      "state": "failed",
+      "evidenceAt": "2026-08-18T17:30:00Z",
+      "repository": null,
+      "deployment": "Containerized application and database; exact deployed revisions need capture",
+      "dataClass": "confidential",
+      "recoveryTier": "tier1",
+      "healthContract": "Application readiness must verify its database dependency; edge authentication response is measured separately.",
+      "publicNames": [],
+      "notes": [
+        "Application observed in a restart loop.",
+        "Database observed stopped or unhealthy.",
+        "Public authentication redirect masked backend failure."
+      ]
+    },
+    {
+      "id": "svc-game-server-01",
+      "name": "Game server 01",
+      "host": "VM400",
+      "state": "unknown",
+      "evidenceAt": "2026-08-18T16:24:03Z",
+      "repository": null,
+      "deployment": "Unknown until Proxmox console inspection",
+      "dataClass": "unknown",
+      "recoveryTier": "unknown",
+      "healthContract": "Unknown until guest boot and network state are observed through the console.",
+      "publicNames": [],
+      "notes": ["Proxmox reports running, but guest networking and guest-agent response were unavailable."]
+    },
+    {
+      "id": "svc-erpnext-worker-long",
+      "name": "ERPNext long queue worker",
+      "host": "VM200",
+      "state": "degraded",
+      "evidenceAt": "2026-08-18T17:30:00Z",
+      "repository": null,
+      "deployment": "ERPNext worker; exact release and process configuration need capture",
+      "dataClass": "restricted",
+      "recoveryTier": "tier1",
+      "healthContract": "A real long-running isolated job must enqueue, execute once, persist its result, and expose failures.",
+      "publicNames": [],
+      "notes": ["Long queue worker was observed stopped; other ERPNext health is not inferred from this entry."]
+    },
+    {
+      "id": "svc-sovereign",
+      "name": "Sovereign",
+      "host": "VM122",
+      "state": "degraded",
+      "evidenceAt": "2026-08-18T17:30:00Z",
+      "repository": "sovereign-standalone",
+      "deployment": "Mixed services; exact running artifacts and intended components need capture",
+      "dataClass": "internal",
+      "recoveryTier": "tier2",
+      "healthContract": "Required components, evaluator behavior, monitoring, and supported public routes must each be verified.",
+      "publicNames": ["sovereign.kecktech.net"],
+      "notes": [
+        "Editor and Prometheus were observed stopped.",
+        "Evaluator units were disabled or failed.",
+        "Public root returned 404.",
+        "A production-path evaluator file self-identifies as a stub and requires replacement or removal."
+      ]
+    },
+    {
+      "id": "svc-conan-exiles",
+      "name": "Conan Exiles Enhanced dedicated server",
+      "host": "VM402",
+      "state": "unknown",
+      "evidenceAt": "2026-08-18T18:21:36Z",
+      "repository": null,
+      "deployment": "Host systemd service conanexiles.service; source/configuration provenance requires capture",
+      "dataClass": "internal",
+      "recoveryTier": "tier2",
+      "healthContract": "Service active plus expected UDP listeners is process-level evidence only; gameplay, persistence, authentication, external reachability, and recovery require separate tests.",
+      "publicNames": [],
+      "notes": [
+        "conanexiles.service was active/running.",
+        "ConanSandboxServer listened on UDP 7777, 7778, and 14001.",
+        "Root disk was 22% used.",
+        "No failed systemd units or Docker workloads were reported in this capture."
+      ]
+    },
+    {
+      "id": "svc-voice-clone",
+      "name": "Voice Clone service",
+      "host": "VM115",
+      "state": "degraded",
+      "evidenceAt": "2026-08-18T18:28:00Z",
+      "repository": "voice-clone-service",
+      "deployment": "Cron-launched host Python process from /home/kecktech/voice-clone-service on port 8008; live directory is not Git",
+      "dataClass": "restricted",
+      "recoveryTier": "tier2",
+      "healthContract": "Real synthesis must produce validated non-placeholder audio using an available approved voice; biometric input/output and model readiness are checked separately and never exposed in health data.",
+      "publicNames": [],
+      "notes": [
+        "Health reported placeholder_mode=false and chatterbox_installed=true.",
+        "Health reported jon_v1_ready=false while default_voice was jon-v1.",
+        "Process state and health JSON do not prove synthesis quality, authorization, GPU coordination, cancellation, or recovery.",
+        "Biometric datasets and reference clips were not read."
+      ]
+    }
+  ]
+}

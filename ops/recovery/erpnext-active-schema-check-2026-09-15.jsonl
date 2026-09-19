@@ -1,0 +1,6 @@
+{"site": "ops.kecktech.net", "tableCount": 727, "coreTablesPresent": true}
+{"name": "erpnext-db-1", "state": "running"}
+{"name": "erpnext-scheduler-1", "state": "exited"}
+{"name": "erpnext-frontend-1", "state": "exited"}
+{"name": "erpnext-websocket-1", "state": "exited"}
+{"name": "portainer_agent", "state": "running"}

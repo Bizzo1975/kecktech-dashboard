@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kecktech.net/schemas/recovery-repositories.schema.json",
+  "title": "Kecktech repository recovery snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "repositories"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "repositories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path", "gitCheckout", "branch", "upstream", "ahead", "behind", "trackedChanges", "untrackedFiles", "origin", "liveMatch", "recoveryState", "sensitiveContentRules", "notes"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^repo-[a-z0-9-]+$" },
+          "path": { "type": "string", "minLength": 1 },
+          "gitCheckout": { "type": "boolean" },
+          "branch": { "type": ["string", "null"] },
+          "upstream": { "type": ["string", "null"] },
+          "ahead": { "type": ["integer", "null"], "minimum": 0 },
+          "behind": { "type": ["integer", "null"], "minimum": 0 },
+          "trackedChanges": { "type": ["integer", "null"], "minimum": 0 },
+          "untrackedFiles": { "type": ["integer", "null"], "minimum": 0 },
+          "origin": { "type": ["string", "null"] },
+          "liveMatch": { "enum": ["verified", "not_verified", "not_applicable"] },
+          "recoveryState": { "enum": ["blocked", "capture_ready", "reconciled"] },
+          "sensitiveContentRules": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}
+

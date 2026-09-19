@@ -1,0 +1,1 @@
+{"at": "2026-09-16T18:56:15.790516+00:00", "lit": {"/v1/evidence/query": true, "/v1/proposals/execute": true, "/v1/jobs": false, "/v1/assign": false, "/v1/activate": false}, "broker": {"/v1/evidence/query": false, "/v1/proposals/execute": false, "/v1/jobs": true, "/v1/assign": true, "/v1/activate": true}, "models": []}

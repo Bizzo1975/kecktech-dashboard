@@ -1,0 +1,292 @@
+{
+  "Accounting / recurring transactions / stock": [
+    {
+      "function": "erpnext.assets.doctype.asset.depreciation.post_depreciation_entries",
+      "label": "post depreciation entries",
+      "count": 1
+    },
+    {
+      "function": "frappe.automation.doctype.auto_repeat.auto_repeat.make_auto_repeat_entry",
+      "label": "make auto repeat entry",
+      "count": 1
+    },
+    {
+      "function": "erpnext.accounts.doctype.fiscal_year.fiscal_year.auto_create_fiscal_year",
+      "label": "auto create fiscal year",
+      "count": 1
+    },
+    {
+      "function": "erpnext.accounts.utils.auto_create_exchange_rate_revaluation_daily",
+      "label": "auto create exchange rate revaluation daily",
+      "count": 1
+    },
+    {
+      "function": "erpnext.accounts.utils.run_ledger_health_checks",
+      "label": "run ledger health checks",
+      "count": 1
+    },
+    {
+      "function": "erpnext.assets.doctype.asset.asset.make_post_gl_entry",
+      "label": "make post gl entry",
+      "count": 1
+    },
+    {
+      "function": "erpnext.stock.doctype.repost_item_valuation.repost_item_valuation.repost_entries",
+      "label": "repost entries",
+      "count": 1
+    },
+    {
+      "function": "erpnext.stock.reorder_item.reorder_item",
+      "label": "reorder item",
+      "count": 1
+    },
+    {
+      "function": "erpnext.accounts.doctype.process_subscription.process_subscription.create_subscription_process",
+      "label": "create subscription process",
+      "count": 1
+    },
+    {
+      "function": "erpnext.accounts.deferred_revenue.process_deferred_accounting",
+      "label": "process deferred accounting",
+      "count": 1
+    },
+    {
+      "function": "erpnext.accounts.utils.auto_create_exchange_rate_revaluation_monthly",
+      "label": "auto create exchange rate revaluation monthly",
+      "count": 1
+    }
+  ],
+  "Cleanup / deletion / session maintenance": [
+    {
+      "function": "frappe.website.doctype.personal_data_deletion_request.personal_data_deletion_request.process_data_deletion_request",
+      "label": "process data deletion request",
+      "count": 1
+    },
+    {
+      "function": "frappe.desk.notifications.clear_notifications",
+      "label": "clear notifications",
+      "count": 1
+    },
+    {
+      "function": "frappe.core.doctype.log_settings.log_settings.run_log_clean_up",
+      "label": "run log clean up",
+      "count": 1
+    },
+    {
+      "function": "frappe.twofactor.delete_all_barcodes_for_users",
+      "label": "delete all barcodes for users",
+      "count": 1
+    },
+    {
+      "function": "frappe.website.doctype.personal_data_deletion_request.personal_data_deletion_request.remove_unverified_record",
+      "label": "remove unverified record",
+      "count": 1
+    },
+    {
+      "function": "frappe.oauth.delete_oauth2_data",
+      "label": "delete oauth2 data",
+      "count": 1
+    },
+    {
+      "function": "frappe.desk.utils.delete_old_exported_report_files",
+      "label": "delete old exported report files",
+      "count": 1
+    },
+    {
+      "function": "frappe.sessions.clear_expired_sessions",
+      "label": "clear expired sessions",
+      "count": 1
+    },
+    {
+      "function": "frappe.desk.page.backups.backups.delete_downloadable_backups",
+      "label": "delete downloadable backups",
+      "count": 1
+    }
+  ],
+  "Email / notifications / project requests": [
+    {
+      "function": "erpnext.accounts.doctype.process_statement_of_accounts.process_statement_of_accounts.send_auto_email",
+      "label": "send auto email",
+      "count": 1
+    },
+    {
+      "function": "erpnext.crm.doctype.email_campaign.email_campaign.set_email_campaign_status",
+      "label": "set email campaign status",
+      "count": 1
+    },
+    {
+      "function": "erpnext.projects.doctype.project.project.collect_project_status",
+      "label": "collect project status",
+      "count": 1
+    },
+    {
+      "function": "frappe.email.doctype.auto_email_report.auto_email_report.send_daily",
+      "label": "send daily",
+      "count": 1
+    },
+    {
+      "function": "erpnext.projects.doctype.project.project.send_project_status_email_to_users",
+      "label": "send project status email to users",
+      "count": 1
+    },
+    {
+      "function": "erpnext.projects.doctype.project.project.project_status_update_reminder",
+      "label": "project status update reminder",
+      "count": 1
+    },
+    {
+      "function": "erpnext.setup.doctype.email_digest.email_digest.send",
+      "label": "send",
+      "count": 1
+    },
+    {
+      "function": "erpnext.crm.doctype.email_campaign.email_campaign.send_email_to_leads_or_contacts",
+      "label": "send email to leads or contacts",
+      "count": 1
+    },
+    {
+      "function": "frappe.desk.form.document_follow.send_hourly_updates",
+      "label": "send hourly updates",
+      "count": 1
+    },
+    {
+      "function": "frappe.desk.form.document_follow.send_weekly_updates",
+      "label": "send weekly updates",
+      "count": 1
+    }
+  ],
+  "Internal status / maintenance": [
+    {
+      "function": "erpnext.support.doctype.issue.issue.auto_close_tickets",
+      "label": "auto close tickets",
+      "count": 1
+    },
+    {
+      "function": "erpnext.crm.doctype.contract.contract.update_status_for_contracts",
+      "label": "update status for contracts",
+      "count": 1
+    },
+    {
+      "function": "erpnext.controllers.accounts_controller.update_invoice_status",
+      "label": "update invoice status",
+      "count": 1
+    },
+    {
+      "function": "frappe.model.utils.user_settings.sync_user_settings",
+      "label": "sync user settings",
+      "count": 1
+    },
+    {
+      "function": "erpnext.assets.doctype.asset_maintenance_log.asset_maintenance_log.update_asset_maintenance_log_status",
+      "label": "update asset maintenance log status",
+      "count": 1
+    },
+    {
+      "function": "erpnext.manufacturing.doctype.bom_update_tool.bom_update_tool.auto_update_latest_price_in_all_boms",
+      "label": "auto update latest price in all boms",
+      "count": 1
+    },
+    {
+      "function": "erpnext.buying.doctype.supplier_quotation.supplier_quotation.set_expired_status",
+      "label": "set expired status",
+      "count": 1
+    },
+    {
+      "function": "erpnext.support.doctype.service_level_agreement.service_level_agreement.check_agreement_status",
+      "label": "check agreement status",
+      "count": 1
+    },
+    {
+      "function": "frappe.core.doctype.user_invitation.user_invitation.mark_expired_invitations",
+      "label": "mark expired invitations",
+      "count": 1
+    },
+    {
+      "function": "frappe.core.doctype.prepared_report.prepared_report.expire_stalled_report",
+      "label": "expire stalled report",
+      "count": 1
+    },
+    {
+      "function": "erpnext.selling.doctype.quotation.quotation.set_expired_status",
+      "label": "set expired status",
+      "count": 1
+    },
+    {
+      "function": "erpnext.crm.utils.open_leads_opportunities_based_on_todays_event",
+      "label": "open leads opportunities based on todays event",
+      "count": 1
+    },
+    {
+      "function": "erpnext.stock.doctype.serial_no.serial_no.update_maintenance_status",
+      "label": "update maintenance status",
+      "count": 1
+    },
+    {
+      "function": "erpnext.setup.doctype.company.company.cache_companies_monthly_sales_history",
+      "label": "cache companies monthly sales history",
+      "count": 1
+    },
+    {
+      "function": "erpnext.crm.doctype.opportunity.opportunity.auto_close_opportunity",
+      "label": "auto close opportunity",
+      "count": 1
+    },
+    {
+      "function": "erpnext.quality_management.doctype.quality_review.quality_review.review",
+      "label": "review",
+      "count": 1
+    },
+    {
+      "function": "erpnext.projects.doctype.task.task.set_tasks_as_overdue",
+      "label": "set tasks as overdue",
+      "count": 1
+    },
+    {
+      "function": "erpnext.utilities.bulk_transaction.retry",
+      "label": "retry",
+      "count": 1
+    },
+    {
+      "function": "erpnext.projects.doctype.project.project.update_project_sales_billing",
+      "label": "update project sales billing",
+      "count": 1
+    },
+    {
+      "function": "frappe.website.doctype.web_page.web_page.check_publish_status",
+      "label": "check publish status",
+      "count": 1
+    },
+    {
+      "function": "erpnext.assets.doctype.asset.asset.update_maintenance_status",
+      "label": "update maintenance status",
+      "count": 1
+    },
+    {
+      "function": "erpnext.buying.doctype.supplier_scorecard.supplier_scorecard.refresh_scorecards",
+      "label": "refresh scorecards",
+      "count": 1
+    }
+  ],
+  "External synchronization / update checks": [
+    {
+      "function": "erpnext.erpnext_integrations.doctype.plaid_settings.plaid_settings.automatic_synchronization",
+      "label": "automatic synchronization",
+      "count": 1
+    },
+    {
+      "function": "erpnext.utilities.doctype.video.video.update_youtube_data",
+      "label": "update youtube data",
+      "count": 1
+    },
+    {
+      "function": "frappe.desk.doctype.changelog_feed.changelog_feed.fetch_changelog_feed",
+      "label": "fetch changelog feed",
+      "count": 1
+    },
+    {
+      "function": "frappe.utils.change_log.check_for_update",
+      "label": "check for update",
+      "count": 1
+    }
+  ]
+}

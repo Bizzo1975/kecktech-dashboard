@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-18T18:34:15Z",
+  "captureRoot": ".recovery-private/2026-08-18",
+  "captureRootVersioned": false,
+  "captures": [
+    {
+      "deploymentId": "deploy-dashboard-vm230",
+      "host": "prod-dashboard-01",
+      "sourceRoot": "/opt/docker",
+      "files": [
+        { "path": "dashboard/src/lib/services.ts", "sha256": "0ad4b5881916ec964d459af934805f187f3105629df8e5400c58580db18ea90f" },
+        { "path": "dashboard/tsconfig.json", "sha256": "93fd139b00c9169490b5a52263cff3878085b93b8e9424049c85e3376df81c6a" },
+        { "path": "dashboard/website/src/data/demos.json", "sha256": "c834408c5eb7db97d30ccf801361bc8df574c70b2b2af62cdb2abe01c6eb070b" },
+        { "path": "dashboard/website/src/data/services.json", "sha256": "35b69a0bbe92bdb84b1843fbed995f1ecba4f2cec5824d7d6f0ca3d2b37c3ef2" }
+      ],
+      "excluded": ["environment files", "runtime data", "backup copies", "generated output", "logo artifacts with malformed filenames"]
+    },
+    {
+      "deploymentId": "deploy-kecktech-cms-vm230",
+      "host": "prod-dashboard-01",
+      "sourceRoot": "/opt/docker",
+      "files": [
+        { "path": "kecktech-cms/app/api/services/[id]/route.ts", "sha256": "723724eb56d4bd5585d302ef63828006d0abba13a605dd68d6cbbe6695fa417e" },
+        { "path": "kecktech-cms/app/api/services/route.ts", "sha256": "8cfe8e08893eb0730ec636137022e2e12b6b4223d83ce0e108bd06512650b78b" },
+        { "path": "kecktech-cms/docker-compose.cms.yml", "sha256": "a419d821dc1ac20f8f391db747b8e64472b2c1ba9cf8734a2758376cfe77aa35" },
+        { "path": "kecktech-cms/lib/projects.ts", "sha256": "c62d8d312ce348852e2145878534bf2f079da10b7d02a646a2f26e10daec9577" },
+        { "path": "kecktech-cms/lib/services.ts", "sha256": "7a91e5de4a368cd644e63ea1fb24c724fc22e4e5e7ba7557d8e2088d0200769a" },
+        { "path": "kecktech-cms/prisma/schema.prisma", "sha256": "4634044a97c42cf1536837599f16e941bbddd64afcfd8248425cf5bdb49d5542" }
+      ],
+      "excluded": ["CMS database and volumes", "contact and subscriber data", "credentials", "environment values", "backup copies", "private or unpublished media"]
+    },
+    {
+      "deploymentId": "deploy-asset-forge-vm115",
+      "host": "prod-ollama-01",
+      "sourceRoot": "/home/kecktech/asset-forge",
+      "files": [
+        { "path": "apps/api/main.py", "sha256": "4f0db1c8e2f370a7a4322af1e7a958f445e5c186a888ea885a6e02252ef3b05f" }
+      ],
+      "excluded": ["data/data", "generated assets", "model caches", "credentials", "environment values", "backup copies"]
+    }
+  ],
+  "verification": {
+    "secretValuePatternScan": "no candidate values matched before detailed comparison",
+    "assetForgeMainPyMatchesLocal": true,
+    "publicDemosHttpStatus": 200,
+    "publicDemosContainsReusableCredential": true,
+    "credentialValueRecorded": false
+  },
+  "notes": [
+    "The private capture is intentionally Git-ignored and is not canonical source.",
+    "Hashes permit later integrity checks without committing captured production source.",
+    "The temporary public HTML response used for verification was deleted immediately after the boolean checks."
+  ]
+}

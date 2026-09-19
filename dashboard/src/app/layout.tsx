@@ -1,21 +1,6 @@
 import type { Metadata } from "next";
-import { Poppins, Open_Sans } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-heading",
-  display: "swap",
-});
-
-const openSans = Open_Sans({
-  subsets: ["latin"],
-  weight: ["400", "600"],
-  variable: "--font-body",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Kecktech Dashboard",
@@ -32,11 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${openSans.variable}`}>
+    <html lang="en">
       <body
         style={{
           margin: 0,
-          fontFamily: "var(--font-body, 'Open Sans', 'Segoe UI', system-ui, sans-serif)",
+          fontFamily: "var(--font-body)",
           background: "#0f172a",
           display: "flex",
           minHeight: "100vh",
@@ -44,7 +29,7 @@ export default function RootLayout({
       >
         <style>{`
           h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-heading, 'Poppins', 'Segoe UI', system-ui, sans-serif);
+            font-family: var(--font-heading);
           }
         `}</style>
         <Sidebar />

@@ -1,0 +1,14 @@
+{
+  "answer": "Unknown. Current infrastructure evidence is unavailable.",
+  "domain": "homelab",
+  "intent": "question",
+  "citations": [],
+  "evidenceStatus": "unknown",
+  "model": {
+    "provider": "none",
+    "model": null,
+    "reason": "No authoritative evidence was available; model execution was skipped."
+  },
+  "unknowns": ["Current host state requires recovery-time capture."],
+  "contradictions": []
+}

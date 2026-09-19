@@ -1,0 +1,21 @@
+{"time": "2026-09-15T22:25:44.825270+00:00", "event": "baseline_loaded"}
+{"time": "2026-09-15T22:25:44.836755+00:00", "event": "agent_baseline", "host": "112", "containerId": "114226b6f7291dbb0da6d35078f566d737bfec23c00c0bfe03f736c51dde9190", "imageId": "sha256:7af856876dcb2778108bf6846f3da31b176443db90e3de31fcfdf17e5ab7857e"}
+{"time": "2026-09-15T22:25:48.370049+00:00", "event": "stopped", "name": "portainer_agent"}
+{"time": "2026-09-15T22:25:48.465920+00:00", "event": "preflight_passed", "host": "112", "apparentBytes": 48981284}
+{"time": "2026-09-15T22:25:48.996667+00:00", "event": "stopped", "name": "umami"}
+{"time": "2026-09-15T22:25:49.836726+00:00", "event": "copy_verified", "archive": "/var/backups/kecktech-recovery/2026-09-15-stage-a/umami_umami_db_data.tar", "sha256": "8bf0f430920bc50a4ebf858238ab1b26837270891a11047b1e41e44bb290f8f6", "bytes": 51200000, "sourceCompared": true}
+{"time": "2026-09-15T22:26:04.253172+00:00", "event": "database_started", "name": "umami-db"}
+{"time": "2026-09-15T22:26:06.471859+00:00", "event": "authenticated_select_passed", "name": "umami-db"}
+{"time": "2026-09-15T22:26:36.532421+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 270}
+{"time": "2026-09-15T22:27:06.593239+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 240}
+{"time": "2026-09-15T22:27:36.654592+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 210}
+{"time": "2026-09-15T22:28:06.719215+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 180}
+{"time": "2026-09-15T22:28:36.777564+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 150}
+{"time": "2026-09-15T22:29:06.836821+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 120}
+{"time": "2026-09-15T22:29:36.897308+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 90}
+{"time": "2026-09-15T22:30:06.954825+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 60}
+{"time": "2026-09-15T22:30:37.010294+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 29}
+{"time": "2026-09-15T22:31:06.534411+00:00", "event": "observation_passed", "name": "umami-db", "remainingSeconds": 0}
+{"time": "2026-09-15T22:31:06.546457+00:00", "event": "log_indicators", "corruption": 0, "errors": 0}
+{"time": "2026-09-15T22:31:06.559014+00:00", "event": "stage_a_passed", "host": "112", "manifest": "/var/backups/kecktech-recovery/2026-09-15-stage-a/manifest.json"}
+{"time": "2026-09-15T22:31:10.328589+00:00", "event": "agent_restored", "host": "112", "containerId": "114226b6f7291dbb0da6d35078f566d737bfec23c00c0bfe03f736c51dde9190"}

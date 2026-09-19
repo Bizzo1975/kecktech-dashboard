@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kecktech.local/contracts/unified-assistant-domain-v1.schema.json",
+  "title": "Unified Assistant domain adapter contract",
+  "oneOf": [
+    { "$ref": "#/$defs/evidenceQuery" },
+    { "$ref": "#/$defs/evidenceResult" },
+    { "$ref": "#/$defs/proposalExecute" },
+    { "$ref": "#/$defs/proposalResult" }
+  ],
+  "$defs": {
+    "domain": { "enum": ["homelab", "fiction"] },
+    "evidenceStatus": { "enum": ["verified", "historical-stale", "contradicted", "inferred", "unknown"] },
+    "evidenceQuery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "requestId", "domain", "question"],
+      "properties": {
+        "kind": { "const": "evidence.query" },
+        "requestId": { "type": "string", "format": "uuid" },
+        "domain": { "$ref": "#/$defs/domain" },
+        "question": { "type": "string", "minLength": 1, "maxLength": 16000 },
+        "manuscriptId": { "type": "string", "minLength": 1 },
+        "limit": { "type": "integer", "minimum": 1, "maximum": 50 }
+      }
+    },
+    "citation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "source", "location", "revision", "capturedAt", "status", "excerpt"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "location": { "type": "string", "minLength": 1 },
+        "revision": { "type": ["string", "null"] },
+        "capturedAt": { "type": "string", "format": "date-time" },
+        "status": { "$ref": "#/$defs/evidenceStatus" },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "manuscriptId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "evidenceResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "requestId", "domain", "status", "citations", "unknowns", "contradictions"],
+      "properties": {
+        "kind": { "const": "evidence.result" },
+        "requestId": { "type": "string", "format": "uuid" },
+        "domain": { "$ref": "#/$defs/domain" },
+        "status": { "$ref": "#/$defs/evidenceStatus" },
+        "citations": { "type": "array", "items": { "$ref": "#/$defs/citation" }, "maxItems": 50 },
+        "unknowns": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "contradictions": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "proposalExecute": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "proposalId", "domain", "action", "target", "payload", "expectedRevision", "approvalDigest", "approvedAt", "expiresAt", "rollback"],
+      "properties": {
+        "kind": { "const": "proposal.execute" },
+        "proposalId": { "type": "string", "format": "uuid" },
+        "domain": { "$ref": "#/$defs/domain" },
+        "action": { "type": "string", "minLength": 1 },
+        "target": { "type": "string", "minLength": 1 },
+        "payload": { "type": "object" },
+        "expectedRevision": { "type": "string", "minLength": 1 },
+        "approvalDigest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "approvedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "rollback": { "type": "string", "minLength": 1 },
+        "manuscriptId": { "type": "string", "minLength": 1 }
+      }
+    },
+    "proposalResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "proposalId", "domain", "status", "revision", "executedAt", "auditId"],
+      "properties": {
+        "kind": { "const": "proposal.result" },
+        "proposalId": { "type": "string", "format": "uuid" },
+        "domain": { "$ref": "#/$defs/domain" },
+        "status": { "const": "executed" },
+        "revision": { "type": "string", "minLength": 1 },
+        "executedAt": { "type": "string", "format": "date-time" },
+        "auditId": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
