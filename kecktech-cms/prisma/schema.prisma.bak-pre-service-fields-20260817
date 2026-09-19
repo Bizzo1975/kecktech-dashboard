@@ -86,9 +86,6 @@ model Service {
   categoryId  String?
   category    ServiceCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   price       String?         // Price or pricing description
-  priceNote   String?         // Optional pricing caveat/note (e.g. "Scope set at discovery call")
-  cta         String?         // Call-to-action button label (e.g. "Get Help Now")
-  features    String          @default("[]") // Bullet-point feature list, JSON-encoded (SQLite has no native array type)
   image       String?         // Image URL
   featured    Boolean         @default(false)
   status      String          @default("active") // active, coming-soon, archived

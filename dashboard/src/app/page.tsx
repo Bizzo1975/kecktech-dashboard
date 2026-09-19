@@ -1,24 +1,39 @@
 import { TileGrid } from "@/components/TileGrid";
 import { SERVICES } from "@/lib/services";
 import { checkHealth } from "@/lib/checkHealth";
+import { readOverrides } from "@/lib/tileOverrides";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Dashboard() {
-  const results = await Promise.all(
+  const overrides = readOverrides();
+
+  const allResults = await Promise.all(
     SERVICES.map(async (svc) => {
       const health = svc.noHealthCheck
         ? { status: "up" as const, latency: 0 }
         : await checkHealth(svc.healthUrl, svc.healthHost);
       const { healthHost: _h, ...tile } = svc;
-      return { ...tile, ...health };
+      const ov = overrides[svc.name] ?? {};
+      return {
+        ...tile,
+        ...health,
+        id: svc.name,
+        name: ov.displayName || svc.name,
+        description: ov.description || svc.description,
+        icon: ov.icon || svc.icon,
+        hidden: !!ov.hidden,
+      };
     })
   );
+
+  const results = allResults.filter((r) => !r.hidden);
 
   const healthChecked = results.filter((r) => !r.noHealthCheck);
   const upCount = healthChecked.filter((r) => r.status === "up").length;
   const totalCount = healthChecked.length;
+  const hiddenCount = allResults.length - results.length;
   const now = new Date().toLocaleString("en-US", {
     timeZone: "America/Chicago",
     dateStyle: "medium",
@@ -94,19 +109,39 @@ export default async function Dashboard() {
             </p>
           </div>
         </div>
-        <div style={{ textAlign: "right" }}>
-          <div
+        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <div style={{ textAlign: "right" }}>
+            <div
+              style={{
+                fontSize: "16px",
+                fontWeight: 600,
+                color: upCount === totalCount ? "#34d399" : "#fbbf24",
+              }}
+            >
+              {upCount}/{totalCount} Services Up
+            </div>
+            <div style={{ fontSize: "13px", color: "#64748b", marginTop: "2px" }}>
+              Last checked: {now}
+              {hiddenCount > 0 ? ` · ${hiddenCount} hidden` : ""}
+            </div>
+          </div>
+          <a
+            href="/settings"
             style={{
-              fontSize: "16px",
-              fontWeight: 600,
-              color: upCount === totalCount ? "#34d399" : "#fbbf24",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "14px",
+              color: "#cbd5e1",
+              textDecoration: "none",
+              border: "1px solid #334155",
+              borderRadius: "8px",
+              padding: "8px 14px",
+              whiteSpace: "nowrap",
             }}
           >
-            {upCount}/{totalCount} Services Up
-          </div>
-          <div style={{ fontSize: "13px", color: "#64748b", marginTop: "2px" }}>
-            Last checked: {now}
-          </div>
+            ⚙️ Edit Tiles
+          </a>
         </div>
       </header>
 

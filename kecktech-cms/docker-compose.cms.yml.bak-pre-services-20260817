@@ -19,7 +19,6 @@ services:
       NEXT_PUBLIC_SITE_URL: https://www.kecktech.net
       NEXTAUTH_URL: https://www.kecktech.net
       DEMOS_JSON_PATH: /astro-data/demos.json
-      SERVICES_JSON_PATH: /astro-data/services.json
       KECKTECH_ASTRO_REBUILD_URL: ${KECKTECH_ASTRO_REBUILD_URL:-}
       KECKTECH_ASTRO_REBUILD_TOKEN: ${KECKTECH_ASTRO_REBUILD_TOKEN:-}
     volumes:

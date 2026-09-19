@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="16" fill="#1E3A5F"/>
+  <text x="50" y="58" font-family="Arial,sans-serif" font-size="30" font-weight="bold" fill="white" text-anchor="middle">Wiki</text>
+  <text x="50" y="82" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="#C07810" text-anchor="middle">.js</text>
+</svg>

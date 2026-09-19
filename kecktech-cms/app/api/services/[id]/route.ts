@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { syncServicesToJson } from "@/lib/services";
 
 const serviceSchema = z.object({
   title: z.string().min(1).optional(),
@@ -14,6 +15,9 @@ const serviceSchema = z.object({
   image: z.string().optional().nullable(),
   featured: z.boolean().optional(),
   status: z.enum(["active", "coming-soon", "archived"]).optional(),
+  priceNote: z.string().optional().nullable(),
+  cta: z.string().optional().nullable(),
+  features: z.array(z.string()).optional().transform((arr) => arr ? JSON.stringify(arr) : undefined),
   order: z.number().optional(),
   metaTitle: z.string().optional().nullable(),
   metaDescription: z.string().optional().nullable(),
@@ -92,6 +96,7 @@ export async function PUT(
       },
     });
 
+    await syncServicesToJson().catch((e) => console.error("services sync failed:", e));
     return NextResponse.json(service);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -124,6 +129,7 @@ export async function DELETE(
       where: { id },
     });
 
+    await syncServicesToJson().catch((e) => console.error("services sync failed:", e));
     return NextResponse.json({ message: "Service deleted successfully" });
   } catch (error) {
     console.error("Error deleting service:", error);

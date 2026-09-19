@@ -74,10 +74,11 @@ export const DEMO_SLUG_ALIASES: Record<string, string> = {
 export function canonicalizeDemoId(slug: string): string | null {
   const raw = (slug || "").trim().toLowerCase();
   if (!raw) return null;
-  const mapped = DEMO_SLUG_ALIASES[raw] || raw;
-  return (MARKETING_DEMO_ALLOWLIST as readonly string[]).includes(mapped)
-    ? mapped
-    : null;
+  // 2026-08-17: allowlist gate removed per operator directive - Me Manager
+  // publish state (status: "published", available: true, already filtered
+  // upstream) is now the sole visibility gate, matching WWFL/UJ/JR. Alias
+  // mapping is kept since it's still useful for legacy slug variants.
+  return DEMO_SLUG_ALIASES[raw] || raw;
 }
 
 type DemoApp = {
@@ -158,17 +159,10 @@ export async function syncProjectsToDemosJson() {
     });
   }
 
-  // Allowlist order; CMS row preferred, else keep curated shell if present
-  const apps: DemoApp[] = [];
-  for (const id of MARKETING_DEMO_ALLOWLIST) {
-    const cms = fromCms.get(id);
-    const curated = curatedById.get(id);
-    if (cms) {
-      apps.push(cms);
-    } else if (curated) {
-      apps.push({ ...curated, id });
-    }
-  }
+  // 2026-08-17: no more allowlist - every published, available project
+  // (already filtered upstream) shows. Order follows the existing query's
+  // updatedAt-desc sort (most recently touched first), unchanged from before.
+  const apps: DemoApp[] = Array.from(fromCms.values());
 
   const next = { ...existing, apps };
   const dir = path.dirname(demosPath);

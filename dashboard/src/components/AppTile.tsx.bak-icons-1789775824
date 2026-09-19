@@ -1,123 +1,20 @@
-"use client";
-
-import { useState } from "react";
-import {
-  Briefcase, Headset, Lock, Workflow, Globe, BookOpen, BarChart3, Monitor,
-  Mail, Container, Route, Shield, Edit3, Users, MonitorSmartphone, Wrench,
-  Kanban, Terminal, Server, Cpu, Database, Cloud, Network, Radio, RadioTower,
-  Activity, TrendingUp, ShoppingCart, Tractor, Ruler, Compass, Swords,
-  Gamepad2, Drama, Image as ImageIcon, Film, Music, Notebook, Heart, Home,
-  Settings as SettingsIcon, Sparkles, Brain, Bot, MessageCircle, MessageSquare,
-  Send, Utensils, LayoutGrid, Layers, Boxes, KeyRound, Fingerprint, UserCog,
-  UserCircle, Eraser, Trash2, Hammer, Rocket, UploadCloud, DownloadCloud,
-  HardDrive, Wifi, Eye, Gauge, Flag, Star, Award, ClipboardList, GitBranch,
-  Code2, Bug, FlaskConical, Palette, PenTool, Calendar, Clock, Bell,
-  ShieldCheck, ShieldAlert, Link2, ServerCog, Coins, Receipt, Ticket, Inbox,
-  Folder, Archive, Smartphone, Tv, Video, BookMarked,
-  type LucideIcon,
-} from "lucide-react";
-
-/** Large curated icon library. Keys are the values stored on ServiceDef.icon
- *  and selectable in the Edit Tiles UI (kebab-case). Falls back to Wrench. */
-const icons: Record<string, LucideIcon> = {
-  // original set (kept for backward compatibility with existing tiles)
-  briefcase: Briefcase,
-  headset: Headset,
-  lock: Lock,
-  workflow: Workflow,
-  globe: Globe,
-  book: BookOpen,
-  chart: BarChart3,
-  monitor: Monitor,
-  mail: Mail,
-  container: Container,
-  route: Route,
-  shield: Shield,
-  edit: Edit3,
-  users: Users,
-  remote: MonitorSmartphone,
-  // expanded library
-  wrench: Wrench,
-  kanban: Kanban,
-  terminal: Terminal,
-  server: Server,
-  "server-cog": ServerCog,
-  cpu: Cpu,
-  database: Database,
-  cloud: Cloud,
-  "upload-cloud": UploadCloud,
-  "download-cloud": DownloadCloud,
-  network: Network,
-  radio: Radio,
-  "radio-tower": RadioTower,
-  activity: Activity,
-  "trending-up": TrendingUp,
-  "shopping-cart": ShoppingCart,
-  tractor: Tractor,
-  ruler: Ruler,
-  compass: Compass,
-  swords: Swords,
-  gamepad: Gamepad2,
-  drama: Drama,
-  image: ImageIcon,
-  film: Film,
-  music: Music,
-  "book-open": BookOpen,
-  "book-marked": BookMarked,
-  notebook: Notebook,
-  heart: Heart,
-  home: Home,
-  settings: SettingsIcon,
-  sparkles: Sparkles,
-  brain: Brain,
-  bot: Bot,
-  "message-circle": MessageCircle,
-  "message-square": MessageSquare,
-  send: Send,
-  utensils: Utensils,
-  "layout-grid": LayoutGrid,
-  layers: Layers,
-  boxes: Boxes,
-  "key-round": KeyRound,
-  fingerprint: Fingerprint,
-  "user-cog": UserCog,
-  "user-circle": UserCircle,
-  eraser: Eraser,
-  trash: Trash2,
-  hammer: Hammer,
-  rocket: Rocket,
-  "hard-drive": HardDrive,
-  wifi: Wifi,
-  eye: Eye,
-  gauge: Gauge,
-  flag: Flag,
-  star: Star,
-  award: Award,
-  "clipboard-list": ClipboardList,
-  "git-branch": GitBranch,
-  code: Code2,
-  bug: Bug,
-  "flask-conical": FlaskConical,
-  palette: Palette,
-  "pen-tool": PenTool,
-  calendar: Calendar,
-  clock: Clock,
-  bell: Bell,
-  "shield-check": ShieldCheck,
-  "shield-alert": ShieldAlert,
-  link: Link2,
-  coins: Coins,
-  receipt: Receipt,
-  ticket: Ticket,
-  inbox: Inbox,
-  folder: Folder,
-  archive: Archive,
-  smartphone: Smartphone,
-  tv: Tv,
-  video: Video,
+const icons: Record<string, string> = {
+  briefcase: "💼",
+  headset: "🎧",
+  lock: "🔒",
+  workflow: "⚡",
+  globe: "🌐",
+  book: "📚",
+  chart: "📊",
+  monitor: "🖥️",
+  mail: "📧",
+  container: "📦",
+  route: "🔀",
+  shield: "🛡️",
+  edit: "✏️",
+  users: "👥",
+  remote: "🖥️",
 };
-
-export { icons as ICON_LIBRARY };
 
 interface AppTileProps {
   name: string;
@@ -145,9 +42,6 @@ export function AppTile({
   disableLink = false,
   noHealthCheck = false,
 }: AppTileProps) {
-  const [logoFailed, setLogoFailed] = useState(false);
-  const Icon = icons[icon] || Wrench;
-
   const tileBody = (
     <div
       style={{
@@ -187,17 +81,20 @@ export function AppTile({
             flexShrink: 0,
           }}
         >
-          {logoUrl && !logoFailed ? (
+          {logoUrl ? (
             <img
               src={logoUrl}
               alt={name}
               width={32}
               height={32}
               style={{ width: 32, height: 32, objectFit: "contain", display: "block" }}
-              onError={() => setLogoFailed(true)}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+                (e.currentTarget.parentElement as HTMLElement).innerText = icons[icon] || "🔧";
+              }}
             />
           ) : (
-            <Icon size={26} color={color} strokeWidth={1.75} />
+            icons[icon] || "🔧"
           )}
         </div>
 

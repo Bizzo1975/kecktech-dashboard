@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { syncServicesToJson } from "@/lib/services";
 
 const serviceSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -14,6 +15,9 @@ const serviceSchema = z.object({
   image: z.string().optional().nullable(),
   featured: z.boolean().default(false),
   status: z.enum(["active", "coming-soon", "archived"]).default("active"),
+  priceNote: z.string().optional().nullable(),
+  cta: z.string().optional().nullable(),
+  features: z.array(z.string()).default([]).transform((arr) => JSON.stringify(arr)),
   order: z.number().default(0),
   metaTitle: z.string().optional().nullable(),
   metaDescription: z.string().optional().nullable(),
@@ -79,6 +83,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    await syncServicesToJson().catch((e) => console.error("services sync failed:", e));
     return NextResponse.json(service, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {

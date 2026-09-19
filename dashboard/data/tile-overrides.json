@@ -1,0 +1,26 @@
+{
+  "Ops Dashboard": {
+    "hidden": true
+  },
+  "Brain": {
+    "hidden": true
+  },
+  "Hub": {
+    "hidden": true
+  },
+  "Session": {
+    "hidden": true
+  },
+  "SillyTavern": {
+    "hidden": true
+  },
+  "Auth WWFL": {
+    "hidden": true
+  },
+  "Auth Jacob": {
+    "hidden": true
+  },
+  "Auth UJ": {
+    "hidden": true
+  }
+}

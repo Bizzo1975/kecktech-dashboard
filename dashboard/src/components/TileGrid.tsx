@@ -19,6 +19,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { AppTile } from "./AppTile";
 
 interface TileData {
+  id: string;
   name: string;
   description: string;
   url: string;
@@ -34,7 +35,7 @@ const STORAGE_KEY = "kecktech-tile-order";
 
 function SortableTile(props: TileData & { isDraggingAny: boolean; justDropped: boolean }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: props.name });
+    useSortable({ id: props.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -54,23 +55,33 @@ function SortableTile(props: TileData & { isDraggingAny: boolean; justDropped: b
 }
 
 export function TileGrid({ tiles }: { tiles: TileData[] }) {
-  const [order, setOrder] = useState<string[]>(() => tiles.map((t) => t.name));
+  const [order, setOrder] = useState<string[]>(() => tiles.map((t) => t.id));
   const [isDragging, setIsDragging] = useState(false);
   const [justDropped, setJustDropped] = useState(false);
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
+      const currentIds = tiles.map((t) => t.id);
       if (saved) {
-        const parsed: string[] = JSON.parse(saved);
-        const allPresent = tiles.every((t) => parsed.includes(t.name));
-        if (allPresent) {
-          setOrder(parsed);
+        const savedIds: string[] = JSON.parse(saved);
+        // Keep the saved arrangement for tiles that still exist, then append
+        // any newly-added tiles at the end instead of discarding the whole
+        // saved order (previously: any single new tile wiped the arrangement).
+        const known = savedIds.filter((id) => currentIds.includes(id));
+        const newOnes = currentIds.filter((id) => !savedIds.includes(id));
+        const merged = [...known, ...newOnes];
+        setOrder(merged);
+        if (newOnes.length > 0) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
         }
+      } else {
+        setOrder(currentIds);
       }
     } catch {
       // ignore
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tiles]);
 
   const sensors = useSensors(
@@ -96,7 +107,7 @@ export function TileGrid({ tiles }: { tiles: TileData[] }) {
   }
 
   const sorted = order
-    .map((name) => tiles.find((t) => t.name === name))
+    .map((id) => tiles.find((t) => t.id === id))
     .filter(Boolean) as TileData[];
 
   return (
@@ -107,10 +118,10 @@ export function TileGrid({ tiles }: { tiles: TileData[] }) {
       onDragEnd={handleDragEnd}
       onDragCancel={() => { setIsDragging(false); setJustDropped(false); }}
     >
-      <SortableContext items={sorted.map((t) => t.name)} strategy={rectSortingStrategy}>
+      <SortableContext items={sorted.map((t) => t.id)} strategy={rectSortingStrategy}>
         {sorted.map((tile) => (
           <SortableTile
-            key={tile.name}
+            key={tile.id}
             {...tile}
             isDraggingAny={isDragging}
             justDropped={justDropped}

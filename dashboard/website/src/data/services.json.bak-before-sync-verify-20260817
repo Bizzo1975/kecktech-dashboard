@@ -61,8 +61,8 @@
       "available": true,
       "name": "IT Professional Services",
       "price": "From $125/hr",
-      "priceNote": "Scope and timeline set at discovery call. Free 30-minute consultation — no obligation.",
       "body": "Infrastructure projects, network design, server builds, migrations, security audits, and more. Scoped, quoted, and delivered on time. If you have a project that goes beyond break/fix, this is where we start the conversation.",
+      "priceNote": "Scope and timeline set at discovery call. Free 30-minute consultation — no obligation.",
       "features": [
         "Infrastructure design & builds",
         "Network architecture & VLAN setup",
